@@ -187,7 +187,8 @@ public class GUITable<TRowType> : GUITable
 
 		if (clickOnRow == null) return false;
 
-		rowButtonStyle ??= new GUIStyle(GUI.skin.label);
+		if(rowButtonStyle == null)
+			rowButtonStyle = new GUIStyle(GUI.skin.label);
 		bool click = GUI.Button(position, GUIContent.none, rowButtonStyle);
 
 		return click;

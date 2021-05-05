@@ -245,7 +245,7 @@ namespace MUtility
             resultMesh.triangles = triangles;
             resultMesh.RecalculateBounds();
             resultMesh.RecalculateTangents();
-            resultMesh.Optimize();
+            ;
         }
 
 

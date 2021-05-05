@@ -4,11 +4,11 @@ namespace MUtility
 {
 public interface IInspectorCurve
 {
-    abstract float Evaluate(object parentObject, float time);
-    abstract Rect DefaultArea(object parentObject); 
-    abstract Color GetCurveColor(object parentObject);
+    float Evaluate(object parentObject, float time);
+    Rect DefaultArea(object parentObject); 
+    Color GetCurveColor(object parentObject);
     
-    abstract float Height(object parentObject);
+    float Height(object parentObject);
 }
 
 

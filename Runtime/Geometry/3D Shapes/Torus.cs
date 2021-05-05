@@ -110,7 +110,7 @@ namespace MUtility
 			resultMesh.triangles = triangles;
 
 			resultMesh.RecalculateBounds();
-			resultMesh.Optimize();
+			;
 		}
     }
 }

@@ -6,10 +6,10 @@ namespace MUtility
 {
 public interface IInspectorUnityObject
 {
-    public abstract IList<Object> NotNullPopupElements(object container);
-    public abstract Object GetValue(object container);
-    public abstract void SetValue(object container, Object value);
-    public abstract Type ContentType { get; }
+    IList<Object> NotNullPopupElements(object container);
+    Object GetValue(object container);
+    void SetValue(object container, Object value);
+    Type ContentType { get; }
 }
 
 public abstract class InspectorUnityObject<TParentObject> : InspectorElement<TParentObject>, IInspectorUnityObject 

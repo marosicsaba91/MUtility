@@ -46,22 +46,36 @@ public class InspectorMessageDrawer : InspectorElementDrawer
         return false;
     }
 
-    internal static GUIContent GetHelpIcon(MessageType type) => type switch
+    internal static GUIContent GetHelpIcon(MessageType type)
     {
-        MessageType.Info => EditorGUIUtility.IconContent("console.infoicon"),
-        MessageType.Warning => EditorGUIUtility.IconContent("console.warnicon"),
-        MessageType.Error => EditorGUIUtility.IconContent("console.erroricon"),
-        _ => new GUIContent(), 
-    };
+        switch (type)
+        {
+            case MessageType.Info:
+                return EditorGUIUtility.IconContent("console.infoicon");
+            case MessageType.Warning:
+                return EditorGUIUtility.IconContent("console.warnicon");
+            case MessageType.Error:
+                return EditorGUIUtility.IconContent("console.erroricon");
+            default:
+                return new GUIContent();
+        }
+    }
 
-    static MessageType ToEditorMessageType(InspectorMessageType inspectorMessageType) => inspectorMessageType switch
+    static MessageType ToEditorMessageType(InspectorMessageType inspectorMessageType)
     {
-        InspectorMessageType.Info => MessageType.Info,
-        InspectorMessageType.Warning => MessageType.Warning ,
-        InspectorMessageType.Error =>  MessageType.Error,
-        _ => MessageType.None
-    };
-    
+        switch (inspectorMessageType)
+        {
+            case InspectorMessageType.Info:
+                return MessageType.Info;
+            case InspectorMessageType.Warning:
+                return MessageType.Warning;
+            case InspectorMessageType.Error:
+                return MessageType.Error;
+            default:
+                return MessageType.None;
+        }
+    }
+
     public override float? GetPropertyHeight(
         IInspectorElement inspectorElement,
         SerializedProperty property, 
