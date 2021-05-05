@@ -1,11 +1,13 @@
 ﻿#if UNITY_EDITOR
-using Example.Geometry;
 using UnityEditor;
 
+namespace MUtility
+{
 [CustomEditor(typeof(GizmoAndHandleDrawer))]
 public class HandleDrawerEditor : Editor
 {
     void OnSceneGUI() =>
         ((GizmoAndHandleDrawer)target).ApplyHandles( );
+}
 }
 #endif

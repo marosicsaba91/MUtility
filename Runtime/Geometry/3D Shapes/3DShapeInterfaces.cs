@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     public interface I3DSurface
     {

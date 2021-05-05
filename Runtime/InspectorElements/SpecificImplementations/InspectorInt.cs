@@ -1,4 +1,6 @@
-﻿public interface IInspectorInt : IInspectorProperty<int>
+﻿namespace MUtility
+{
+public interface IInspectorInt : IInspectorProperty<int>
 {
 	bool TryGetRange(object parentObject,  out int min, out int max);
 }
@@ -20,4 +22,5 @@ public abstract class InspectorInt<TParentObject> : InspectorElement<TParentObje
 		max = default;
 		return false;
 	}
+}
 }

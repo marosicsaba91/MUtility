@@ -1,7 +1,7 @@
 ﻿using System; 
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     public struct Plain : IDrawable

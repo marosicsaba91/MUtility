@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     public static class AxisExpansionMethods
     {

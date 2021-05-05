@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     public struct Circle : I2DArea, I2DCircumference, IHandleable, IDrawable

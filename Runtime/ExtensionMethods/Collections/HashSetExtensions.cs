@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+namespace MUtility
+{
 public static class HashSetExtensions
 {
     public static void CopyTo<T>(this HashSet<T> source, HashSet<T> destination)
@@ -122,4 +124,5 @@ public static class HashSetExtensions
 
         throw new Exception("Unreachable Code!");
     }
+}
 }

@@ -1,6 +1,6 @@
 {
-    "name": "Utility",
-    "rootNamespace": "Utility",
+    "name": "MUtility",
+    "rootNamespace": "MUtility",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

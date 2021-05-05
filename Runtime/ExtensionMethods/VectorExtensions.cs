@@ -1,7 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using Utility;
 
+namespace MUtility
+{
 public static class VectorExtensions
 {
     public static Vector2 Round(this Vector2 vector) =>
@@ -101,4 +102,5 @@ public static class VectorExtensions
     public static Vector2 Clamp01(this Vector2 areaPos) => areaPos.Clamp(0, 1);
 
     public static Vector3 Clamp01(this Vector3 areaPos) => areaPos.Clamp(0, 1);
+}
 }

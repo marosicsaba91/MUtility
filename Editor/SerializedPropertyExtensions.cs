@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Linq;
 using Object = UnityEngine.Object;
 
+namespace MUtility
+{
 public static class SerializedPropertyExtensions
 {
     public static IEnumerable<SerializedProperty> GetChildren(this SerializedProperty property)
@@ -53,6 +55,7 @@ public static class SerializedPropertyExtensions
             Object c = obj.targetObjects[0];
             return c.GetType();
         }
+
         return obj.targetObject.GetType();
     }
 
@@ -77,9 +80,10 @@ public static class SerializedPropertyExtensions
                 obj = GetValue_Imp(obj, element);
             }
         }
+
         return obj;
     }
-    
+
     public static void SetObjectOfProperty(this SerializedProperty prop, object value)
     {
         if (prop == null) return;
@@ -100,6 +104,7 @@ public static class SerializedPropertyExtensions
                 obj = GetValue_Imp(obj, element);
             }
         }
+
         obj = value;
     }
 
@@ -123,6 +128,7 @@ public static class SerializedPropertyExtensions
                 obj = GetValue_Imp(obj, element);
             }
         }
+
         return obj;
     }
 
@@ -138,15 +144,17 @@ public static class SerializedPropertyExtensions
             if (f != null)
                 return f.GetValue(source);
 
-            PropertyInfo p = type.GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo p =
+                type.GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             if (p != null)
                 return p.GetValue(source, null);
 
             type = type.BaseType;
         }
+
         return null;
     }
-    
+
 
     static object GetValue_Imp(object source, string name, int index)
     {
@@ -158,9 +166,10 @@ public static class SerializedPropertyExtensions
         {
             if (!enm.MoveNext()) return null;
         }
+
         return enm.Current;
     }
-    
+
     public static object GetPropertyValue(this SerializedProperty prop)
     {
         if (prop == null) throw new ArgumentNullException("prop");
@@ -180,7 +189,7 @@ public static class SerializedPropertyExtensions
             case SerializedPropertyType.ObjectReference:
                 return prop.objectReferenceValue;
             case SerializedPropertyType.LayerMask:
-                return (LayerMask)prop.intValue;
+                return (LayerMask) prop.intValue;
             case SerializedPropertyType.Enum:
                 return prop.enumValueIndex;
             case SerializedPropertyType.Vector2:
@@ -194,7 +203,7 @@ public static class SerializedPropertyExtensions
             case SerializedPropertyType.ArraySize:
                 return prop.arraySize;
             case SerializedPropertyType.Character:
-                return (char)prop.intValue;
+                return (char) prop.intValue;
             case SerializedPropertyType.AnimationCurve:
                 return prop.animationCurveValue;
             case SerializedPropertyType.Bounds:
@@ -206,7 +215,7 @@ public static class SerializedPropertyExtensions
 
         return null;
     }
-        
+
     public static void CopyPropertyValueTo(this SerializedProperty source, SerializedProperty destination)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
@@ -253,7 +262,7 @@ public static class SerializedPropertyExtensions
                 break;
             case SerializedPropertyType.Vector3Int:
                 destination.vector3IntValue = source.vector3IntValue;
-                break; 
+                break;
             case SerializedPropertyType.Rect:
                 destination.rectValue = source.rectValue;
                 break;
@@ -283,11 +292,12 @@ public static class SerializedPropertyExtensions
                     destinationEnumerator.MoveNext();
                     sourceEnumerator.Current.CopyPropertyValueTo(destinationEnumerator.Current);
                 }
+
                 sourceEnumerator.Dispose();
                 sourceEnumerator.Dispose();
-                
+
                 break;
-            } 
+            }
         }
 
         if (!source.isArray || !destination.isArray) return;
@@ -339,7 +349,7 @@ public static class SerializedPropertyExtensions
                 return false;
         }
     }
-    
+
     public static int GetChildPropertyCount(this SerializedProperty property, bool includeGrandChildren = false)
     {
         SerializedProperty pStart = property.Copy();
@@ -371,20 +381,25 @@ public static class SerializedPropertyExtensions
             if (element.Contains("["))
             {
                 string elementName = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
-                var index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal)).Replace("[", "").Replace("]", ""));
+                var index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal))
+                    .Replace("[", "").Replace("]", ""));
 
-                field = tp.GetMember(elementName, MemberTypes.Field, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault() as FieldInfo;
+                field = tp.GetMember(elementName, MemberTypes.Field,
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault() as FieldInfo;
                 if (field == null) return null;
                 tp = field.FieldType;
             }
             else
             {
-                field = tp.GetMember(element, MemberTypes.Field, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault() as FieldInfo;
+                field = tp.GetMember(element, MemberTypes.Field,
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault() as FieldInfo;
                 if (field == null) return null;
                 tp = field.FieldType;
             }
         }
+
         return null;
     }
+}
 }
 #endif

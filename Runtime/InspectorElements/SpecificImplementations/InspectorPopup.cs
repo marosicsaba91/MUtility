@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+namespace MUtility
+{
 public interface IInspectorPopup 
 {
     IEnumerable<object> Elements(object parentObject);
@@ -16,4 +18,5 @@ public abstract class InspectorPopup<TParentObject> : InspectorElement<TParentOb
     protected abstract IEnumerable<object> Elements(TParentObject parentObject);
     public abstract int GetSelectedElement(TParentObject parentObject);
     public abstract void SetSelectedElement(TParentObject parentObject, int index);
+}
 }

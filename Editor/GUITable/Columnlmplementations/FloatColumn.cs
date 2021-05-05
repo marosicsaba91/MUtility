@@ -1,9 +1,9 @@
-﻿#if UNITY_EDITOR 
+﻿#if UNITY_EDITOR
 using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace EditorGUITable
+namespace MUtility
 {
 public class FloatColumn<TRow> : EditableColumn<TRow, float>
 {

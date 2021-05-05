@@ -1,10 +1,11 @@
 ﻿#if UNITY_EDITOR
-using System; 
-using UnityEngine;
+using System;
 using UnityEditor;
-using Utility;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
+namespace MUtility.SpecificImplementations
+{
 [CustomPropertyDrawer(typeof(IInspectorCurve), useForChildren: true)]
 public class InspectorCurveDrawer : InspectorElementDrawer
 {
@@ -378,3 +379,4 @@ public class CurveEditorPreview
     }
 }
 #endif
+}

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
+namespace MUtility
+{
 public static class IListExtensions {
 
     public static T First<T>(this IList<T> list) => list[0];
@@ -151,4 +153,5 @@ public static class IListExtensions {
 
         throw new Exception("Unreachable Code!");
     }
+}
 }

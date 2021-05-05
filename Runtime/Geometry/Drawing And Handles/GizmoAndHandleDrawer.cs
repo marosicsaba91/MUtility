@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using Utility;
 
-namespace  Example.Geometry
+namespace MUtility
 {
     public class GizmoAndHandleDrawer : MonoBehaviour
     { 

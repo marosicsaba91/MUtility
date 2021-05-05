@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+namespace MUtility
+{
 [Serializable]
 public class InfiniteEasingFunction
 {
@@ -52,4 +54,5 @@ public class InfiniteEasingFunction
             function.maximumValue / ((0.8f * function.linearPart) + 0.2f), 
             function.maximumValue);
     }
+}
 }

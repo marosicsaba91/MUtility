@@ -1,4 +1,4 @@
-﻿namespace Utility
+﻿namespace MUtility
 {
     public enum Axis3D : byte
     {

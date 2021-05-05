@@ -1,5 +1,7 @@
 ﻿using System;
 
+namespace MUtility
+{
 public static class ArrayExtensions
 {
     public static void Fill<T>(this T[] array, T value)
@@ -57,4 +59,5 @@ public static class ArrayExtensions
         return result;
 
     }
+}
 }

@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace EditorGUITable
+namespace MUtility
 {
 public abstract class ValueColumn<TRow, TValue> : Column<TRow>
 {

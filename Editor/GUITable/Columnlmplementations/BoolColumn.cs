@@ -3,7 +3,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace EditorGUITable
+namespace MUtility
 {
 public class BoolColumn<TRow> : ValueColumn<TRow, bool>
 {

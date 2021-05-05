@@ -1,4 +1,4 @@
-﻿namespace Utility
+﻿namespace MUtility
 {
     public enum HorizontalDirection
     {

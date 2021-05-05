@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     public static class DrawableHelper
     {

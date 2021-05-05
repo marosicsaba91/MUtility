@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+namespace MUtility
+{
 public enum InspectorMessageType
 {
 	Info,
@@ -26,4 +28,5 @@ public abstract class InspectorMessage<TParentObject> : InspectorElement<TParent
 	protected virtual InspectorMessageType MessageType(TParentObject parentObject) => InspectorMessageType.None;
 	protected virtual bool IsBoxed(TParentObject parentObject) => true;
 
+}
 }

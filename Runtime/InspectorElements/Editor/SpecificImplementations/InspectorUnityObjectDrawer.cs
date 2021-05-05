@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using Utility;
 using Object = UnityEngine.Object;
 
+namespace MUtility.SpecificImplementations
+{
 [CustomPropertyDrawer(typeof(IInspectorUnityObject), useForChildren: true)]
 public class InspectorUnityObjectDrawer : InspectorElementDrawer
 {
@@ -61,5 +62,6 @@ public class InspectorUnityObjectDrawer : InspectorElementDrawer
 		newValue = popup.GetValue(parentObject);
 		return oldValue != newValue;
 	}
+}
 }
 #endif

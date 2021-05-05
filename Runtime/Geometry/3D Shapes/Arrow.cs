@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     // Kb. ugyanaz mint a Ray, de rajzolásra.
 

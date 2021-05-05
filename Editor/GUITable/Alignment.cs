@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace EditorGUITable
+namespace MUtility
 {
 public enum Alignment
 {

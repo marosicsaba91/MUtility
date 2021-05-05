@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using Utility;
 
+namespace MUtility
+{
 public interface IInspectorCurve
 {
     abstract float Evaluate(object parentObject, float time);
@@ -35,4 +36,5 @@ public abstract class InspectorCurve<TContainer> : InspectorElement<TContainer>,
         return Color.yellow;
 #pragma warning restore 162
     } 
+}
 }

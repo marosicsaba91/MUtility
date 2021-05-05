@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+namespace MUtility
+{
 [Serializable]
 public class ElasticEasingFunction : EasingFunctionBase
 {
@@ -27,4 +29,5 @@ public class ElasticEasingFunction : EasingFunctionBase
         MinHeight,
         1,
         MaxHeight - MinHeight);
+}
 }

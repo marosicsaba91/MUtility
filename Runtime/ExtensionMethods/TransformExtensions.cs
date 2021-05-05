@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+namespace MUtility
+{
 public static class TransformExtensions
 {
-    static Vector3 _cacheVector3;
+	static Vector3 _cacheVector3;
 
 	public static void DestroyChildren(this Transform transform, params Transform[] exceptions)
 	{
@@ -106,67 +107,67 @@ public static class TransformExtensions
 	}
 
 
-    public static void SetPositionX(this Transform self, float value)
-    {
-        _cacheVector3 = self.position;
-        _cacheVector3.x = value;
-        self.position = _cacheVector3;
-    }
-    public static void SetPositionY(this Transform self, float value)
-    {
-        _cacheVector3 = self.position;
-        _cacheVector3.y = value;
-        self.position = _cacheVector3;
-    }
-    public static void SetPositionZ(this Transform self, float value)
-    {
-        _cacheVector3 = self.position;
-        _cacheVector3.z = value;
-        self.position = _cacheVector3;
-    }
-    public static void SetLocalPositionX(this Transform self, float value)
-    {
-        _cacheVector3 = self.localPosition;
-        _cacheVector3.x = value;
-        self.localPosition = _cacheVector3;
-    }
-    public static void SetLocalPositionY(this Transform self, float value)
-    {
-        _cacheVector3 = self.localPosition;
-        _cacheVector3.y = value;
-        self.localPosition = _cacheVector3;
-    }
-    public static void SetLocalPositionZ(this Transform self, float value)
-    {
-        _cacheVector3 = self.localPosition;
-        _cacheVector3.z = value;
-        self.localPosition = _cacheVector3;
-    }
-    public static void SetLocalScaleX(this Transform self, float value)
-    {
-        _cacheVector3 = self.localScale;
-        _cacheVector3.x = value;
-        self.localScale = _cacheVector3;
-    }
+	public static void SetPositionX(this Transform self, float value)
+	{
+		_cacheVector3 = self.position;
+		_cacheVector3.x = value;
+		self.position = _cacheVector3;
+	}
+	public static void SetPositionY(this Transform self, float value)
+	{
+		_cacheVector3 = self.position;
+		_cacheVector3.y = value;
+		self.position = _cacheVector3;
+	}
+	public static void SetPositionZ(this Transform self, float value)
+	{
+		_cacheVector3 = self.position;
+		_cacheVector3.z = value;
+		self.position = _cacheVector3;
+	}
+	public static void SetLocalPositionX(this Transform self, float value)
+	{
+		_cacheVector3 = self.localPosition;
+		_cacheVector3.x = value;
+		self.localPosition = _cacheVector3;
+	}
+	public static void SetLocalPositionY(this Transform self, float value)
+	{
+		_cacheVector3 = self.localPosition;
+		_cacheVector3.y = value;
+		self.localPosition = _cacheVector3;
+	}
+	public static void SetLocalPositionZ(this Transform self, float value)
+	{
+		_cacheVector3 = self.localPosition;
+		_cacheVector3.z = value;
+		self.localPosition = _cacheVector3;
+	}
+	public static void SetLocalScaleX(this Transform self, float value)
+	{
+		_cacheVector3 = self.localScale;
+		_cacheVector3.x = value;
+		self.localScale = _cacheVector3;
+	}
 
-    public static void SetLocalScaleY(this Transform self, float value)
-    {
-        _cacheVector3 = self.localScale;
-        _cacheVector3.y = value;
-        self.localScale = _cacheVector3;
-    }
+	public static void SetLocalScaleY(this Transform self, float value)
+	{
+		_cacheVector3 = self.localScale;
+		_cacheVector3.y = value;
+		self.localScale = _cacheVector3;
+	}
 
 	public static void SetLocalScale(this Transform transform, float scale)
 	{
 		transform.localScale = new Vector3(scale, scale, scale);
 	}
 	
-    public static void SetLocalScaleZ(this Transform self, float value)
-    {
-        _cacheVector3 = self.localScale;
-        _cacheVector3.z = value;
-        self.localScale = _cacheVector3;
-    }
+	public static void SetLocalScaleZ(this Transform self, float value)
+	{
+		_cacheVector3 = self.localScale;
+		_cacheVector3.z = value;
+		self.localScale = _cacheVector3;
+	}
 
 	public static void SetGlobalScale(this Transform transform, Vector3 globalScale)
 	{
@@ -213,82 +214,83 @@ public static class TransformExtensions
 		Vector3 up = transform.TransformDirection(rotation * Vector3.up);
 		return Quaternion.LookRotation(forward, up);
 	}
-    public static IEnumerable<Transform> AllChildrenRecursively(this Transform transform)
-    { 
-        for (var i = 0; i < transform.childCount; i++)
-            foreach (Transform child in SelfAndAllChildrenRecursively(transform.GetChild(i)))
-                yield return child;
-    }
+	public static IEnumerable<Transform> AllChildrenRecursively(this Transform transform)
+	{ 
+		for (var i = 0; i < transform.childCount; i++)
+			foreach (Transform child in SelfAndAllChildrenRecursively(transform.GetChild(i)))
+				yield return child;
+	}
 
-    public static IEnumerable<Transform> SelfAndAllChildrenRecursively(this Transform transform)
-    {
-        yield return transform; 
-        for (var i = 0; i< transform.childCount ; i++ )
-            foreach (Transform child in SelfAndAllChildrenRecursively(transform.GetChild(i)))
-                yield return child;
-    }
+	public static IEnumerable<Transform> SelfAndAllChildrenRecursively(this Transform transform)
+	{
+		yield return transform; 
+		for (var i = 0; i< transform.childCount ; i++ )
+			foreach (Transform child in SelfAndAllChildrenRecursively(transform.GetChild(i)))
+				yield return child;
+	}
     
-    public static Transform FindChildRecursive(this Transform parent, string name)
-    {
-        foreach (Transform child in parent)
-        {
-            if (child.name.Contains(name))
-                return child;
+	public static Transform FindChildRecursive(this Transform parent, string name)
+	{
+		foreach (Transform child in parent)
+		{
+			if (child.name.Contains(name))
+				return child;
 
-            Transform result = child.FindChildRecursive(name);
-            if (result != null)
-                return result;
-        }
-        return null;
-    }
+			Transform result = child.FindChildRecursive(name);
+			if (result != null)
+				return result;
+		}
+		return null;
+	}
     
-    public static IEnumerable<TComponent> EnumerateComponentsInParents<TComponent>(
-	    this Transform self, 
+	public static IEnumerable<TComponent> EnumerateComponentsInParents<TComponent>(
+		this Transform self, 
 		bool includeInactive = false)
-    {
-	    if(self == null) yield break;
-	    if(!includeInactive && !self.gameObject.activeInHierarchy) yield break;
+	{
+		if(self == null) yield break;
+		if(!includeInactive && !self.gameObject.activeInHierarchy) yield break;
 	    
-	    foreach (TComponent component in self.GetComponents<TComponent>())
-		    yield return component;
-	    foreach (TComponent component in EnumerateComponentsInParents<TComponent>(self.parent))
-		    yield return component;
-    }
+		foreach (TComponent component in self.GetComponents<TComponent>())
+			yield return component;
+		foreach (TComponent component in EnumerateComponentsInParents<TComponent>(self.parent))
+			yield return component;
+	}
     
-    public static IEnumerable<Component> EnumerateComponentsInParents(
-	    this Transform self,
-	    Type componentType,
-	    bool includeInactive = false)
-    {
-	    if(self == null) yield break;
-	    if(!includeInactive && !self.gameObject.activeInHierarchy) yield break;
+	public static IEnumerable<Component> EnumerateComponentsInParents(
+		this Transform self,
+		Type componentType,
+		bool includeInactive = false)
+	{
+		if(self == null) yield break;
+		if(!includeInactive && !self.gameObject.activeInHierarchy) yield break;
 	    
-	    foreach (Component component in self.GetComponents(componentType))
-		    yield return component;
-	    foreach (Component component in EnumerateComponentsInParents(self.parent, componentType))
-		    yield return component; 
-    }
+		foreach (Component component in self.GetComponents(componentType))
+			yield return component;
+		foreach (Component component in EnumerateComponentsInParents(self.parent, componentType))
+			yield return component; 
+	}
 
-    public static T GetTransformInParentsOnly<T>(this Transform self) where T : Component
-    {
-	    while (true)
-	    {
-		    if (self.parent == null) return null;
-		    var comp = self.parent.GetComponent<T>();
-		    if (comp != null) return comp;
-		    self = self.parent;
-	    }
-    }
+	public static T GetTransformInParentsOnly<T>(this Transform self) where T : Component
+	{
+		while (true)
+		{
+			if (self.parent == null) return null;
+			var comp = self.parent.GetComponent<T>();
+			if (comp != null) return comp;
+			self = self.parent;
+		}
+	}
 
-    public static Object[] GetAllUnityObjects(this Transform root)
-    {
-	    var allObjects = new List<Object>( );
-	    foreach (Transform transform in root.SelfAndAllChildrenRecursively())
-	    {
-		    allObjects.Add(transform.gameObject);
-		    allObjects.AddRange(transform.GetComponents<Component>());
+	public static Object[] GetAllUnityObjects(this Transform root)
+	{
+		var allObjects = new List<Object>( );
+		foreach (Transform transform in root.SelfAndAllChildrenRecursively())
+		{
+			allObjects.Add(transform.gameObject);
+			allObjects.AddRange(transform.GetComponents<Component>());
             
-	    }
-	    return allObjects.ToArray();
-    }
+		}
+		return allObjects.ToArray();
+	}
+}
 }

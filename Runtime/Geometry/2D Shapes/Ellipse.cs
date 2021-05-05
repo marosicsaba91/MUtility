@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     public struct Ellipse : IDrawable, IHandleable, I2DArea, I2DCircumference

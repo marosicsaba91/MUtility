@@ -1,10 +1,12 @@
-﻿#if UNITY_EDITOR 
+﻿#if UNITY_EDITOR
 using System.Linq;
 using System.Text;
-using UnityEditor; 
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+namespace MUtility.SpecificImplementations
+{
 [CustomPropertyDrawer(typeof(IInspectorMessage), useForChildren: true)]
 public class InspectorMessageDrawer : InspectorElementDrawer
 {
@@ -79,5 +81,6 @@ public class InspectorMessageDrawer : InspectorElementDrawer
             return Mathf.Max(h, minimumBoxedHeight);
         return h;
     }
+}
 }
 #endif

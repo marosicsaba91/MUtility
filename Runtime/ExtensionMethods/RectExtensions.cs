@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace MUtility
+{
 public static class RectExtensions
 {
     public static Rect Combine(this Rect self, Rect other)
@@ -66,5 +68,6 @@ public static class RectExtensions
     public static Vector2 TopPoint(this Rect self) => new Vector2(self.center.x, self.yMax);
 
     public static Vector2 BottomPoint(this Rect self) => new Vector2(self.center.x, self.yMin);
+}
 }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     public struct Sphere : IDrawable, IHandleable, I3DContaining, I3DSurface, I3DVolume, IDrag, IMesh

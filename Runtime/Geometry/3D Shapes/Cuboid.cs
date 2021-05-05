@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine; 
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     public struct Cuboid : IDrawable, IHandleable, I3DSurface, I3DVolume, I3DContaining, IMesh

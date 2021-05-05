@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+namespace MUtility
+{
 public static class CollectionExtensions
 {
     public static bool Any<T>(this ICollection<T> source) 
@@ -10,4 +12,5 @@ public static class CollectionExtensions
 
     public static bool IsNullOrEmpty<T>(this ICollection<T> source)
         => source == null || source.Count == 0;
+}
 }

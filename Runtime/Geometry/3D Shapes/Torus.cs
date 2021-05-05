@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     public struct Torus :I3DSurface, I3DVolume, IMesh

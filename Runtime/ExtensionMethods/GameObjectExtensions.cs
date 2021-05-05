@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace MUtility
+{
 public static class GameObjectExtensions
 {
     public static void FindOrCreateComponentInSelf<T>(this GameObject gameObject, ref T component) where T : Component
@@ -29,4 +31,5 @@ public static class GameObjectExtensions
         child.transform.localScale = Vector3.one;
         component = child.AddComponent<T>();
     }
+}
 }

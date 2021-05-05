@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
+namespace MUtility
+{
 public interface IInspectorUnityObject
 {
     public abstract IList<Object> NotNullPopupElements(object container);
@@ -22,4 +24,5 @@ public abstract class InspectorUnityObject<TParentObject> : InspectorElement<TPa
     protected abstract Object GetValue(TParentObject parentObject);
     protected virtual void SetValue(TParentObject parentObject, Object value) { }
     protected virtual IList<Object> NotNullPopupElements(TParentObject parentObject) => null;  
+}
 }

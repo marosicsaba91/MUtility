@@ -3,7 +3,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     public static class EditorHelper
     {

@@ -1,7 +1,9 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
- 
+
+namespace MUtility
+{
 [CustomPropertyDrawer(typeof(TypedGameObject), useForChildren: true)]
 public class TypedGameObjectDrawer : PropertyDrawer
 {
@@ -19,5 +21,6 @@ public class TypedGameObjectDrawer : PropertyDrawer
         if (typedGameObject.TrySetGameObject(newValue))
             EditorUtility.SetDirty(so);
     }
+}
 }
 #endif

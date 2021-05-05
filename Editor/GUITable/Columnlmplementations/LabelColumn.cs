@@ -1,8 +1,8 @@
-﻿#if UNITY_EDITOR 
+﻿#if UNITY_EDITOR
 using System;
 using UnityEngine;
 
-namespace EditorGUITable
+namespace MUtility
 {
 public class LabelColumn<TRow> : ValueColumn<TRow, GUIContent>
 {

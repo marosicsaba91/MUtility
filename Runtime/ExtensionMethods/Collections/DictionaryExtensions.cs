@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+namespace MUtility
+{
 public static class DictionaryExtensions
 {
     public delegate bool Predicate<in TKey, in TValue>(TKey key, TValue value);
@@ -91,13 +93,13 @@ public static class DictionaryExtensions
         dictionary.GetSortedByKeys((a, b) => a.CompareTo(b));
 
     public static Dictionary<TKey, TValue> GetSortedByValues<TKey, TValue>(this Dictionary<TKey, TValue> dictionary) where TValue : IComparable =>
-       dictionary.GetSortedByValues((a, b) => a.CompareTo(b));
+        dictionary.GetSortedByValues((a, b) => a.CompareTo(b));
 
     public static Dictionary<TKey, TValue> GetSortedByKeys<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Comparison<TKey> comparison) =>
         dictionary.GetSorted((a, b) => comparison( a.Key, b.Key));
 
     public static Dictionary<TKey, TValue> GetSortedByValues<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Comparison<TValue> comparison) =>
-       dictionary.GetSorted((a, b) => comparison(a.Value, b.Value));
+        dictionary.GetSorted((a, b) => comparison(a.Value, b.Value));
 
     public static Dictionary<TKey, TValue> GetSorted<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Comparison<KeyValuePair<TKey, TValue>> comparison)
     {
@@ -119,13 +121,13 @@ public static class DictionaryExtensions
         dictionary.IsSortedByKeys((a, b) => a.CompareTo(b));
 
     public static bool IsSortedByValues<TKey, TValue>(this Dictionary<TKey, TValue> dictionary) where TValue : IComparable =>
-       dictionary.IsSortedByValues((a, b) => a.CompareTo(b));
+        dictionary.IsSortedByValues((a, b) => a.CompareTo(b));
 
     public static bool IsSortedByKeys<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Comparison<TKey> comparison) =>
         dictionary.IsSorted((a, b) => comparison(a.Key, b.Key));
 
     public static bool IsSortedByValues<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Comparison<TValue> comparison) =>
-       dictionary.IsSorted((a, b) => comparison(a.Value, b.Value));
+        dictionary.IsSorted((a, b) => comparison(a.Value, b.Value));
 
 
     public static bool IsSorted<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Comparison<KeyValuePair<TKey, TValue>> comparison)
@@ -199,4 +201,5 @@ public static class DictionaryExtensions
         else
             dictionary.Add(key, value);
     }
+}
 }

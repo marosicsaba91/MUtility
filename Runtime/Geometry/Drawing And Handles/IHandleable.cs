@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Utility
+namespace MUtility
 {
     public interface IHandleable
     {

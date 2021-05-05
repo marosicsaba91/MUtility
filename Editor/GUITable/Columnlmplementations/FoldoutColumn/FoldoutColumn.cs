@@ -1,10 +1,9 @@
 ﻿#if UNITY_EDITOR
-using System; 
+using System;
 using UnityEditor;
 using UnityEngine;
-using Utility;
 
-namespace EditorGUITable
+namespace MUtility
 {
 public abstract class FoldoutColumn<T>: Column<FoldableRow<T>>
 {

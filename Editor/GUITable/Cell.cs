@@ -2,18 +2,18 @@
 using System;
 using UnityEngine;
 
-namespace EditorGUITable
-{
+namespace MUtility
+{ 
 public abstract class Cell
 {
     public abstract void DrawCell(Rect position);
 }
 
-class Cell<TRow,TColumn> : Cell where TColumn : IColumn<TRow>
+class Cell<TRow, TColumn> : Cell where TColumn : IColumn<TRow>
 {
     readonly Action _onChanged;
     readonly TRow _row;
-    readonly TColumn _column; 
+    readonly TColumn _column;
 
     public Cell(
         TRow row,
@@ -27,7 +27,7 @@ class Cell<TRow,TColumn> : Cell where TColumn : IColumn<TRow>
     }
 
     public override void DrawCell(Rect position) => _column.DrawCell(position, _row, _onChanged);
-    
-}
+
+} 
 }
 #endif

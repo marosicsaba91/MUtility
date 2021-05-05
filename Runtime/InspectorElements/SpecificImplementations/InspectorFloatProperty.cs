@@ -1,4 +1,5 @@
-﻿
+﻿namespace MUtility
+{
 public interface IInspectorFloatProperty : IInspectorProperty<float> { 
 	bool TryGetRange(object parentObject, out float min, out float max); 
 }
@@ -20,4 +21,5 @@ public abstract class InspectorFloatProperty<TParentObject> : InspectorElement<T
 		max = 0;
 		return false;
 	}
+}
 }

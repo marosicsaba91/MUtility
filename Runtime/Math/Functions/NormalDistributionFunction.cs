@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+namespace MUtility
+{
 [Serializable]
 public class NormalDistributionFunction 
 {
@@ -62,4 +64,5 @@ public class NormalDistributionFunction
         }
 
     }
+}
 }

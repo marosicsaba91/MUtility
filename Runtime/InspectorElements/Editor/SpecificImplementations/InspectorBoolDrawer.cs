@@ -1,8 +1,10 @@
-﻿#if UNITY_EDITOR 
+﻿#if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine; 
+using UnityEngine;
 using Object = UnityEngine.Object;
 
+namespace MUtility.SpecificImplementations
+{
 [CustomPropertyDrawer(typeof(IInspectorProperty<bool>), useForChildren: true)]
 public class InspectorBoolDrawer : InspectorElementDrawer
 {
@@ -23,5 +25,6 @@ public class InspectorBoolDrawer : InspectorElementDrawer
 		boolElement.SetValue(parentObject, newValue);
 		return true;
 	}
+}
 }
 #endif

@@ -1,6 +1,8 @@
 ﻿
 using UnityEngine;
 
+namespace MUtility
+{
 public static class RectTransformExtensions
 {
     public static void SetLeft(this RectTransform rt, float left)
@@ -22,4 +24,5 @@ public static class RectTransformExtensions
     {
         rt.offsetMin = new Vector2(rt.offsetMin.x, bottom);
     }
+}
 }

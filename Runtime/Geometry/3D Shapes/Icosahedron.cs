@@ -1,6 +1,6 @@
 ﻿using System; 
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     struct Icosahedron : I3DSurface, I3DVolume

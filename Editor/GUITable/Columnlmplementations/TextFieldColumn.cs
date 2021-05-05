@@ -2,9 +2,9 @@
 #if UNITY_EDITOR
 using System;
 using UnityEditor;
-using UnityEngine; 
+using UnityEngine;
 
-namespace EditorGUITable
+namespace MUtility
 {
 public class TextFieldColumn<TRow> : EditableColumn<TRow, string>
 {

@@ -1,7 +1,7 @@
 ﻿using System; 
 using UnityEngine;
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     public struct Rectangle3D : IEquatable<Rectangle3D>, IDrawable, I2DArea, I2DCircumference

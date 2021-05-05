@@ -1,4 +1,6 @@
-﻿public interface IInspectorButton
+﻿namespace MUtility
+{
+public interface IInspectorButton
 {
 	void OnClick(object parentObject);
 	string WarningMessage(object parentObject);
@@ -10,4 +12,5 @@ public abstract class InspectorButton<TParentObject> : InspectorElement<TParentO
 	public string WarningMessage(object parentObject) => WarningMessage((TParentObject) parentObject);
 	protected abstract void OnClick(TParentObject parentObject);
 	protected virtual string WarningMessage(TParentObject parentObject) => null; 
+}
 }

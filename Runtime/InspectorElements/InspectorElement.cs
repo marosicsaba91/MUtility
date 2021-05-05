@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace MUtility
+{
 public interface IInspectorElement
 {
     public abstract string Text(object parentObject);
@@ -22,4 +24,5 @@ public abstract class InspectorElement<TContainer> : IInspectorElement
     protected virtual bool IsEnabled(TContainer parentObject) => true;
     protected virtual bool IsVisible(TContainer parentObject) => true;
     protected virtual Object[] ChangeableObjects(TContainer parentObject) => null;
+}
 }

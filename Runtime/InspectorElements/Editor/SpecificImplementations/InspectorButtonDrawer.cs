@@ -1,7 +1,9 @@
 ﻿#if UNITY_EDITOR
-using UnityEditor; 
+using UnityEditor;
 using UnityEngine;
 
+namespace MUtility.SpecificImplementations
+{
 [CustomPropertyDrawer(typeof(IInspectorButton), useForChildren: true)]
 public class InspectorButtonDrawer : InspectorElementDrawer
 {
@@ -19,13 +21,14 @@ public class InspectorButtonDrawer : InspectorElementDrawer
 		string warning = button.WarningMessage(parentObject);
 		if (!string.IsNullOrEmpty(warning) && !DisplayDialog(warning, label.text)) return false;
 
-		 button.OnClick(parentObject);
-		 return true;
+		button.OnClick(parentObject);
+		return true;
 	}
 
 	bool DisplayDialog(string warningMessage, string label)
 	{
 		return EditorUtility.DisplayDialog(label, warningMessage, "OK", "Cancel");
 	}
+}
 }
 #endif

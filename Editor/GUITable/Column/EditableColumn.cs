@@ -1,10 +1,8 @@
-﻿#if UNITY_EDITOR 
-using System; 
+﻿#if UNITY_EDITOR
+using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-namespace EditorGUITable
+namespace MUtility
 {
 public abstract class EditableColumn<TRow, TValue> : Column<TRow> where TValue : IEquatable<TValue>
 { 

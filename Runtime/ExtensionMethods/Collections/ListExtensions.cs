@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+namespace MUtility
+{
 public static class ListExtensions
 {
     public static void Add<T>(this List<T> list, T value, int length)
@@ -46,4 +48,5 @@ public static class ListExtensions
             j++;
         }
     }
+}
 }

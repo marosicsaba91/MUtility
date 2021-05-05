@@ -1,8 +1,10 @@
-﻿#if UNITY_EDITOR 
+﻿#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
  
+namespace MUtility
+{
 public abstract class InspectorElementDrawer : PropertyDrawer
 {
 	Color _tempColor;
@@ -78,5 +80,6 @@ public abstract class InspectorElementDrawer : PropertyDrawer
 		Object serializedObject,
 		GUIContent label)
 		=> null;
+}
 }
 #endif

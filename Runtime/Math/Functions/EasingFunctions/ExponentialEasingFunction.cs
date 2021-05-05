@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+namespace MUtility
+{
 [Serializable]
 public class ExponentialEasingFunction : EasingFunctionBase
 {
@@ -9,4 +11,5 @@ public class ExponentialEasingFunction : EasingFunctionBase
 
     protected override float EaseIn01Evaluate(float t) =>
         1 - Mathf.Pow(1 - t, exponent);
+}
 }

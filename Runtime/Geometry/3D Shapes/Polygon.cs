@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System; 
 using UnityEngine.Serialization;
 
-namespace Utility
+namespace MUtility
 {
     [Serializable]
     public struct Polygon : I2DArea, IHandleable, I2DCircumference, IDrawable

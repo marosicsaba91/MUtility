@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+namespace MUtility
+{
 [Serializable]
 public abstract class TypedGameObject
 {
@@ -42,4 +44,5 @@ public abstract class TypedGameObject<TComponent> : TypedGameObject where TCompo
         gameObject = value;
         return true;
     }
+}
 }

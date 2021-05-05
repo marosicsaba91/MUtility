@@ -4,6 +4,8 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+namespace MUtility.SpecificImplementations
+{
 [CustomPropertyDrawer(typeof(IInspectorInt), useForChildren: true)]
 public class InspectorIntDrawer : InspectorElementDrawer
 {
@@ -35,5 +37,6 @@ public class InspectorIntDrawer : InspectorElementDrawer
 		intElement.SetValue(parentObject, newValue);
 		return true;
 	}
+}
 }
 #endif

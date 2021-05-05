@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+namespace MUtility
+{
 public static class MathHelper
 {
     public static float LerpUnclamped(float input, float minOutput, float maxOutput,
@@ -142,4 +144,5 @@ public static class MathHelper
     public static bool ChanceInPercent(int percent) => Random.Range(0, 100) < percent;
 
     public static bool Chance(float rate) => Random.Range(0f, 1f) < rate;
+}
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine; 
 
-namespace Utility
+namespace MUtility
 {
 [Serializable]
 public struct HermiteCurve : IDrawable

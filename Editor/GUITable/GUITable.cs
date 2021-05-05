@@ -2,21 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EditorGUITable;
 using UnityEditor;
 using UnityEngine; 
-using Utility;
+using MUtility;
 using Object = UnityEngine.Object;
 
+namespace MUtility
+{
 public class GUITable
 {
 	protected static GUIStyle rowButtonStyle;
 }
 
-public class GUITable<TRowType>: GUITable
-{ 
+public class GUITable<TRowType> : GUITable
+{
 	public List<IColumn<TRowType>> columns;
-	
+
 	// Optionally Modifiable Fields 
 	public float rowHeight = EditorGUIUtility.singleLineHeight;
 	public Func<int, TRowType, bool> isRowHighlightedGetter;
@@ -38,9 +39,9 @@ public class GUITable<TRowType>: GUITable
 		this.columns = columns;
 		this.window = window;
 	}
-	 
+
 	public void Draw(Rect position, IReadOnlyList<TRowType> rows)
-	{ 
+	{
 		int rowCount = rows.Count;
 		float areaH = HeaderHeight + (rowHeight * rowCount);
 		float areaW = position.width - (position.height >= areaH ? 0 : 13);
@@ -60,22 +61,22 @@ public class GUITable<TRowType>: GUITable
 			summaRelativeWidth == 0 ? 0 : leftoverWidth / summaRelativeWidth;
 
 		bool wasScrolledToEnd = _lastRowCount != rowCount &&
-		                        position.height + _scrollPos.y + 0.01f >=  HeaderHeight + (rowHeight * _lastRowCount);
+		                        position.height + _scrollPos.y + 0.01f >= HeaderHeight + (rowHeight * _lastRowCount);
 
 		Vector2 newScrollPos = GUI.BeginScrollView(position, _scrollPos, area);
 		bool manuallyScrolled = Math.Abs(newScrollPos.y - _scrollPos.y) > 0.01f;
 		_scrollPos = newScrollPos;
 
 		float currentY = HeaderHeight;
-		if(rowHeight <= 0)
+		if (rowHeight <= 0)
 			rowHeight = EditorGUIUtility.singleLineHeight;
 
 		_currentCellHoverIndex = Vector2Int.zero;
 		_mouseMoved = Event.current.type == EventType.MouseMove;
-		
-		if(drawHeader)
+
+		if (drawHeader)
 			DrawHeaders(columns, relativeWidthMultiplier, _scrollPos.y);
-		
+
 		DrawRows(
 			position.size,
 			rows, currentY,
@@ -92,7 +93,7 @@ public class GUITable<TRowType>: GUITable
 		void OnRowsChanged()
 		{
 			Object obj = editedObjectGetter?.Invoke();
-			if(obj!=null) 
+			if (obj != null)
 				EditorUtility.SetDirty(obj);
 		}
 
@@ -102,11 +103,11 @@ public class GUITable<TRowType>: GUITable
 
 		_lastRowCount = rowCount;
 		GUI.enabled = true;
-		GUI.EndScrollView(); 
+		GUI.EndScrollView();
 	}
 
 	void DrawRows(
-		Vector2 size, 
+		Vector2 size,
 		IReadOnlyList<TRowType> rows,
 		float currentY,
 		float relativeWidthMultiplier,
@@ -115,21 +116,22 @@ public class GUITable<TRowType>: GUITable
 		int rowCount = rows.Count;
 		if (rowCount == 0)
 			GUI.Label(
-				new Rect(5, currentY, size.x-5, rowHeight),
-				emptyCollectionTextGetter?.Invoke()??string.Empty);
+				new Rect(5, currentY, size.x - 5, rowHeight),
+				emptyCollectionTextGetter?.Invoke() ?? string.Empty);
 		else
 		{
 			int firsElementToDraw = Mathf.Max(0, (int) (_scrollPos.y / rowHeight));
 			int lastElementToDraw =
 				Mathf.Min(firsElementToDraw + Mathf.CeilToInt(size.y / rowHeight), rows.Count - 1);
-			
+
 			currentY += firsElementToDraw * rowHeight;
 			for (int i = firsElementToDraw; i <= lastElementToDraw; i++)
 			{
 				TRowType row = rows[i];
 				bool isSelected = isRowHighlightedGetter?.Invoke(i, row) ?? false;
-				List<Cell> cells = columns.Select(columnSelector => columnSelector.GetCell(row, onRowsChanged)).ToList();
-				
+				List<Cell> cells = columns.Select(columnSelector => columnSelector.GetCell(row, onRowsChanged))
+					.ToList();
+
 				var rowPosition = new Rect(0, currentY, size.x, rowHeight);
 				bool clickedOnRow = DrawRow(
 					rowPosition,
@@ -137,11 +139,11 @@ public class GUITable<TRowType>: GUITable
 					columns,
 					cells,
 					relativeWidthMultiplier,
-					i % 2 == 0, 
+					i % 2 == 0,
 					isSelected);
 				currentY += rowHeight;
-				
-				if(clickedOnRow)
+
+				if (clickedOnRow)
 					clickOnRow?.Invoke(i, row);
 			}
 		}
@@ -166,7 +168,7 @@ public class GUITable<TRowType>: GUITable
 		if (clickOnRow != null && position.Contains(Event.current.mousePosition))
 			EditorGUI.DrawRect(position, EditorHelper.tableHoverColor);
 
-		float currentX = position.x; 
+		float currentX = position.x;
 
 		for (var i = 0; i < cells.Count; i++)
 		{
@@ -215,9 +217,10 @@ public class GUITable<TRowType>: GUITable
 				column.CustomHeaderDrawer.Invoke(headerRect);
 		}
 	}
-	
+
 	float TableHeight(int rowCount) => HeaderHeight + RowsHeight(rowCount);
 	float HeaderHeight => drawHeader ? 22 : 0;
 	float RowsHeight(int rowCount) => rowHeight * Mathf.Max(1, rowCount);
-} 
+}
+}
 #endif

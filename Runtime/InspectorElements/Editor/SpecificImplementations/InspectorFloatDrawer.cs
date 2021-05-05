@@ -2,9 +2,10 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using Utility;
 using Object = UnityEngine.Object;
 
+namespace MUtility.SpecificImplementations
+{
 [CustomPropertyDrawer(typeof(IInspectorFloatProperty), useForChildren: true)]
 public class InspectorFloatDrawer : InspectorElementDrawer
 {
@@ -36,5 +37,6 @@ public class InspectorFloatDrawer : InspectorElementDrawer
 		floatElement.SetValue(parentObject, newValue);
 		return true;
 	}
+}
 }
 #endif
