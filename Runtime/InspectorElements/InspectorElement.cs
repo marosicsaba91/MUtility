@@ -3,8 +3,8 @@
 namespace MUtility
 {
 public interface IInspectorElement
-{
-    object ParentObject { get; set; }
+{ 
+    object ParentObject { get; set; } 
     string Text(object parentObject);
     Color GetGUIColor(object parentObject);
     bool IsEnabled(object parentObject);
