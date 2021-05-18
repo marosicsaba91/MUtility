@@ -39,7 +39,7 @@ public interface IInspectorUnityObject
         this.value = value;
         InvokeValueChanged();
     }
-    protected void InvokeValueChanged() => ValueChanged?.Invoke(value);
+    protected void InvokeValueChanged() => ValueChanged.EditorInvoke(value);
 
     protected virtual IList<Object> NotNullPopupElements(TParentObject parentObject) => null;
 

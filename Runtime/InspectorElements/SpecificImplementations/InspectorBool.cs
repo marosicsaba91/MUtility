@@ -24,7 +24,7 @@ namespace MUtility
 		this.value = value;
 		InvokeValueChanged();
 	}
-	protected void InvokeValueChanged() => ValueChanged?.EditorInvoke(value);
+	protected void InvokeValueChanged() => ValueChanged.EditorInvoke(value);
 	
 	public static implicit operator bool(InspectorBool<TParentObject> obj) => obj.GetValue(obj.ParentObject);
 }

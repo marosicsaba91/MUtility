@@ -39,7 +39,7 @@ namespace MUtility
         this.value = value;
         InvokeValueChanged();
     }
-    protected void InvokeValueChanged() => ValueChanged?.EditorInvoke(value);
+    protected void InvokeValueChanged() => ValueChanged.EditorInvoke(value);
 
 
     public static implicit operator TEnumType(InspectorEnumPopup<TParentObject, TEnumType> obj) =>
