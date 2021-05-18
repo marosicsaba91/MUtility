@@ -57,7 +57,7 @@ public static class EditorDelegateInvokeExtensions
         }
 
         //Invoke 
-        return del.DynamicInvoke(args);
+        return del?.DynamicInvoke(args);
 #endif
     }
 }

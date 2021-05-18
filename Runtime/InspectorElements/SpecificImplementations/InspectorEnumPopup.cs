@@ -37,9 +37,9 @@ namespace MUtility
     {
         if (this.value.Equals(value)) return;
         this.value = value;
-        ValueChanged?.Invoke(this.value);
+        InvokeValueChanged();
     }
-    protected void InvokeValueChanged() => ValueChanged?.Invoke(value);
+    protected void InvokeValueChanged() => ValueChanged?.EditorInvoke(value);
 
 
     public static implicit operator TEnumType(InspectorEnumPopup<TParentObject, TEnumType> obj) =>

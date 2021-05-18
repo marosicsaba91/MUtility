@@ -31,7 +31,7 @@ public interface IInspectorFloatProperty : IInspectorProperty<float> {
 		InvokeValueChanged();
 	}
 	
-	protected void InvokeValueChanged() => ValueChanged?.Invoke(value);
+	protected void InvokeValueChanged() => ValueChanged.EditorInvoke(value);
 
 	protected virtual bool TryGetRange(TParentObject container, out float min, out float max)
 	{
