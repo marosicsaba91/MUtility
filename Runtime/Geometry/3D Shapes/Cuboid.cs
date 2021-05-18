@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine; 
+using UnityEngine;
 
 namespace MUtility
 {
@@ -245,7 +245,7 @@ namespace MUtility
             resultMesh.triangles = triangles;
             resultMesh.RecalculateBounds();
             resultMesh.RecalculateTangents();
-            resultMesh.Optimize();
+            ;
         }
 
 

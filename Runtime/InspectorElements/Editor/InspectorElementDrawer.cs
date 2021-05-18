@@ -19,6 +19,7 @@ public abstract class InspectorElementDrawer : PropertyDrawer
 		if (!inspectorElement.IsVisible(containerObject))
 			return -EditorGUIUtility.standardVerticalSpacing;
 
+		inspectorElement.ParentObject = containerObject;
 		float? height = GetPropertyHeight(inspectorElement, property, containerObject, serializedObject, label);
 		return
 			height == null ? base.GetPropertyHeight(property, label) :
@@ -31,7 +32,7 @@ public abstract class InspectorElementDrawer : PropertyDrawer
 		_tempColor = GUI.color;
 		_tempEnabled = GUI.enabled;
 		var inspectorElement = (IInspectorElement) property.GetObjectOfProperty();
-		object containerObject = property.GetObjectWithProperty();
+		object containerObject = property.GetObjectWithProperty(); 
 		if (!inspectorElement.IsVisible(containerObject)) return;
 
 		Object serializedObject = property.serializedObject.targetObject;
@@ -49,7 +50,7 @@ public abstract class InspectorElementDrawer : PropertyDrawer
 			inspectorElement.ChangeableObjects(containerObject) ?? new[] {serializedObject};
 
 		Undo.RecordObjects(changeableObjects, "Inspector Property Changed!");
-
+		inspectorElement.ParentObject = containerObject;
 		bool stateChanged = Draw(position, inspectorElement, property, containerObject, serializedObject, label);
 
 		if (stateChanged)

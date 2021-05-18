@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace MUtility.SpecificImplementations
+namespace MUtility
 {
 [CustomPropertyDrawer(typeof(IInspectorUnityObject), useForChildren: true)]
 public class InspectorUnityObjectDrawer : InspectorElementDrawer
@@ -19,7 +19,7 @@ public class InspectorUnityObjectDrawer : InspectorElementDrawer
 		Object serializedObject,
 		GUIContent label)
 	{
-		var popup = (IInspectorUnityObject) inspectorElement; 
+		var popup = (IInspectorUnityObject) inspectorElement;
 		Object oldValue = popup.GetValue(parentObject);
 		Object newValue;
 		Type contentType = popup.ContentType;

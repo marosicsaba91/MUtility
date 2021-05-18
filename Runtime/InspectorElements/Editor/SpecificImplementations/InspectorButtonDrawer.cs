@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace MUtility.SpecificImplementations
+namespace MUtility
 {
 [CustomPropertyDrawer(typeof(IInspectorButton), useForChildren: true)]
 public class InspectorButtonDrawer : InspectorElementDrawer

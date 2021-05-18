@@ -1,10 +1,9 @@
-﻿#if UNITY_EDITOR 
+﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEngine; 
-using MUtility;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace MUtility
@@ -187,7 +186,8 @@ public class GUITable<TRowType> : GUITable
 
 		if (clickOnRow == null) return false;
 
-		rowButtonStyle ??= new GUIStyle(GUI.skin.label);
+		if(rowButtonStyle == null)
+			rowButtonStyle = new GUIStyle(GUI.skin.label);
 		bool click = GUI.Button(position, GUIContent.none, rowButtonStyle);
 
 		return click;

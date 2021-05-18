@@ -186,7 +186,7 @@ namespace MUtility
             resultMesh.triangles = triangles;
 
             resultMesh.RecalculateBounds();
-            resultMesh.Optimize();
+            ;
         }
 
         public float GetDrag(Vector3 direction)

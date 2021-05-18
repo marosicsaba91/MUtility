@@ -47,7 +47,6 @@ namespace MUtility
 
 		
 		// Drawing Inspector
- 
         public const float indentWidth = 15;
         public const float startSpace = 18;
         public const float endSpace = 5;
@@ -65,6 +64,8 @@ namespace MUtility
         
         public static float ContentStartX => startSpace + IndentsWidth + LabelWidth;
         public static float ContentWidth => FullWith - NotIndentedLabelWidth - startSpace - endSpace;
+        
+        public static bool IsModernEditorUI => UnityVersion.Get().IsHigherOrEqualThan("2019.3");
         
         // Box Drawing
         public static Rect DrawBox(Rect position, bool borderInside = true) =>
@@ -105,7 +106,7 @@ namespace MUtility
                 return _mat;
             }
         }
-
+        
         public static void DrawLine(Rect rect, Vector2 a, Vector2 b) => DrawLine(rect, b, b, tableBorderColor);
 
         public static void DrawLine(Rect rect, Vector2 a, Vector2 b, Color color) =>

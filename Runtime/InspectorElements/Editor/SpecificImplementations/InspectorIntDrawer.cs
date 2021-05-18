@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace MUtility.SpecificImplementations
+namespace MUtility
 {
 [CustomPropertyDrawer(typeof(IInspectorInt), useForChildren: true)]
 public class InspectorIntDrawer : InspectorElementDrawer

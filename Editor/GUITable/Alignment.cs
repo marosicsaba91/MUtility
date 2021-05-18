@@ -30,13 +30,20 @@ public static class AlignmentHelper
         return result;
     }
 
-    public static TextAnchor ToTextAnchor(this Alignment alignment) => alignment switch
+    public static TextAnchor ToTextAnchor(this Alignment alignment)
     {
-        Alignment.Left => TextAnchor.MiddleLeft,
-        Alignment.Center => TextAnchor.MiddleCenter,
-        Alignment.Right => TextAnchor.MiddleRight,
-        _ => throw new ArgumentOutOfRangeException()
-    };
+        switch (alignment)
+        {
+            case Alignment.Left:
+                return TextAnchor.MiddleLeft;
+            case Alignment.Center:
+                return TextAnchor.MiddleCenter;
+            case Alignment.Right:
+                return TextAnchor.MiddleRight;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
 }
 }
 #endif

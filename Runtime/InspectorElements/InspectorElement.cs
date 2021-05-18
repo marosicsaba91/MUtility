@@ -4,15 +4,23 @@ namespace MUtility
 {
 public interface IInspectorElement
 {
-    public abstract string Text(object parentObject);
-    public abstract Color GetGUIColor(object parentObject);
-    public abstract bool IsEnabled(object parentObject);
-    public abstract bool IsVisible(object parentObject);
-    public abstract Object[] ChangeableObjects(object parentObject);
+    object ParentObject { get; set; }
+    string Text(object parentObject);
+    Color GetGUIColor(object parentObject);
+    bool IsEnabled(object parentObject);
+    bool IsVisible(object parentObject);
+    Object[] ChangeableObjects(object parentObject);
 }
 
 public abstract class InspectorElement<TContainer> : IInspectorElement
 {
+    public object ParentObject { get; internal set; }
+    object IInspectorElement.ParentObject
+    {
+        get => ParentObject;
+        set => ParentObject = value;
+    }
+
     public string Text(object parentObject) => Text((TContainer) parentObject);
     public Color GetGUIColor(object parentObject) => GetColor((TContainer) parentObject);
     public bool IsEnabled(object parentObject) => IsEnabled((TContainer) parentObject);
