@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace MUtility
 {
-[CustomPropertyDrawer(typeof(IInspectorFloatProperty), useForChildren: true)]
+[CustomPropertyDrawer(typeof(IFloatProperty), useForChildren: true)]
 public class InspectorFloatDrawer : InspectorElementDrawer
 {
 	public override bool Draw(
@@ -17,7 +17,7 @@ public class InspectorFloatDrawer : InspectorElementDrawer
 		Object serializedObject,
 		GUIContent label)
 	{
-		var floatElement = (IInspectorFloatProperty) inspectorElement;
+		var floatElement = (IFloatProperty) inspectorElement;
 		float oldValue = floatElement.GetValue(parentObject);
 		float newValue;
 		if (floatElement.TryGetRange(parentObject, out float min, out float max))

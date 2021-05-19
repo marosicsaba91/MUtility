@@ -1,13 +1,13 @@
 ﻿using System;
-using UnityEngine;
+using UnityEngine; 
 
 namespace MUtility
 {
-public interface IInspectorFloatProperty : IInspectorProperty<float> { 
+public interface IFloatProperty : IInspectorProperty<float> { 
 	bool TryGetRange(object parentObject, out float min, out float max); 
 }
 
-[Serializable]public abstract class InspectorFloat<TParentObject> : InspectorElement<TParentObject>, IInspectorFloatProperty
+[Serializable]public abstract class Float<TParentObject> : InspectorElement<TParentObject>, IFloatProperty
 {
 	[SerializeField] float value;
 	public event Action<float> ValueChanged;
@@ -40,6 +40,9 @@ public interface IInspectorFloatProperty : IInspectorProperty<float> {
 		return false;
 	}
 
-	public static implicit operator float(InspectorFloat<TParentObject> obj) => obj.GetValue(obj.ParentObject);
+	public static implicit operator float(Float<TParentObject> obj) => obj.GetValue(obj.ParentObject);
 }
+
+[Serializable] public class FloatProperty : Float<object> { }
+
 }

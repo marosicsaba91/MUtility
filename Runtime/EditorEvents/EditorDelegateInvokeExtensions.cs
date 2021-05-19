@@ -50,10 +50,10 @@ public static class EditorDelegateInvokeExtensions
     static object DynamicEditorInvoke(this Delegate del, params object[] args)
     {
 #if !UNITY_EDITOR
-            return del.DynamicInvoke(args);
+            return del?.DynamicInvoke(args);
 #else
         if (Application.isPlaying)
-            return del.DynamicInvoke(args);
+            return del?.DynamicInvoke(args);
 
 
         // Subscribe all Subscribers
