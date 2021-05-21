@@ -8,7 +8,7 @@ namespace MUtility
 [Serializable] public abstract class InspectorEnumPopup<TParentObject, TEnumType> : InspectorPopup<TParentObject> 
     where TEnumType : Enum
 {
-    [SerializeField]  TEnumType value;
+    [SerializeField] TEnumType value;
     public event Action<TEnumType> ValueChanged;
     protected sealed override IEnumerable<object> Elements(TParentObject parentObject) => 
         Enum.GetValues(typeof(TEnumType)).Cast<object>();

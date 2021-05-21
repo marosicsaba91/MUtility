@@ -47,7 +47,7 @@ public static class EditorDelegateInvokeExtensions
         T1 param1, T2 param2, T3 param3, T4 param4) =>
         (TOut) function.DynamicEditorInvoke(param1, param2, param3, param4);
 
-    static object DynamicEditorInvoke(this Delegate del, params object[] args)
+    internal static object DynamicEditorInvoke(this Delegate del, params object[] args)
     {
 #if !UNITY_EDITOR
             return del?.DynamicInvoke(args);

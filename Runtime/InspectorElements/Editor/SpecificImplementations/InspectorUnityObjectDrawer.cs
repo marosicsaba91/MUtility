@@ -23,7 +23,8 @@ public class InspectorUnityObjectDrawer : InspectorElementDrawer
 		Object oldValue = popup.GetValue(parentObject);
 		Object newValue;
 		Type contentType = popup.ContentType;
-		if (!contentType.IsSubclassOf(typeof(Object)))
+		Type objectType = typeof(Object);
+		if (contentType != objectType && !contentType.IsSubclassOf(objectType))
 		{
 			EditorGUI.LabelField(position,
 				$"This is not a UnityEngine.Object type: {contentType}");
