@@ -292,5 +292,8 @@ public static class TransformExtensions
 		}
 		return allObjects.ToArray();
 	}
+	
+	
+	public static Pose GetPose(this Transform transform) => new Pose(transform.position, transform.rotation);
 }
 }

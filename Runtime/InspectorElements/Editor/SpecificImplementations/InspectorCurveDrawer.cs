@@ -378,5 +378,5 @@ public class CurveEditorPreview
         return value.ToString("0.#E+0");
     }
 }
-#endif
 }
+#endif
