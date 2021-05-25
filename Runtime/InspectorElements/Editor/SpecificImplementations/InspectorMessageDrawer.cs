@@ -33,7 +33,7 @@ public class InspectorMessageDrawer : InspectorElementDrawer
 
         InspectorMessageType inspectorMessageType = message.MessageType(parentObject);
         MessageType editorMessageType = ToEditorMessageType(inspectorMessageType);
-        GUIContent content = GetHelpIcon(editorMessageType);
+        GUIContent content = GetHelpIcon(editorMessageType, position.height < 40);
         content.text = messageBuilder.ToString();
         int fontSize = message.FontSize;
 
@@ -46,21 +46,29 @@ public class InspectorMessageDrawer : InspectorElementDrawer
         return false;
     }
 
-    internal static GUIContent GetHelpIcon(MessageType type)
+    internal static GUIContent GetHelpIcon(MessageType type, bool small)
     {
+        var t = string.Empty;
+        
         switch (type)
         {
             case MessageType.Info:
-                return EditorGUIUtility.IconContent("console.infoicon");
+                t += "console.infoicon";
+                break;
             case MessageType.Warning:
-                return EditorGUIUtility.IconContent("console.warnicon");
+                t += "console.warnicon"; 
+                break;
             case MessageType.Error:
-                return EditorGUIUtility.IconContent("console.erroricon");
+                t += "console.erroricon"; 
+                break; 
             default:
                 return new GUIContent();
         }
-    }
 
+        t += small ? ".sml" : string.Empty;
+        return EditorGUIUtility.IconContent(t);
+    }
+    
     static MessageType ToEditorMessageType(InspectorMessageType inspectorMessageType)
     {
         switch (inspectorMessageType)
@@ -88,9 +96,8 @@ public class InspectorMessageDrawer : InspectorElementDrawer
         int fontSize = message.FontSize;
         bool boxed = message.IsBoxed(parentObject);
         int spacingSize = Mathf.RoundToInt(0.2f * fontSize);
-
-        float h = messageCount * (fontSize + spacingSize) + (boxed ? 7 : 0);
-        const float minimumBoxedHeight = 38;
+        const float minimumBoxedHeight = 22;
+        float h = messageCount * (fontSize + spacingSize) + (boxed ? 7 : 0);  
         if(boxed)
             return Mathf.Max(h, minimumBoxedHeight);
         return h;

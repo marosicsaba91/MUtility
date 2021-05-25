@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MUtility
@@ -7,6 +8,8 @@ public interface IInspectorProperty<T>
 {
     T GetValue(object parentObject);
     void SetValue(object parentObject, T value);
+
+    IList<T> PopupElements(object parentObject);
 }
 
 
@@ -27,7 +30,9 @@ public class InspectorProperty<TParentObject, TPropertyType> :
         SetValue((TParentObject) parentObject, value);
         valueChanged?.Invoke((TParentObject) parentObject, oldValue, value);
     }
- 
+
+    public IList<TPropertyType> PopupElements(object parentObject) => PopupElements((TParentObject) parentObject);
+
     public TPropertyType Value
     {
         get => GetValue(ParentObject);
@@ -38,6 +43,7 @@ public class InspectorProperty<TParentObject, TPropertyType> :
 
     protected virtual void SetValue(TParentObject parentObject, TPropertyType value) => this.value = value;
  
+    protected virtual IList<TPropertyType> PopupElements(TParentObject container) => null;
 
     public static implicit operator TPropertyType(InspectorProperty<TParentObject, TPropertyType> obj) => 
         obj.GetValue(obj.ParentObject);

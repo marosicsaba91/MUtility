@@ -2,40 +2,22 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace MUtility
 {
 [CustomPropertyDrawer(typeof(IFloatProperty), useForChildren: true)]
-public class InspectorFloatDrawer : InspectorElementDrawer
+public class InspectorFloatDrawer :  InspectorPropertyDrawer<float, IFloatProperty>
 {
-	public override bool Draw(
-		Rect position,
-		IInspectorElement inspectorElement,
-		SerializedProperty property,
-		object parentObject,
-		Object serializedObject,
-		GUIContent label)
-	{
-		var floatElement = (IFloatProperty) inspectorElement;
-		float oldValue = floatElement.GetValue(parentObject);
-		float newValue;
-		if (floatElement.TryGetRange(parentObject, out float min, out float max))
-		{
-			newValue = EditorGUI.Slider(
-				position,
-				label,
-				oldValue,
-				min,
-				max);
-		}
-		else
-			newValue = EditorGUI.FloatField(position, label, oldValue);
-		
-		if (Math.Abs(newValue - oldValue) < float.Epsilon) return false;
+ 
 
-		floatElement.SetValue(parentObject, newValue);
-		return true;
+	protected override float GetValue(
+		Rect position, GUIContent label, float oldValue,
+		IFloatProperty inspectorProperty, object parentObject)
+	{
+		if (inspectorProperty.TryGetRange(parentObject, out float min, out float max))
+			return EditorGUI.Slider(position, label, oldValue, min, max);
+
+		return EditorGUI.FloatField(position, label, oldValue);
 	}
 }
 }
