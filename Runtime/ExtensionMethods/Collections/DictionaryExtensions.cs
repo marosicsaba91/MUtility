@@ -146,7 +146,7 @@ public static class DictionaryExtensions
     public static KeyValuePair<TKey, TValue> GetRandomElement<TKey, TValue>(this Dictionary<TKey, TValue> dict)
     {
         int randomIndex = UnityEngine.Random.Range(0, dict.Count);
-        int index = 0;
+        var index = 0;
         foreach (var item in dict)
         {
             if (index == randomIndex)

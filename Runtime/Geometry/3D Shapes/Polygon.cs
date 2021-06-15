@@ -77,9 +77,9 @@ namespace MUtility
             if (points == null || points.Count <= 1)
                 return new Drawable(new Vector3 [0][]);
              
-            Vector3[] polygon = new Vector3[SegmentCount+1];
+            var polygon = new Vector3[SegmentCount+1];
 
-            for (int i = 0; i < points.Count; i++)            
+            for (var i = 0; i < points.Count; i++)            
                 polygon[i] = points[i];
             
             if (closed)
@@ -90,8 +90,8 @@ namespace MUtility
 
         public List<HandlePoint> GetHandles()
         {
-            List<HandlePoint> result = new List<HandlePoint>(points.Count);
-            for (int i = 0; i < points.Count; i++)
+            var result = new List<HandlePoint>(points.Count);
+            for (var i = 0; i < points.Count; i++)
             {
                 result.Add(new HandlePoint(points[i], HandlePoint.Shape.Rectangle));
             }

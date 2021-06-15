@@ -13,7 +13,7 @@ public static class IListExtensions {
     {
         output.Clear();
         int listCount = source.Count;
-        for (int i = 0; i < listCount; i++)
+        for (var i = 0; i < listCount; i++)
         {
             var element = source[i];
             if (predicate(element))
@@ -27,7 +27,7 @@ public static class IListExtensions {
     {
         output.Clear();
         int listCount = source.Count;
-        for (int i = 0; i < listCount; i++)
+        for (var i = 0; i < listCount; i++)
         {
             var element = source[i];
             output.Add(selector(element));
@@ -97,7 +97,7 @@ public static class IListExtensions {
         if (list == null || list.Count == 0)
             return list;
 
-        for (int i = 0; i < list.Count - 1; i++)
+        for (var i = 0; i < list.Count - 1; i++)
         {
             int index = UnityEngine.Random.Range(i, list.Count);
             list.Swap(i, index);
@@ -119,8 +119,8 @@ public static class IListExtensions {
     {
         int count = source.Count;
 
-        int elementCountWithPredicate = 0;
-        for (int i = 0; i < count; i++)
+        var elementCountWithPredicate = 0;
+        for (var i = 0; i < count; i++)
         {
             T element = source[i];
             if (predicate(element))
@@ -136,8 +136,8 @@ public static class IListExtensions {
         }
 
         int random = UnityEngine.Random.Range(0, elementCountWithPredicate);
-        int index = 0;
-        for (int i = 0; i < count; i++)
+        var index = 0;
+        for (var i = 0; i < count; i++)
         {
             T element = source[i];
             if (predicate(element))

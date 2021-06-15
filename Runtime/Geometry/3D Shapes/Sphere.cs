@@ -47,14 +47,14 @@ namespace MUtility
 
         public Drawable ToDrawable(int complexity, int circleSegmentCount)
         {
-            Vector3[][] polygons = new Vector3[complexity * 2][];
-            Circle unitCircle = new Circle(Vector3.zero, radius);
-            for (int i = 0; i < complexity; i++)
+            var polygons = new Vector3[complexity * 2][];
+            var unitCircle = new Circle(Vector3.zero, radius);
+            for (var i = 0; i < complexity; i++)
             {
                 // Szélességi
                 float h = (-radius) + ((1 + i) * (2 * radius) / (complexity + 1));
                 float circleRadius = Mathf.Sqrt((radius * radius) - (h * h));
-                Circle c1 = new Circle(Vector3.zero, circleRadius);
+                var c1 = new Circle(Vector3.zero, circleRadius);
                 var polygon = c1.ToPolygon(circleSegmentCount);
                 polygon.Rotate(Quaternion.Euler(90, 0, 0));
                 polygon.Offset(new Vector3(center.x, center.y + h, center.z));
@@ -93,18 +93,18 @@ namespace MUtility
 
             resultMesh.Clear();
             #region Vertices
-            Vector3[] vertices = new Vector3[(nbLong + 1) * nbLat + 2];
+            var vertices = new Vector3[(nbLong + 1) * nbLat + 2];
             float pi = Mathf.PI;
             float _2pi = pi * 2f;
 
             vertices[0] = Vector3.up * radius;
-            for (int lat = 0; lat < nbLat; lat++)
+            for (var lat = 0; lat < nbLat; lat++)
             {
                 float a1 = pi * (lat + 1) / (nbLat + 1);
                 float sin1 = Mathf.Sin(a1);
                 float cos1 = Mathf.Cos(a1);
 
-                for (int lon = 0; lon <= nbLong; lon++)
+                for (var lon = 0; lon <= nbLong; lon++)
                 {
                     float a2 = _2pi * (float)(lon == nbLong ? 0 : lon) / nbLong;
                     float sin2 = Mathf.Sin(a2);
@@ -121,17 +121,17 @@ namespace MUtility
             #endregion
 
             #region Normales		
-            Vector3[] normales = new Vector3[vertices.Length];
-            for (int n = 0; n < vertices.Length; n++)
+            var normales = new Vector3[vertices.Length];
+            for (var n = 0; n < vertices.Length; n++)
                 normales[n] = vertices[n].normalized;
             #endregion
 
             #region UVs
-            Vector2[] uvs = new Vector2[vertices.Length];
+            var uvs = new Vector2[vertices.Length];
             uvs[0] = Vector2.up;
             uvs[uvs.Length - 1] = Vector2.zero;
-            for (int lat = 0; lat < nbLat; lat++)
-                for (int lon = 0; lon <= nbLong; lon++)
+            for (var lat = 0; lat < nbLat; lat++)
+                for (var lon = 0; lon <= nbLong; lon++)
                     uvs[lon + lat * (nbLong + 1) + 1] = new Vector2(((float)lon / nbLong) + 0.5f, 1f - (float)(lat + 1) / (nbLat + 1));
             #endregion
 
@@ -139,11 +139,11 @@ namespace MUtility
             int nbFaces = vertices.Length;
             int nbTriangles = nbFaces * 2;
             int nbIndexes = nbTriangles * 3;
-            int[] triangles = new int[nbIndexes];
+            var triangles = new int[nbIndexes];
 
             //Top Cap
-            int i = 0;
-            for (int lon = 0; lon < nbLong; lon++)
+            var i = 0;
+            for (var lon = 0; lon < nbLong; lon++)
             {
                 triangles[i++] = lon + 2;
                 triangles[i++] = lon + 1;
@@ -151,9 +151,9 @@ namespace MUtility
             }
 
             //Middle
-            for (int lat = 0; lat < nbLat - 1; lat++)
+            for (var lat = 0; lat < nbLat - 1; lat++)
             {
-                for (int lon = 0; lon < nbLong; lon++)
+                for (var lon = 0; lon < nbLong; lon++)
                 {
                     int current = lon + lat * (nbLong + 1) + 1;
                     int next = current + nbLong + 1;
@@ -169,7 +169,7 @@ namespace MUtility
             }
 
             //Bottom Cap
-            for (int lon = 0; lon < nbLong; lon++)
+            for (var lon = 0; lon < nbLong; lon++)
             {
                 triangles[i++] = vertices.Length - 1;
                 triangles[i++] = vertices.Length - (lon + 2) - 1;
@@ -177,7 +177,7 @@ namespace MUtility
             }
             #endregion
 
-            for (int n = 0; n < vertices.Length; n++)
+            for (var n = 0; n < vertices.Length; n++)
                 vertices[n] += center;
 
             resultMesh.vertices = vertices;

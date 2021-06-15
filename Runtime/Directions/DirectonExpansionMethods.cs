@@ -383,7 +383,7 @@ namespace MUtility
                     break;
             }
 
-            throw new System.Exception("Unreachable Code");
+            throw new Exception("Unreachable Code");
         }
     }
 }

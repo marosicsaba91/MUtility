@@ -61,7 +61,7 @@ public static class CubeSliceHelper
 
         _intersections.Clear();
         _tested.Fill(false);
-        CubeSliceHelper._plain = plain;
+        _plain = plain;
 
         _lastIndex = 0;
         _testIndex = 0;

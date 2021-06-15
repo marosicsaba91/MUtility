@@ -6,28 +6,28 @@ namespace MUtility
     {
         public static Vector3[] Transform(this Vector3[] polygon, Transform transform)
         {
-            for (int i = 0; i < polygon.Length; i++)
+            for (var i = 0; i < polygon.Length; i++)
                 polygon[i] = transform.TransformPoint(polygon[i]);
             return polygon;
         }
 
         public static Vector3[] Offset(this Vector3[] polygon, Vector3 offset)
         {
-            for (int i = 0; i < polygon.Length; i++)
+            for (var i = 0; i < polygon.Length; i++)
                 polygon[i] += offset;
             return polygon;
         }
 
         public static Vector3[] Rotate(this Vector3[] polygon, Quaternion rotate)
         {
-            for (int i = 0; i < polygon.Length; i++)
+            for (var i = 0; i < polygon.Length; i++)
                 polygon[i] = rotate * polygon[i];
             return polygon;
         }
 
         public static Vector3[] Scale(this Vector3[] polygon, float scale)
         {
-            for (int i = 0; i < polygon.Length; i++)
+            for (var i = 0; i < polygon.Length; i++)
                 polygon[i] = new Vector3(
                     scale * polygon[i].x,
                     scale * polygon[i].y,
@@ -37,7 +37,7 @@ namespace MUtility
 
         public static Vector3[] Scale(this Vector3[] polygon, Vector3 scale)
         {
-            for (int i = 0; i < polygon.Length; i++)
+            for (var i = 0; i < polygon.Length; i++)
                 polygon[i] = new Vector3(
                     scale.x * polygon[i].x,
                     scale.y * polygon[i].y,
@@ -47,7 +47,7 @@ namespace MUtility
 
         public static Vector3[] Transform(this Vector3[] polygon, Vector3 offset, Quaternion rotate, float scale)
         {
-            for (int i = 0; i < polygon.Length; i++)
+            for (var i = 0; i < polygon.Length; i++)
             {
                 polygon[i] = rotate * polygon[i];
                 polygon[i] = new Vector3(
@@ -60,7 +60,7 @@ namespace MUtility
 
         public static Vector3[] Transform(this Vector3[] polygon, Vector3 offset, Quaternion rotate, Vector3 scale)
         {
-            for (int i = 0; i < polygon.Length; i++)
+            for (var i = 0; i < polygon.Length; i++)
             {
                 polygon[i] = rotate * polygon[i];
                 polygon[i] = new Vector3(
@@ -86,7 +86,7 @@ namespace MUtility
 
             if (type == DrawingType.Debug)
             {
-                for (int i = 0; i < polygon.Length - 1; i++)
+                for (var i = 0; i < polygon.Length - 1; i++)
                 {
                     Debug.DrawLine(polygon[i], polygon[i + 1], color);
                 }
@@ -94,7 +94,7 @@ namespace MUtility
             else
             {
                 Gizmos.color = color;
-                for (int i = 0; i < polygon.Length - 1; i++)
+                for (var i = 0; i < polygon.Length - 1; i++)
                 {
                     Gizmos.DrawLine(polygon[i], polygon[i + 1]);
                 }

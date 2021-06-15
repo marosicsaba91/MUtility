@@ -59,14 +59,14 @@ namespace MUtility
 
         public Drawable ToDrawable()
         {
-            Vector3 ap = new Vector3(0,fullHeight, 0);
+            var ap = new Vector3(0,fullHeight, 0);
 
-            Vector3 p1 = new Vector3(baseRect.x / 2f, 0, baseRect.y / 2f);
-            Vector3 p2 = new Vector3(baseRect.x / 2f, 0, -baseRect.y / 2f);
-            Vector3 p3 = new Vector3(-baseRect.x / 2f, 0, baseRect.y / 2f);
-            Vector3 p4 = new Vector3(-baseRect.x / 2f, 0, -baseRect.y / 2f);
+            var p1 = new Vector3(baseRect.x / 2f, 0, baseRect.y / 2f);
+            var p2 = new Vector3(baseRect.x / 2f, 0, -baseRect.y / 2f);
+            var p3 = new Vector3(-baseRect.x / 2f, 0, baseRect.y / 2f);
+            var p4 = new Vector3(-baseRect.x / 2f, 0, -baseRect.y / 2f);
 
-            Drawable d = new Drawable(
+            var d = new Drawable(
                 new Vector3[] { p1, p2, p4, p3, p1 },
                 new Vector3[] { p1, ap },
                 new Vector3[] { p2, ap },

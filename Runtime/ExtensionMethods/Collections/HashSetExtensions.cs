@@ -81,7 +81,7 @@ public static class HashSetExtensions
     public static T GetRandomElement<T>(this HashSet<T> hashSet)
     {
         int randomIndex = UnityEngine.Random.Range(0, hashSet.Count);
-        int index = 0;
+        var index = 0;
         foreach (var item in hashSet)
         {
             if (index == randomIndex)
@@ -95,7 +95,7 @@ public static class HashSetExtensions
     {
         int count = hashSet.Count;
 
-        int elementCountWithPredicate = 0;
+        var elementCountWithPredicate = 0;
         foreach (var element in hashSet)
             if (predicate(element))
             {
@@ -110,7 +110,7 @@ public static class HashSetExtensions
         }
 
         int random = UnityEngine.Random.Range(0, elementCountWithPredicate);
-        int index = 0;
+        var index = 0;
         foreach (var element in hashSet)
             if (predicate(element))
             {

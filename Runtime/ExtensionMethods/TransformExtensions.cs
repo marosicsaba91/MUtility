@@ -206,7 +206,7 @@ public static class TransformExtensions
 		Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one).inverse;
 		return worldToLocalMatrix.MultiplyPoint3x4(position);
 	}
-	
+
 	public static Quaternion TransformRotation(
 		this Transform transform, Quaternion rotation)
 	{
@@ -214,6 +214,16 @@ public static class TransformExtensions
 		Vector3 up = transform.TransformDirection(rotation * Vector3.up);
 		return Quaternion.LookRotation(forward, up);
 	}
+	
+	public static Quaternion InverseTransformRotation(
+		this Transform transform, Quaternion rotation)
+	{
+		Vector3 forward = transform.InverseTransformDirection(rotation * Vector3.forward);
+		Vector3 up = transform.InverseTransformDirection(rotation * Vector3.up);
+		return Quaternion.LookRotation(forward, up);
+	}
+
+
 	public static IEnumerable<Transform> AllChildrenRecursively(this Transform transform)
 	{ 
 		for (var i = 0; i < transform.childCount; i++)
@@ -295,5 +305,17 @@ public static class TransformExtensions
 	
 	
 	public static Pose GetPose(this Transform transform) => new Pose(transform.position, transform.rotation);
+
+	public static Pose TransformPose(this Transform transform, Pose localPose) => new Pose
+	{
+		position = transform.TransformPoint(localPose.position),
+		rotation = transform.TransformRotation(localPose.rotation)
+	};
+
+	public static Pose InverseTransformPose(this Transform transform, Pose localPose) => new Pose
+	{
+		position = transform.InverseTransformPoint(localPose.position),
+		rotation = transform.InverseTransformRotation(localPose.rotation)
+	};
 }
 }

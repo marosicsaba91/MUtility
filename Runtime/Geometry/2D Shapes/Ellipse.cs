@@ -46,10 +46,10 @@ namespace MUtility
 
         public Vector3[] ToPolygon(int fragmentCount = defaultFragmentCount)
         {
-            Vector3[] points = new Vector3[fragmentCount];
+            var points = new Vector3[fragmentCount];
 
             float angle = Mathf.PI * 2f / (fragmentCount - 1);
-            for (int i = 0; i < fragmentCount - 1; i++)
+            for (var i = 0; i < fragmentCount - 1; i++)
             {
                 float phase = i * angle;
                 points[i] = (Mathf.Sin(phase) * Vector3.right) + (Mathf.Cos(phase) * Vector3.up);

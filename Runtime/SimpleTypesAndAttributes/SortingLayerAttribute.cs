@@ -77,7 +77,7 @@ namespace MUtility
 			string layerName = SortingLayer.IDToName(property.intValue);
 
 			// Return the index where on it matches.
-			for (int i = 0; i < SortingLayerNames.Length; ++i)
+			for (var i = 0; i < SortingLayerNames.Length; ++i)
 			{
 				if (SortingLayerNames[i].Equals(layerName))
 				{
@@ -93,9 +93,9 @@ namespace MUtility
 
 		string[] GetSortingLayerNames()
 		{
-			string[] result = new string[SortingLayer.layers.Length];
+			var result = new string[SortingLayer.layers.Length];
 
-			for (int i = 0; i < result.Length; ++i)
+			for (var i = 0; i < result.Length; ++i)
 				result[i] = SortingLayer.layers[i].name;
 
 			return result;

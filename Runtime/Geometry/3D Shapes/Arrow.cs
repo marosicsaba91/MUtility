@@ -94,12 +94,12 @@ namespace MUtility
             bool showBaseLine = visulas.baseLineLength > 0 && !headOnly;
             bool showMiddleLine = !headOnly;
 
-            int polygonIndex = 0;
+            var polygonIndex = 0;
             int polygonCount =
                 (showArrowHead ? 1 : 0) +
                 (showBaseLine ? 1 : 0) +
                 (showMiddleLine ? 1 : 0);
-            Vector3[][] polygons = new Vector3[polygonCount][];
+            var polygons = new Vector3[polygonCount][];
 
             var normalDir = NormalDirection;
             float middleLength = magnitude - (showArrowHead ? arrowHeadLength : 0);
@@ -167,8 +167,8 @@ namespace MUtility
             public DrawingSettings(float baseLineLength, float arrowHeadLength, float arrowHeadAngle)
             {
                 this.baseLineLength = baseLineLength;
-                this.maxArrowHeadLength = arrowHeadLength;
-                this.arrowHeadAngleInDeg = arrowHeadAngle;
+                maxArrowHeadLength = arrowHeadLength;
+                arrowHeadAngleInDeg = arrowHeadAngle;
             }
         }
     }

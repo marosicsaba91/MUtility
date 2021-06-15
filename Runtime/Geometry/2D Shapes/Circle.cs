@@ -64,13 +64,13 @@ namespace MUtility
         public Drawable ToDrawable_Dashed( int fregmentCount = defaultSegmentCount)
         {
             fregmentCount /= 2;
-            Vector2 right = new Vector2(radius, 0); ;
-            Vector2 up = new Vector2(0, radius);
+            var right = new Vector2(radius, 0); ;
+            var up = new Vector2(0, radius);
 
-            Vector3[][] polygons = new Vector3[fregmentCount][];
+            var polygons = new Vector3[fregmentCount][];
 
             float angle = Mathf.PI * 2f / (fregmentCount*2);
-            for (int i = 0; i < polygons.Length; i++)
+            for (var i = 0; i < polygons.Length; i++)
             {
                 float phase1 = angle * 2 * i;
                 float phase2 = angle * ((2 * i) + 1);
@@ -86,10 +86,10 @@ namespace MUtility
             Vector3 right = new Vector2(radius, 0); ;
             Vector3 up = new Vector2(0, radius);
 
-            Vector3[] points = new Vector3[segmentCount + 1];
+            var points = new Vector3[segmentCount + 1];
 
             float angle = Mathf.PI * 2f / segmentCount;
-            for (int i = 0; i < segmentCount; i++)
+            for (var i = 0; i < segmentCount; i++)
             {
                 float phase = angle * i;
                 points[i] = (Mathf.Sin(phase) * right) + (Mathf.Cos(phase) * up);

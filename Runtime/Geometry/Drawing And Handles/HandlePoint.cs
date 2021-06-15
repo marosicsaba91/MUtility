@@ -13,10 +13,10 @@ namespace MUtility
          
         public HandlePoint(Vector3 position, Shape shape = Shape.Circle)  
         {
-            this.label = null;
+            label = null;
             this.position = position;
             this.shape = shape;
-            this.labelShift = default;
+            labelShift = default;
         }
 
         public HandlePoint(Vector3 position, Shape shape, string label)
@@ -24,7 +24,7 @@ namespace MUtility
             this.label = label;
             this.position = position;
             this.shape = shape;
-            this.labelShift = default;
+            labelShift = default;
         }
 
         public HandlePoint(Vector3 position, Shape shape, string label, Vector3 labelShift)
@@ -39,7 +39,7 @@ namespace MUtility
         {
             this.label = label;
             this.position = position;
-            this.shape = Shape.Circle;
+            shape = Shape.Circle;
             this.labelShift = labelShift;
         }
 
@@ -47,8 +47,8 @@ namespace MUtility
         {
             this.label = label;
             this.position = position;
-            this.shape = Shape.Circle;
-            this.labelShift = default;
+            shape = Shape.Circle;
+            labelShift = default;
         }
     }
 }

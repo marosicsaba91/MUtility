@@ -11,7 +11,7 @@ namespace MUtility
 
         public Plain(Vector3 position, Vector3 normal)
         {
-            this.origin = position;
+            origin = position;
             this.normal = normal;
         }
 
@@ -49,7 +49,7 @@ namespace MUtility
             const int points = 25;
             var polygon = new Vector3[points];
             float angle = Mathf.PI * 2 / (points - 1);
-            for (int i = 0; i < points-1; i++)
+            for (var i = 0; i < points-1; i++)
             {
                 float phase = i *angle;
                 polygon[i] = origin + (Mathf.Sin(phase) * up + Mathf.Cos(phase) * right);

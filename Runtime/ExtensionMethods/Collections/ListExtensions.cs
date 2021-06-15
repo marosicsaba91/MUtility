@@ -7,7 +7,7 @@ public static class ListExtensions
 {
     public static void Add<T>(this List<T> list, T value, int length)
     {
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
             list.Add(value); 
     }
 
@@ -18,7 +18,7 @@ public static class ListExtensions
 
         T last = startValue;
         array.Add(startValue);
-        for (int i = 1; i < length; i++)
+        for (var i = 1; i < length; i++)
         {
             last = next(last);
             array.Add(last);
@@ -34,8 +34,8 @@ public static class ListExtensions
     {
         int destCount = destination.Count;
 
-        int j = 0;
-        for (int i = 0; i < length; i++)
+        var j = 0;
+        for (var i = 0; i < length; i++)
         {
             if (destCount >= j)
             {
