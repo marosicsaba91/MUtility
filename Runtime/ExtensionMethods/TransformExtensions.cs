@@ -317,5 +317,15 @@ public static class TransformExtensions
 		position = transform.InverseTransformPoint(localPose.position),
 		rotation = transform.InverseTransformRotation(localPose.rotation)
 	};
+
+	public static void SetPose(this Transform transform, Pose pose) =>
+		transform.SetPositionAndRotation(pose.position, pose.rotation);
+
+	public static void SetLocalPose(this Transform transform, Pose pose)
+	{
+		transform.localPosition = pose.position;
+		transform.localRotation = pose.rotation;
+	}
+
 }
 }

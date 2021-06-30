@@ -286,7 +286,7 @@ public static class SerializedPropertyExtensions
             {
                 IEnumerator<SerializedProperty> sourceEnumerator = source.GetChildren().GetEnumerator();
                 IEnumerator<SerializedProperty> destinationEnumerator = destination.GetChildren().GetEnumerator();
-                for (var i = 0; i < source.GetChildPropertyCount(false); i++)
+                for (var i = 0; i < source.GetChildPropertyCount(includeGrandChildren: false); i++)
                 {
                     sourceEnumerator.MoveNext();
                     destinationEnumerator.MoveNext();
@@ -381,8 +381,6 @@ public static class SerializedPropertyExtensions
             if (element.Contains("["))
             {
                 string elementName = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
-                var index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal))
-                    .Replace("[", "").Replace("]", ""));
 
                 field = tp.GetMember(elementName, MemberTypes.Field,
                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault() as FieldInfo;
@@ -399,6 +397,15 @@ public static class SerializedPropertyExtensions
         }
 
         return null;
+    }
+    
+    public static bool IsExpandable(this SerializedProperty property)
+    {
+        if (property.propertyType == SerializedPropertyType.Generic ||
+            property.propertyType == SerializedPropertyType.Vector4 ||
+            property.propertyType == SerializedPropertyType.Quaternion)
+            return true;
+        return false;
     }
 }
 }
