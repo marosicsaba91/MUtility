@@ -4,94 +4,105 @@ using UnityEngine;
 
 namespace MUtility
 {
-    // Kb. ugyanaz mint a Ray, de rajzolásra.
-
-    [Serializable]
+[Serializable]
     public struct Arrow : IDrawable, IHandleable
     {
         public Vector3 origin;
-        [SerializeField] Vector3 normalDirection;
-        
-        public Vector3 NormalDirection
-        {
-            get => normalDirection.normalized;
-            set => normalDirection = value == Vector3.zero ? Vector3.zero : value.normalized;
-        }
+        public Vector3 direction;
         public float magnitude;
+        public Vector3? normalDirection;
+        
+        public Vector3 DirectionNormalized
+        {
+            get => direction.normalized;
+            set => direction = value == Vector3.zero ? Vector3.zero : value.normalized;
+        }
+
+        public Arrow(Ray ray, Vector3? normalDirection = null) => Init(
+	        ray, 
+	        normalDirection,
+	        out origin, 
+	        out direction, 
+	        out magnitude,
+	        out this.normalDirection);
         
         
-        public Arrow(Ray ray)
+        static void Init(Ray ray, Vector3? normalDirectionValue, 
+	        out Vector3 origin, out  Vector3 directionNormalized, out float magnitude, out Vector3? normalDirection)
         {
             origin = ray.origin;
             magnitude = ray.direction.magnitude;
 
-            if (ray.direction == Vector3.zero)
-                normalDirection = Vector3.up;
-            else
-                normalDirection = ray.direction.normalized;
+            directionNormalized = ray.direction == Vector3.zero ? Vector3.up : ray.direction.normalized;
+            normalDirection = normalDirectionValue;
+        }
+
+        public Arrow(Vector3 origin, Vector3 direction, Vector3? normalDirection = null)
+        {
+	        this.origin = origin;
+	        magnitude = direction.magnitude;
+
+	        if (direction == Vector3.zero)
+		        this.direction = Vector3.up;
+	        else
+		        this.direction = direction.normalized;
+	        this.normalDirection = normalDirection;
+        }
+
+
+        public Arrow(Vector3 origin, Vector3 direction, float magnitude, Vector3? normalDirection = null )
+        {
+	        this.origin = origin;
+	        this.magnitude = magnitude;
+
+	        if (direction == Vector3.zero)
+		        this.direction = Vector3.up;
+	        else
+		        this.direction = direction.normalized;
+	        this.normalDirection = normalDirection;
         }
         
-        public Arrow(Vector3 origin, Vector3 direction)
-        {
-            this.origin = origin;
-            magnitude = direction.magnitude;
-
-            if (direction == Vector3.zero)
-                normalDirection = Vector3.up;
-            else
-                normalDirection = direction.normalized;
-        }
-
-
-        public Arrow(Vector3 origin, Vector3 direction, float magnitude)
-        {
-            this.origin = origin;
-            this.magnitude = magnitude;
-
-            if (direction == Vector3.zero)
-                normalDirection = Vector3.up;
-            else
-                normalDirection = direction.normalized;
-        }
-
         Vector3 Head
         {
-            get => origin + (NormalDirection * magnitude);
+            get => origin + (DirectionNormalized * magnitude);
             set
             {
-                Vector2 vec = value - origin;
-                NormalDirection = vec.normalized;
+                Vector3 vec = value - origin;
+                DirectionNormalized = vec.normalized;
                 magnitude = vec.magnitude;
             }
         }
 
         public Vector3 DirectionVector
         {
-            get => NormalDirection * magnitude;
+            get => DirectionNormalized * magnitude;
             set
             {
-                NormalDirection = value;
+                DirectionNormalized = value;
                 magnitude = value.magnitude;
             }
         }
         Ray ToRay => new Ray(origin, DirectionVector);
 
-        public Drawable ToDrawable() => ToDrawable(Vector3.forward, DrawingSettings.Default);
-
-        public Drawable ToDrawable(Vector3 normal) => ToDrawable(normal, DrawingSettings.Default);
-
-        public Drawable ToDrawable(DrawingSettings visulas) => ToDrawable(Vector3.forward, visulas);
-
-        public Drawable ToDrawable(Vector3 normal, DrawingSettings visulas)
+        public Drawable ToDrawable() => ToDrawable(DrawingSettings.Default); 
+        public Drawable ToDrawable( DrawingSettings visuals)
         {
-            if (normal == Vector3.zero) { normal = Vector3.forward; }
+	        Vector3 normal;
+	        if (normalDirection == null)
+	        {
+		        Camera c = Camera.current;
+		        normal = c == null ? Vector3.forward : (c.transform.position - origin).normalized;
+	        }
+	        else
+		        normal = normalDirection.Value;
+	        
             if (magnitude < 0)
                 magnitude = 0;
 
-            float arrowHeadLength = magnitude == 0 ? visulas.maxArrowHeadLength : Mathf.Min(visulas.maxArrowHeadLength, magnitude);
-            bool showArrowHead = visulas.maxArrowHeadLength > 0 && visulas.arrowHeadAngleInDeg > 0 && visulas.arrowHeadAngleInDeg < 180;
-            bool headOnly = showArrowHead && (magnitude <= visulas.maxArrowHeadLength || magnitude==0);
-            bool showBaseLine = visulas.baseLineLength > 0 && !headOnly;
+            float arrowHeadLength = magnitude == 0 ? visuals.maxArrowHeadLength : Mathf.Min(visuals.maxArrowHeadLength, magnitude);
+            bool showArrowHead = visuals.maxArrowHeadLength > 0 && visuals.arrowHeadAngleInDeg > 0 && visuals.arrowHeadAngleInDeg < 180;
+            bool headOnly = showArrowHead && (magnitude <= visuals.maxArrowHeadLength || magnitude==0);
+            bool showBaseLine = visuals.baseLineLength > 0 && !headOnly;
             bool showMiddleLine = !headOnly;
 
             var polygonIndex = 0;
@@ -101,39 +112,36 @@ namespace MUtility
                 (showMiddleLine ? 1 : 0);
             var polygons = new Vector3[polygonCount][];
 
-            var normalDir = NormalDirection;
+            Vector3 normalizedDirection = DirectionNormalized;
             float middleLength = magnitude - (showArrowHead ? arrowHeadLength : 0);
-            Vector3 backOfHead = origin + (middleLength * normalDir);
-            Vector3 perpendicular = Vector3.Cross(normalDir, normal).normalized;
+            Vector3 backOfHead = origin + (middleLength * normalizedDirection);
+            Vector3 perpendicular = Vector3.Cross(normalizedDirection, normal).normalized;
             if (perpendicular == Vector3.zero)
             {
-                perpendicular = Math.Abs(Mathf.Abs(normalDir.x) - 1) > 0.0001f ? Vector3.right : Vector3.up;
+                perpendicular = Math.Abs(Mathf.Abs(normalizedDirection.x) - 1) > 0.0001f ? Vector3.right : Vector3.up;
             }
 
             if (showArrowHead)
             {
-                float arrowHeadBack = arrowHeadLength * 2 * Mathf.Tan(visulas.arrowHeadAngleInDeg * Mathf.Deg2Rad / 2f);
+                float arrowHeadBack = arrowHeadLength * 2 * Mathf.Tan(visuals.arrowHeadAngleInDeg * Mathf.Deg2Rad / 2f);
                 Vector3 halfArrowBackVec = perpendicular * (0.5f * arrowHeadBack);
                 Vector3 headA = backOfHead + halfArrowBackVec;
                 Vector3 headB = backOfHead - halfArrowBackVec;
-                polygons[polygonIndex] = new Vector3[] { Head, headA, headB, Head };
+                polygons[polygonIndex] = new[] { Head, headA, headB, Head };
                 polygonIndex++;
             }
 
             if (showBaseLine)
             {
-                Vector3 halfBaseLineVec = perpendicular * 0.5f * visulas.baseLineLength;
+                Vector3 halfBaseLineVec = perpendicular * (0.5f * visuals.baseLineLength);
                 Vector3 baseLineA = origin + halfBaseLineVec;
                 Vector3 baseLineB = origin - halfBaseLineVec;
-                polygons[polygonIndex] = new Vector3[] { baseLineA, baseLineB };
+                polygons[polygonIndex] = new[] { baseLineA, baseLineB };
                 polygonIndex++;
             }
 
             if (showMiddleLine)
-            {
-                polygons[polygonIndex] = new Vector3[] { origin, backOfHead };
-                polygonIndex++;
-            }
+	            polygons[polygonIndex] = new[] { origin, backOfHead };
 
             return new Drawable(polygons);
         }
@@ -141,7 +149,7 @@ namespace MUtility
         public List<HandlePoint> GetHandles() =>
             new List<HandlePoint> {
                 new HandlePoint(origin, HandlePoint.Shape.Rectangle),
-                new HandlePoint(Head, HandlePoint.Shape.Circle) };
+                new HandlePoint(Head) };
         
         public void SetHandle(int index, Vector3 point)
         {
