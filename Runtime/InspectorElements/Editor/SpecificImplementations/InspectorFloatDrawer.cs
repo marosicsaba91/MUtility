@@ -8,8 +8,6 @@ namespace MUtility
 [CustomPropertyDrawer(typeof(IFloatProperty), useForChildren: true)]
 public class InspectorFloatDrawer :  InspectorPropertyDrawer<float, IFloatProperty>
 {
- 
-
 	protected override float GetValue(
 		Rect position, GUIContent label, float oldValue,
 		IFloatProperty inspectorProperty, object parentObject)

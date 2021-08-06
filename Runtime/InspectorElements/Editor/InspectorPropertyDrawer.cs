@@ -7,6 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace MUtility
 {
+
 public abstract class InspectorPropertyDrawer<T, TProperty> : InspectorElementDrawer
 	where TProperty : IInspectorProperty<T>
 {

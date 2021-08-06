@@ -5,6 +5,7 @@ using Object = UnityEngine.Object;
  
 namespace MUtility
 {
+[CustomPropertyDrawer(typeof(IInspectorElement), useForChildren: true)]
 public abstract class InspectorElementDrawer : PropertyDrawer
 {
 	Color _tempColor;

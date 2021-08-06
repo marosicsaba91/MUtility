@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace MUtility
 {
+
 public interface IInspectorProperty<T>
 {
     T GetValue(object parentObject);

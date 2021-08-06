@@ -53,8 +53,9 @@ namespace MUtility
         public const float minLabelWidth = 122;
         public const float horizontalSpacing = 5;
         public static float FullWith => EditorGUIUtility.currentViewWidth;
+        public static float LabelAndContentWidth => FullWith - startSpace - endSpace;
         static float BaseContentWidth => FullWith * 0.55f + 15;
-        static float BaseLabelWidth => FullWith - BaseContentWidth - startSpace - endSpace;
+        static float BaseLabelWidth => LabelAndContentWidth - BaseContentWidth;
         static float NotIndentedLabelWidth => Mathf.Max(minLabelWidth, BaseLabelWidth);
         public static float IndentLevel => EditorGUI.indentLevel;
         public static float IndentsWidth => IndentLevel * indentWidth;
@@ -70,23 +71,24 @@ namespace MUtility
         // Box Drawing
         public static Rect DrawBox(Rect position, bool borderInside = true) =>
             DrawBox(position, tableBackgroundColor, tableBorderColor, borderInside);
-          
-        public static Rect DrawBox(Rect position, Color? backgroundColor, Color? borderColor = null, bool borderInside = true)
-        {
-            float x = borderInside ? position.x + 1 : position.x;
-            float y = borderInside ? position.y + 1 : position.y;
-            float w = borderInside ? position.width - 2 : position.width;
-            float h = borderInside ? position.height - 2 : position.height;
-            if(backgroundColor!=null)
-            EditorGUI.DrawRect(position, backgroundColor.Value);
-            if (borderColor == null) return new Rect(x + 1, y + 1, w - 2, h - 2);
-            
-            EditorGUI.DrawRect(new Rect(x - 1, y - 1, 1, h + 2), borderColor.Value);
-            EditorGUI.DrawRect(new Rect(x - 1, y - 1, w + 2, 1), borderColor.Value);
-            EditorGUI.DrawRect(new Rect(x + w, y - 1, 1, h + 2), borderColor.Value);
-            EditorGUI.DrawRect(new Rect(x - 1, y + h, w + 2, 1), borderColor.Value);
 
-            return new Rect(x + 1, y + 1, w - 2, h - 2);
+        public static Rect DrawBox(Rect position, Color? backgroundColor, Color? borderColor = null,
+	        bool borderInside = true)
+        {
+	        float x = borderInside ? position.x + 1 : position.x;
+	        float y = borderInside ? position.y + 1 : position.y;
+	        float w = borderInside ? position.width - 2 : position.width;
+	        float h = borderInside ? position.height - 2 : position.height;
+	        if (backgroundColor != null)
+		        EditorGUI.DrawRect(position, backgroundColor.Value);
+	        if (borderColor == null) return new Rect(x + 1, y + 1, w - 2, h - 2);
+
+	        EditorGUI.DrawRect(new Rect(x - 1, y - 1, 1, h + 2), borderColor.Value);
+	        EditorGUI.DrawRect(new Rect(x - 1, y - 1, w + 2, 1), borderColor.Value);
+	        EditorGUI.DrawRect(new Rect(x + w, y - 1, 1, h + 2), borderColor.Value);
+	        EditorGUI.DrawRect(new Rect(x - 1, y + h, w + 2, 1), borderColor.Value);
+
+	        return new Rect(x + 1, y + 1, w - 2, h - 2);
         }
         
         public static Rect DrawSuccessBox(Rect position, bool borderInside = true) =>
@@ -106,7 +108,7 @@ namespace MUtility
                 return _mat;
             }
         }
-        
+
         public static void DrawLine(Rect rect, Vector2 a, Vector2 b) => DrawLine(rect, b, b, tableBorderColor);
 
         public static void DrawLine(Rect rect, Vector2 a, Vector2 b, Color color) =>
@@ -131,8 +133,15 @@ namespace MUtility
             GL.PopMatrix();
             GUI.EndClip();
         }
-    
-        
+
+        public const string scriptPropertyName = "m_Script";
+        public static void DrawScriptLine(SerializedObject serializedObject)
+        {
+	        GUI.enabled = false;
+	        EditorGUILayout.PropertyField(serializedObject.FindProperty(scriptPropertyName)); 
+	        GUI.enabled = true;
+        }
+
         public static void DrawFunction(Rect rect, Rect functionArea, Func<float, float> function) =>
             DrawFunction(rect, functionArea, function, functionColor);
         
