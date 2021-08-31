@@ -17,7 +17,7 @@ namespace MUtility
         
         static readonly float tableBorderBrightness = EditorGUIUtility.isProSkin ? 0.15f : 0.6f;
         public static readonly Color tableBorderColor =
-            new Color(tableBorderBrightness, tableBorderBrightness, tableBorderBrightness);
+            new Color(tableBorderBrightness, tableBorderBrightness, tableBorderBrightness, 1);
         
         static readonly float tableEvenLineBrightness = EditorGUIUtility.isProSkin ? 0.1f : 1f;
         public static readonly Color tableEvenLineColor =
@@ -75,10 +75,10 @@ namespace MUtility
         public static Rect DrawBox(Rect position, Color? backgroundColor, Color? borderColor = null,
 	        bool borderInside = true)
         {
-	        float x = borderInside ? position.x + 1 : position.x;
-	        float y = borderInside ? position.y + 1 : position.y;
-	        float w = borderInside ? position.width - 2 : position.width;
-	        float h = borderInside ? position.height - 2 : position.height;
+	        float x = Mathf.Round(borderInside ? position.x + 1 : position.x);
+	        float y = Mathf.Round(borderInside ? position.y + 1 : position.y);
+	        float w = Mathf.Round(borderInside ? position.width - 2 : position.width);
+	        float h = Mathf.Round(borderInside ? position.height - 2 : position.height);
 	        if (backgroundColor != null)
 		        EditorGUI.DrawRect(position, backgroundColor.Value);
 	        if (borderColor == null) return new Rect(x + 1, y + 1, w - 2, h - 2);
