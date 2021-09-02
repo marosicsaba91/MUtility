@@ -39,8 +39,12 @@ namespace MUtility
         public static readonly Color successBackgroundColor = new Color(0.75f, 1f, 0.45f, 0.2f);
         static readonly Color errorRedColorLight = new Color(0.95f, 0.2f, 0.25f);
         static readonly Color errorRedColorDark = new Color(0.95f, 0.4f, 0.39f);
-        public static Color ErrorRedColor =>  EditorGUIUtility.isProSkin ?errorRedColorDark :errorRedColorLight;
-        public static readonly Color errorBackgroundColor = new Color(0.95f, 0.2f, 0.25f, 0.2f);
+        public static Color ErrorRedColor =>  EditorGUIUtility.isProSkin ?errorRedColorDark :errorRedColorLight; 
+        
+        static readonly Color errorBackgroundColorLight = new Color(1f, 0.65f, 0.6f);
+        static readonly Color errorBackgroundColorDark =  new Color(0.56f, 0.23f, 0.21f);
+        public static Color ErrorBackgroundColor => 
+            EditorGUIUtility.isProSkin ?errorBackgroundColorDark :errorBackgroundColorLight; 
 
         public static readonly Color functionColor =
             EditorGUIUtility.isProSkin ? Color.yellow : new Color(0.2f, 0.56f, 1f);
@@ -95,7 +99,7 @@ namespace MUtility
             DrawBox(position, successBackgroundColor, tableBorderColor, borderInside);
 
         public static Rect DrawErrorBox(Rect position, bool borderInside = true) =>
-            DrawBox(position, errorBackgroundColor, tableBorderColor, borderInside); 
+            DrawBox(position, ErrorBackgroundColor, tableBorderColor, borderInside); 
 
         static Material _mat;
 
