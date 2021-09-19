@@ -11,19 +11,19 @@ namespace MUtility
         public static readonly Color tableMarginColor =
             new Color(tableMarginBrightness, tableMarginBrightness, tableMarginBrightness);
         
-        static readonly float tableBackgroundBrightness = EditorGUIUtility.isProSkin ? 0.275f : 0.9f;
+        static readonly float tableBackgroundBrightness = EditorGUIUtility.isProSkin ? 0.275f : 0.891f;
         public static readonly Color tableBackgroundColor =
             new Color(tableBackgroundBrightness, tableBackgroundBrightness, tableBackgroundBrightness);
         
-        static readonly float tableBorderBrightness = EditorGUIUtility.isProSkin ? 0.15f : 0.6f;
+        static readonly float tableBorderBrightness = EditorGUIUtility.isProSkin ? 0.15f : 0.7f;
         public static readonly Color tableBorderColor =
             new Color(tableBorderBrightness, tableBorderBrightness, tableBorderBrightness, 1);
         
-        static readonly float tableEvenLineBrightness = EditorGUIUtility.isProSkin ? 0.1f : 1f;
+        static readonly float tableEvenLineBrightness = EditorGUIUtility.isProSkin ? 0.165f : 0.95f;
         public static readonly Color tableEvenLineColor =
             new Color(tableEvenLineBrightness, tableEvenLineBrightness, tableEvenLineBrightness, 0.3f);
         
-        static readonly float tableOddLineBrightness = EditorGUIUtility.isProSkin ? 0 : 1;
+        static readonly float tableOddLineBrightness = EditorGUIUtility.isProSkin ? 0.125f : 0.85f;
         public static readonly Color tableOddLineColor =
             new Color(tableOddLineBrightness, tableOddLineBrightness, tableOddLineBrightness, 0.4f);
         
