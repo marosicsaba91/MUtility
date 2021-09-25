@@ -36,10 +36,6 @@ public class FoldableRow <T>
         _onFold = onFold;
     }
 
-    public static List<FoldableRow<T>> GetRows(
-        IEnumerable<TreeNode<T>> roots,
-        List<T> openedElements) => GetRows(roots, openedElements, node => node);
-    
     
     public static List<FoldableRow<T>> GetRows<TContainer> (
         IEnumerable<TreeNode<T>> roots, 
