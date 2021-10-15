@@ -1,10 +1,11 @@
+# if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace MUtility
 {
-public static class ScriptableObjectHelper
+public static class EditorScriptableObjectHelper
 { 
 	public static TScriptableObject Find<TScriptableObject>() where TScriptableObject :ScriptableObject
 	{  
@@ -39,3 +40,4 @@ public static class ScriptableObjectHelper
 	}
 }
 }
+# endif

@@ -48,6 +48,15 @@ namespace MUtility
 
         public static readonly Color functionColor =
             EditorGUIUtility.isProSkin ? Color.yellow : new Color(0.2f, 0.56f, 1f);
+        
+        
+        static readonly float buttonBackgroundBrightness = EditorGUIUtility.isProSkin ? 0.35f : 0.89f;
+        public static readonly Color buttonBackgroundColor =
+            new Color(buttonBackgroundBrightness, buttonBackgroundBrightness, buttonBackgroundBrightness, 1);
+        
+        static readonly float buttonBorderBrightness = EditorGUIUtility.isProSkin ? 0.14f : 0.70f;
+        public static readonly Color buttonBorderColor = 
+            new Color(buttonBorderBrightness, buttonBorderBrightness, buttonBorderBrightness, 1);
 
 		
 		// Drawing Inspector
@@ -73,6 +82,17 @@ namespace MUtility
         public static bool IsModernEditorUI => UnityVersion.Get().IsHigherOrEqualThan("2019.3");
         
         // Box Drawing
+        public static void DrawButtonLikeBox(Rect position, string label = null,
+            TextAnchor alignment = TextAnchor.MiddleCenter)
+        {
+            DrawBox(position, buttonBackgroundColor, buttonBorderColor, borderInside: true);
+            if (string.IsNullOrEmpty(label)) return;
+            var style = new GUIStyle("Label") { alignment = alignment };
+            position.x += 4;
+            position.width -= 8;
+            GUI.Label(position, label, style);
+        }
+
         public static Rect DrawBox(Rect position, bool borderInside = true) =>
             DrawBox(position, tableBackgroundColor, tableBorderColor, borderInside);
 
