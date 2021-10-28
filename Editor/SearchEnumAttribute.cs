@@ -88,7 +88,7 @@ public class KeyCodeDrawer : PropertyDrawer
 	/// sync the button ID and the label ID to allow for keyboard
 	/// navigation like the built-in enum drawers.
 	/// </summary>
-	static bool DropdownButton(int id, Rect position, GUIContent content)
+	public static bool DropdownButton(int id, Rect position, GUIContent content)
 	{
 		Event current = Event.current;
 		switch (current.type)
