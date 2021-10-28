@@ -95,8 +95,8 @@ public static class SerializedPropertyExtensions
         {
             if (element.Contains("["))
             {
-                string elementName = element.Substring(0, element.IndexOf("["));
-                var index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
+                string elementName = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
+                var index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal)).Replace("[", "").Replace("]", ""));
                 obj = GetValue_Imp(obj, elementName, index);
             }
             else
