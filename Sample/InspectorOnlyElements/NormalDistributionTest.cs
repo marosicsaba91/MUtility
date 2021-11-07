@@ -71,17 +71,17 @@ public class NormalDistributionTest : MonoBehaviour
      class SampleCountProperty : IntProperty<NormalDistributionTest>
      { 
          protected override int GetValue(NormalDistributionTest parentObject) => parentObject.AllSampleCount;
-         protected override void SetValue(NormalDistributionTest parentObject, int value) 
+         protected override void SetValue(NormalDistributionTest parentObject, int newValue) 
          {
              int sampleCount = parentObject.AllSampleCount;
-             if (value == sampleCount) return;
-             if (value <= 0)
+             if (newValue == sampleCount) return;
+             if (newValue <= 0)
              {
                  parentObject._valueDictionary.Clear();
                  return;
              }
 
-             while (sampleCount < value)
+             while (sampleCount < newValue)
              {
                  parentObject.NewSample();
                  sampleCount++;

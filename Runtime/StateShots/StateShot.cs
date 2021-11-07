@@ -15,7 +15,7 @@ public abstract class StateShot : ScriptableObject
         Undo.RecordObject(this, "World State Recorded");
 #endif 
         RecordState(gameObject);
-        timeStamp = TimeStamp.Get();
+        timeStamp = TimeStamp.Now();
 #if UNITY_EDITOR
         EditorUtility.SetDirty(this);
 #endif 

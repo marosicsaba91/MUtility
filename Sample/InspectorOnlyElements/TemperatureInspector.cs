@@ -12,10 +12,10 @@ namespace Utility_Examples
 		{
 			protected override float GetValue(Temperature parentObject) => Math.Abs(value) < epsilon ? 0 : value;
 
-			protected override void SetValue(Temperature parentObject, float value)  
+			protected override void SetValue(Temperature parentObject, float newValue)  
 			{
-				if (this.value == value) return; 
-				this.value = Mathf.Max(value, 0);
+				if (value == newValue) return; 
+				value = Mathf.Max(newValue, 0);
 			}
 
 		}
@@ -25,10 +25,10 @@ namespace Utility_Examples
 		{
 			protected override float GetValue(Temperature parentObject) => parentObject.TemperatureInFahrenheit;
 
-			protected override void SetValue(Temperature parentObject, float value)
+			protected override void SetValue(Temperature parentObject, float newValue)
 			{
-				if (parentObject.TemperatureInFahrenheit == value) return;
-				parentObject.TemperatureInFahrenheit = value;
+				if (parentObject.TemperatureInFahrenheit == newValue) return;
+				parentObject.TemperatureInFahrenheit = newValue;
 			}
 
 			protected override bool IsVisible(Temperature parentObject) => parentObject.iAmAmerican;
@@ -38,10 +38,10 @@ namespace Utility_Examples
 		class TemperatureCelsiusProperty : FloatProperty<Temperature>
 		{
 			protected override float GetValue(Temperature parentObject) => parentObject.TemperatureInCelsius;
-			protected override void SetValue(Temperature parentObject, float value)
+			protected override void SetValue(Temperature parentObject, float newValue)
 			{
-				if (parentObject.TemperatureInCelsius == value) return;
-				parentObject.TemperatureInCelsius = value;
+				if (parentObject.TemperatureInCelsius == newValue) return;
+				parentObject.TemperatureInCelsius = newValue;
 			}
 		}		
 		  

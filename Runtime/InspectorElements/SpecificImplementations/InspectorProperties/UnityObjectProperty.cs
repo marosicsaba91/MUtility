@@ -15,7 +15,7 @@ public interface IInspectorUnityObject :  IInspectorProperty<Object>
 {
     public new Object GetValue(object parentObject) => base.GetValue(parentObject);
 
-    public void SetValue(object parentObject, Object value) => base.SetValue(parentObject, (TUnityObject) value);
+    public void SetValue(object parentObject, Object newValue) => base.SetValue(parentObject, (TUnityObject) newValue);
     public new IList<Object> PopupElements(object parentObject) => base.PopupElements(parentObject)?.Cast<Object>().ToList();
 
     public virtual Type ContentType => typeof(TUnityObject); 

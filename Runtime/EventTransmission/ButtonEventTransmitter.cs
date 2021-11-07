@@ -90,9 +90,9 @@ public class ButtonEventTransmitter : MonoBehaviour,
 
         public DelayedSubscriber(MonoBehaviour parent, Action<PointerEventData> callback, float delay)
         {
-            this._parent = parent;
-            this._callback = callback;
-            this._delay = delay;
+            _parent = parent;
+            _callback = callback;
+            _delay = delay;
         }
 
         public void EventHappened(PointerEventData eventData)

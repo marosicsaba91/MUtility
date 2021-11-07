@@ -27,6 +27,7 @@ public struct TimeStamp
     public string FixedTimeShortString => SecondsToShortString(fixedTime);
     public string FixedUnscaledTimeShortString => SecondsToShortString(fixedUnscaledTime);
 
+    public DateTime DateTime => new DateTime(systemTimeInTicks);
     string TicksToShortString(long ticks)
     {
         var time = new DateTime(ticks);
@@ -48,15 +49,15 @@ public struct TimeStamp
     string ToHeaderShortString(int hours, int minutes, float seconds)
     {
         if (hours != 0)
-            return $"{hours}: {minutes:00}: {seconds:00}";
+            return $"{hours}:{minutes:00}:{seconds:00}";
         if (minutes != 0)
-            return $"{minutes:00}: {seconds:00.00}";
+            return $"{minutes:00}:{seconds:00.00}";
         if (seconds != 0)
             return $"{seconds:0.00}";
         return "0";
     }
 
-    public static TimeStamp Get() => new TimeStamp
+    public static TimeStamp Now() => new TimeStamp
     { 
         systemTimeInTicks = DateTime.Now.Ticks,
         gameTime = Time.time,
