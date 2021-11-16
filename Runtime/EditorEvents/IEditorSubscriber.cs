@@ -3,5 +3,6 @@
 public interface IEditorSubscriber
 {
     void Subscribe();
+    bool IsSubscribedAlready { get; }
 }
 }

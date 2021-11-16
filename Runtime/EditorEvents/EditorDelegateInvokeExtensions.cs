@@ -6,13 +6,9 @@ using Object = UnityEngine.Object;
 namespace MUtility
 {
 public static class EditorDelegateInvokeExtensions
-{
-#if UNITY_EDITOR
-    static List<IEditorSubscriber> _subscribedAlready = null;
-#endif
-
+{ 
     // Actions
-    public static void EditorInvoke(this Action action) => action?.DynamicEditorInvoke();
+    public static void EditorInvoke(this Action action) => action.DynamicEditorInvoke();
 
     public static void EditorInvoke<T1>(this Action<T1> action, T1 param1) =>
         action.DynamicEditorInvoke(param1);
@@ -56,14 +52,12 @@ public static class EditorDelegateInvokeExtensions
             return del?.DynamicInvoke(args);
 
 
-        // Subscribe all Subscribers
-        _subscribedAlready = _subscribedAlready ?? new List<IEditorSubscriber>();
+        // Subscribe all Subscribers 
         foreach (MonoBehaviour monoBehaviour in Object.FindObjectsOfType<MonoBehaviour>())
         {
             if (!(monoBehaviour is IEditorSubscriber subscriber)) continue;
-            if (_subscribedAlready.Contains(subscriber)) continue;
-            subscriber.Subscribe();
-            _subscribedAlready.Add(subscriber);
+            if (subscriber.IsSubscribedAlready) continue;
+            subscriber.Subscribe(); 
         }
 
         //Invoke 
