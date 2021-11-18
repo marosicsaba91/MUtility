@@ -63,11 +63,11 @@ Shader "Hidden/Main Category/Secondary Category/Shader Name"
 		_Texture3DDProperty ("Texture3D Display Name", 3D) = "" {}
 		_CubemapProperty ("Cubemap Display Name", Cube) = "" {}
 		_CubemapArrayProperty ("Cubemap Array Display Name", CubeArray) = "" {}
-		[Vector2] _Vector2Property ("2D Vector Display Name", Vector) = (1, 1, 0, 0)  // [Vector2] is in MUtility
-		[Vector3] _Vector3Property ("3D Vector Display Name", Vector) = (1, 1, 1, 0)  // [Vector3] is in MUtility
-		[Vector4] _Vector4Property ("4D Vector Display Name", Vector) = (1, 1, 1, 1)  // [Vector4] is in MUtility (Just for formatting)
-		[Vector2Int] _Vector2IntProperty ("2D Int Vector Display Name", Vector) = (1, 1, 0, 0)  // [Vector2Int] is in MUtility
-		[Vector3Int] _Vector3IntProperty ("3D Int Vector Display Name", Vector) = (1, 1, 1, 0)  // [Vector3Int] is in MUtility 
+		// [Vector2] _Vector2Property ("2D Vector Display Name", Vector) = (1, 1, 0, 0)  // [Vector2] is in MUtility
+		// [Vector3] _Vector3Property ("3D Vector Display Name", Vector) = (1, 1, 1, 0)  // [Vector3] is in MUtility
+		// [Vector4] _Vector4Property ("4D Vector Display Name", Vector) = (1, 1, 1, 1)  // [Vector4] is in MUtility (Just for formatting)
+		// [Vector2Int] _Vector2IntProperty ("2D Int Vector Display Name", Vector) = (1, 1, 0, 0)  // [Vector2Int] is in MUtility
+		// [Vector3Int] _Vector3IntProperty ("3D Int Vector Display Name", Vector) = (1, 1, 1, 0)  // [Vector3Int] is in MUtility 
 		
 		// Universal Property Attributes:
         // [HideInInspector] - Does not show the property in the material inspector.

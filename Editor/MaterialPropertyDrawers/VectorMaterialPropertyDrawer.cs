@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -59,3 +60,4 @@ public class Vector3IntDrawer :  VectorMaterialPropertyDrawer
             new Vector3Int((int)propVectorValue.x,(int)propVectorValue.y,(int)propVectorValue.z ));
 } 
 }
+*/
