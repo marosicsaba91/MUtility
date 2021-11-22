@@ -32,7 +32,11 @@ public interface IInspectorMessage
 	public virtual int FontSize  => fontSizeGetter?.Invoke() ?? 11;
 	protected virtual IEnumerable<string> GetLines(TParentObject parentObject)
 	{ 
-		string message = messageGetter?.Invoke(parentObject); 
+		string message = messageGetter?.Invoke(parentObject);
+
+		if (string.IsNullOrEmpty(message))
+			message = Text(parentObject, null);
+		
 		if (string.IsNullOrEmpty(message))
 		{
 			yield return "Here should be some message, You forgot to add!";
