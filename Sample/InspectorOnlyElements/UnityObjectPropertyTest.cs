@@ -17,7 +17,7 @@ public class UnityObjectPropertyTest : MonoBehaviour
     
     [Space]
     [Tooltip("This property calls a callback when its changed.")]
-    [SerializeField] UnityObjectProperty someMonoBehaviour = new UnityObjectProperty
+    [SerializeField] InspectorUnityObject someMonoBehaviour = new InspectorUnityObject
     {
         type = typeof(MonoBehaviour),
         valueChanged = MonoBehaviourChanged
@@ -39,7 +39,7 @@ public class UnityObjectPropertyTest : MonoBehaviour
     
     
     [Serializable]
-    class MyCamera : UnityObjectProperty<UnityObjectPropertyTest>
+    class MyCamera : InspectorUnityObject<UnityObjectPropertyTest>
     {
         public override Type ContentType => typeof(Camera);
         protected override Color GetColor(UnityObjectPropertyTest parentObject)
@@ -51,7 +51,7 @@ public class UnityObjectPropertyTest : MonoBehaviour
             return Color.white;
         }
 
-        protected override string Text(UnityObjectPropertyTest parentObject, string text)
+        protected override string GetLabel(UnityObjectPropertyTest parentObject, string text)
         {
             if (value == null)
                 return text;
@@ -64,14 +64,14 @@ public class UnityObjectPropertyTest : MonoBehaviour
     }
 
     [Serializable]
-    class MyTexture : UnityObjectProperty<UnityObjectPropertyTest, Texture>
+    class MyTexture : InspectorUnityObject<UnityObjectPropertyTest, Texture>
     {
         protected override bool IsEnabled(UnityObjectPropertyTest parentObject) =>
             parentObject.someCamera.Value != null;
     }
 
     [Serializable]
-    class MyChildTransform : UnityObjectProperty<UnityObjectPropertyTest, Transform>
+    class MyChildTransform : InspectorUnityObject<UnityObjectPropertyTest, Transform>
     {
         protected override IList<Transform> PopupElements(UnityObjectPropertyTest parentObject)
         {

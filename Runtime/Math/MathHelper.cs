@@ -41,7 +41,7 @@ public static class MathHelper
         return new Vector2(outX, outY);
     }
 
-    public static Vector3 LerpUnclamped(float input, Vector3 minOutput, Vector3 maxOutput,
+    public static UnityEngine.Vector3 LerpUnclamped(float input, UnityEngine.Vector3 minOutput, UnityEngine.Vector3 maxOutput,
         float minInput = 0, float maxInput = 1)
     {
         float outX = minOutput.x +
@@ -50,10 +50,10 @@ public static class MathHelper
                      (input - minInput) / (maxInput - minInput) * (maxOutput.y - minOutput.y);
         float outZ = minOutput.z +
                      (input - minInput) / (maxInput - minInput) * (maxOutput.z - minOutput.z);
-        return new Vector3(outX, outY, outZ);
+        return new UnityEngine.Vector3(outX, outY, outZ);
     }
 
-    public static Vector3 Lerp(float input, Vector3 minOutput, Vector3 maxOutput,
+    public static UnityEngine.Vector3 Lerp(float input, UnityEngine.Vector3 minOutput, UnityEngine.Vector3 maxOutput,
         float minInput = 0, float maxInput = 1)
     {
         if (input < minInput) return minOutput;
@@ -64,7 +64,7 @@ public static class MathHelper
                      (input - minInput) / (maxInput - minInput) * (maxOutput.y - minOutput.y);
         float outZ = minOutput.z +
                      (input - minInput) / (maxInput - minInput) * (maxOutput.z - minOutput.z);
-        return new Vector3(outX, outY, outZ);
+        return new UnityEngine.Vector3(outX, outY, outZ);
     }
 
     public static int Mod(int n, int m) => ((n % m) + m) % m;
@@ -80,8 +80,8 @@ public static class MathHelper
     public static Vector3Int Mod(Vector3Int n, int w, int h, int d) =>
         new Vector3Int(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
 
-    public static Vector3 Mod(Vector3 n, float w, float h, int d) =>
-        new Vector3(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
+    public static UnityEngine.Vector3 Mod(UnityEngine.Vector3 n, float w, float h, int d) =>
+        new UnityEngine.Vector3(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
     
     
     // Code duplication is for optimisation purposes.
@@ -121,17 +121,17 @@ public static class MathHelper
     
     // Special Aggregate Functions : Vector3
     
-    public static Vector3 Average(params Vector3[] values)
-        => Average((IList<Vector3>)values); 
+    public static UnityEngine.Vector3 Average(params UnityEngine.Vector3[] values)
+        => Average((IList<UnityEngine.Vector3>)values); 
 
-    public static Vector3 Sum(params Vector3[] values)  => Sum((IList<Vector3>)values) ;
-    public static Vector3 Average(IList<Vector3> values) => Sum(values) / values.Count;
-    public static Vector3 Sum(IList<Vector3> values) 
+    public static UnityEngine.Vector3 Sum(params UnityEngine.Vector3[] values)  => Sum((IList<UnityEngine.Vector3>)values) ;
+    public static UnityEngine.Vector3 Average(IList<UnityEngine.Vector3> values) => Sum(values) / values.Count;
+    public static UnityEngine.Vector3 Sum(IList<UnityEngine.Vector3> values) 
     {
-        Vector3 accumulator = Vector3.zero;
+        UnityEngine.Vector3 accumulator = UnityEngine.Vector3.zero;
         for (var i = 0; i < values.Count; i++)
         {
-            Vector3 element = values[i];
+            UnityEngine.Vector3 element = values[i];
             accumulator.x += element.x;
             accumulator.y += element.y;
             accumulator.z += element.z;

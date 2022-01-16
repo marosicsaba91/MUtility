@@ -1,13 +1,14 @@
 ﻿using System;
 using MUtility;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Utility_Examples
 {
 	public partial class Temperature : MonoBehaviour
 	{
 		[Serializable]
-		class Direction2DProperty : EnumProperty<Direction2D> { }
+		class Direction2D : InspectorEnum<MUtility.Direction2D> { }
 
 		const float zeroKelvinInCelsius = -273.15f;
 		const float kelvinToFahrenheitMultiplier = 1.8f;
@@ -16,19 +17,20 @@ namespace Utility_Examples
 		 
 		[SerializeField] bool iAmAmerican = false;
 
-		[SerializeField] TemperatureKelvinProperty temperatureInKelvin = 
-			new TemperatureKelvinProperty {Value = -zeroKelvinInCelsius, valueChanged = TemperatureChanged};
+		[SerializeField] TemperatureKelvin temperatureInKelvin = 
+			new TemperatureKelvin {Value = -zeroKelvinInCelsius, valueChanged = TemperatureChanged};
 		
-		[SerializeField] TemperatureCelsiusProperty temperatureInCelsius;
-		[SerializeField] TemperatureFahrenheitProperty temperatureInFahrenheit;
+		[SerializeField] TemperatureCelsius temperatureInCelsius;
+		[SerializeField] TemperatureFahrenheit temperatureInFahrenheit;
 		[SerializeField] ResetTemperatureButton resetTemperature;
 		[SerializeField] InspectorButton increaseTemperature =
 			new InspectorButton {onClicked = IncreaseTemperatureClicked};
 
+		[FormerlySerializedAs("testEnumProperty")]
 		[Space]
-		[SerializeField] Direction2DProperty testEnumProperty = new Direction2DProperty {valueChanged = OnEnumChanged};
+		[SerializeField] Direction2D testEnum = new Direction2D {valueChanged = OnEnumChanged};
 
-		static void OnEnumChanged(object parent, Direction2D oldValue, Direction2D newValue)
+		static void OnEnumChanged(object parent, MUtility.Direction2D oldValue, MUtility.Direction2D newValue)
 		{
 			Debug.Log($"Enum Changed:     {oldValue}  =>  {newValue}");
 		}
@@ -37,8 +39,8 @@ namespace Utility_Examples
 		static void IncreaseTemperatureClicked(object parentObject) =>
 			((Temperature)parentObject).temperatureInCelsius.Value++;
 
-		[SerializeField] IntProperty someInt; 
-		[SerializeField] OneDigitProperty oneDigit; 
+		[SerializeField] InspectorInt someInspectorInt; 
+		[SerializeField] OneDigit oneDigit; 
 		
 		static void TemperatureChanged(Temperature parent, float oldValue, float newValue) =>
 			Debug.Log($"New temperature: {newValue}");

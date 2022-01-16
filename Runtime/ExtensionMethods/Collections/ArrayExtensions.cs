@@ -7,9 +7,7 @@ public static class ArrayExtensions
     public static void Fill<T>(this T[] array, T value)
     {
         for (var i = 0; i < array.Length; i++)
-        {
             array[i] = value;
-        }
     }
 
     public static void Fill<T>(this T[] array, T startValue, Func<T, T> next)
@@ -57,7 +55,6 @@ public static class ArrayExtensions
         var result = new T[length];
         Array.Copy(data, index, result, 0, length);
         return result;
-
     }
 }
 }

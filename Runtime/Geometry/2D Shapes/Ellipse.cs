@@ -13,7 +13,7 @@ namespace MUtility
         public float radiusHorizontal;
         public float radiusVertical;
 
-        public Ellipse(Vector3 center, float radiusHorizontal, float radiusVertical)
+        public Ellipse(UnityEngine.Vector3 center, float radiusHorizontal, float radiusVertical)
         {
             this.center = center;
             this.radiusHorizontal = radiusHorizontal;
@@ -44,15 +44,15 @@ namespace MUtility
 
         public Drawable ToDrawable(int fragmentCount) => new Drawable ( ToPolygon(fragmentCount) );
 
-        public Vector3[] ToPolygon(int fragmentCount = defaultFragmentCount)
+        public UnityEngine.Vector3[] ToPolygon(int fragmentCount = defaultFragmentCount)
         {
-            var points = new Vector3[fragmentCount];
+            var points = new UnityEngine.Vector3[fragmentCount];
 
             float angle = Mathf.PI * 2f / (fragmentCount - 1);
             for (var i = 0; i < fragmentCount - 1; i++)
             {
                 float phase = i * angle;
-                points[i] = (Mathf.Sin(phase) * Vector3.right) + (Mathf.Cos(phase) * Vector3.up);
+                points[i] = (Mathf.Sin(phase) * UnityEngine.Vector3.right) + (Mathf.Cos(phase) * UnityEngine.Vector3.up);
                 points[i].x *= radiusHorizontal;
                 points[i].y *= radiusVertical;
                 points[i].x += center.x;
@@ -75,7 +75,7 @@ namespace MUtility
             };
         }
 
-        public void SetHandle(int i, Vector3 newPoint)
+        public void SetHandle(int i, UnityEngine.Vector3 newPoint)
         {
             switch (i)
             {
@@ -83,10 +83,10 @@ namespace MUtility
                     center = newPoint;
                     return;
                 case 1:
-                    radiusHorizontal = (newPoint - (Vector3)center ).magnitude;
+                    radiusHorizontal = (newPoint - (UnityEngine.Vector3)center ).magnitude;
                     return;
                 case 2:
-                    radiusVertical = (newPoint - (Vector3)center ).magnitude;
+                    radiusVertical = (newPoint - (UnityEngine.Vector3)center ).magnitude;
                     return;
             }
         }

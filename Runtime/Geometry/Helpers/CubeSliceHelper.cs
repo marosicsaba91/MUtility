@@ -25,7 +25,7 @@ public static class CubeSliceHelper
 
     static LineSegment[] _segments = new LineSegment[12];
     static bool[] _tested = new bool[12];
-    static List<Vector3> _intersections = new List<Vector3>();
+    static List<UnityEngine.Vector3> _intersections = new List<UnityEngine.Vector3>();
 
     static int _lastIndex = 0;
     static int _testIndex = 0;
@@ -34,14 +34,14 @@ public static class CubeSliceHelper
     static Plain _plain;
 
     static public Drawable Slice(Plain plain,
-        Vector3 leftBottomBack,
-        Vector3 leftBottomFront,
-        Vector3 leftTopBack,
-        Vector3 leftTopFront,
-        Vector3 rightBottomBack,
-        Vector3 rightBottomFront,
-        Vector3 rightTopBack,
-        Vector3 rightTopFront)
+        UnityEngine.Vector3 leftBottomBack,
+        UnityEngine.Vector3 leftBottomFront,
+        UnityEngine.Vector3 leftTopBack,
+        UnityEngine.Vector3 leftTopFront,
+        UnityEngine.Vector3 rightBottomBack,
+        UnityEngine.Vector3 rightBottomFront,
+        UnityEngine.Vector3 rightTopBack,
+        UnityEngine.Vector3 rightTopFront)
     {
 
         _segments[0] = new LineSegment(leftBottomBack, rightBottomBack); //  0
@@ -79,7 +79,7 @@ public static class CubeSliceHelper
 
 
             var segment = _segments[testable];
-            Vector3? interection = plain.Intersect(segment);
+            UnityEngine.Vector3? interection = plain.Intersect(segment);
             if (interection.HasValue)
             {
                 _intersections.Add(interection.Value);

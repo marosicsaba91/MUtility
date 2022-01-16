@@ -19,7 +19,7 @@ public abstract class EnumProperty<TParentObject, TEnumType> :
         Enum.GetValues(typeof(TEnumType)).Cast<TEnumType>().ToList();
 }
 
-[Serializable] public abstract class EnumProperty<TEnumType> : EnumProperty<object, TEnumType>
+[Serializable] public abstract class InspectorEnum<TEnumType> : EnumProperty<object, TEnumType>
     where TEnumType : Enum
 {
 }

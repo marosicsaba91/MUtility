@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace MUtility
 {
-[Serializable] public abstract class Vector3Property<TParentObject> : InspectorProperty<TParentObject, Vector3>
+[Serializable] public abstract class InspectorVector3<TParentObject> : InspectorProperty<TParentObject, UnityEngine.Vector3>
 {
 }
-[Serializable] public class Vector3Property : Vector2Property<object> { }
+[Serializable] public class Vector3 : InspectorVector2<object> { }
 }

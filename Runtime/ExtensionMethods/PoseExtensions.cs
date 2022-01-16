@@ -13,22 +13,22 @@ public static class PoseExtensions
         Mesh cubeMesh = PrimitiveMeshHelper.GetPrimitiveMesh(PrimitiveType.Cube);
 
         const float cubeSize = 0.35f;
-        var cubeSizeVec = new Vector3(size * cubeSize, size * cubeSize, size * cubeSize);
+        var cubeSizeVec = new UnityEngine.Vector3(size * cubeSize, size * cubeSize, size * cubeSize);
         Gizmos.color = color; 
         Gizmos.DrawMesh(cubeMesh, pose.position, pose.rotation, cubeSizeVec);
-        DrawCylinder(Vector3.right, Color.red);
-        DrawCylinder(Vector3.up, Color.green);
-        DrawCylinder(Vector3.forward, Color.blue);
+        DrawCylinder(UnityEngine.Vector3.right, Color.red);
+        DrawCylinder(UnityEngine.Vector3.up, Color.green);
+        DrawCylinder(UnityEngine.Vector3.forward, Color.blue);
 
 
         Gizmos.color = tempColor;
         
-        void DrawCylinder(Vector3 up, Color lineColor)
+        void DrawCylinder(UnityEngine.Vector3 up, Color lineColor)
         {
             Gizmos.color = lineColor;
             up = r * up;
-            Vector3 start = pose.position + (size * cubeSize * 0.5f * up);
-            Vector3 end =  pose.position + up * size; 
+            UnityEngine.Vector3 start = pose.position + (size * cubeSize * 0.5f * up);
+            UnityEngine.Vector3 end =  pose.position + up * size; 
             Gizmos.DrawLine(start, end);
         }
     }

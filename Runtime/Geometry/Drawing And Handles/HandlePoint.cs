@@ -6,12 +6,12 @@ namespace MUtility
     {
         public enum Shape { Circle, Rectangle, LabelOnly }
 
-        public Vector3 position;
+        public UnityEngine.Vector3 position;
         public string label;
         public Shape shape;
-        public Vector3 labelShift;
+        public UnityEngine.Vector3 labelShift;
          
-        public HandlePoint(Vector3 position, Shape shape = Shape.Circle)  
+        public HandlePoint(UnityEngine.Vector3 position, Shape shape = Shape.Circle)  
         {
             label = null;
             this.position = position;
@@ -19,7 +19,7 @@ namespace MUtility
             labelShift = default;
         }
 
-        public HandlePoint(Vector3 position, Shape shape, string label)
+        public HandlePoint(UnityEngine.Vector3 position, Shape shape, string label)
         {
             this.label = label;
             this.position = position;
@@ -27,7 +27,7 @@ namespace MUtility
             labelShift = default;
         }
 
-        public HandlePoint(Vector3 position, Shape shape, string label, Vector3 labelShift)
+        public HandlePoint(UnityEngine.Vector3 position, Shape shape, string label, UnityEngine.Vector3 labelShift)
         { 
             this.label = label;
             this.position = position;
@@ -35,7 +35,7 @@ namespace MUtility
             this.labelShift = labelShift;
         }
 
-        public HandlePoint(Vector3 position, string label, Vector3 labelShift)
+        public HandlePoint(UnityEngine.Vector3 position, string label, UnityEngine.Vector3 labelShift)
         {
             this.label = label;
             this.position = position;
@@ -43,7 +43,7 @@ namespace MUtility
             this.labelShift = labelShift;
         }
 
-        public HandlePoint(Vector3 position, string label)
+        public HandlePoint(UnityEngine.Vector3 position, string label)
         {
             this.label = label;
             this.position = position;

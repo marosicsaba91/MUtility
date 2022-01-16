@@ -10,25 +10,25 @@ namespace MUtility
     {
         const int defaultDrawingPointsOnSegment = 25;
 
-        public List<Vector3> points;
+        public List<UnityEngine.Vector3> points;
         
         public void Clear()
         {
             if (points == null)
-                points = new List<Vector3>();
+                points = new List<UnityEngine.Vector3>();
             else
                 points.Clear();
         }
         
-        public CatmullRomSpine(bool isClosed, params Vector3[] points)
+        public CatmullRomSpine(bool isClosed, params UnityEngine.Vector3[] points)
         {
-            this.points = new List<Vector3>(points); 
+            this.points = new List<UnityEngine.Vector3>(points); 
             this.isClosed = isClosed;
         }
 
-        public CatmullRomSpine(params Vector3[] points )
+        public CatmullRomSpine(params UnityEngine.Vector3[] points )
         {
-            this.points = new List<Vector3>(points); 
+            this.points = new List<UnityEngine.Vector3>(points); 
             isClosed = false;
         }
 
@@ -44,19 +44,19 @@ namespace MUtility
         public Drawable ToDrawable(int drawingPointsOnSegment, float derivativeSizeMultiplier)
         {
             if (points == null || points.Count <= 1)
-                return new Drawable(new Vector3[0]);
+                return new Drawable(new UnityEngine.Vector3[0]);
 
-            var result1 = new List<Vector3[]>();
-            var result = new List<Vector3>();
+            var result1 = new List<UnityEngine.Vector3[]>();
+            var result = new List<UnityEngine.Vector3>();
 
             int segmentCount = SegmentCount;
 
             for (var i = 0; i < segmentCount; i++)
             {
-                GetControlPoints(i, out Vector3 a, out Vector3 b, out Vector3 c, out Vector3 d);
+                GetControlPoints(i, out UnityEngine.Vector3 a, out UnityEngine.Vector3 b, out UnityEngine.Vector3 c, out UnityEngine.Vector3 d);
 
-                Vector3 position;
-                Vector3 derivative;
+                UnityEngine.Vector3 position;
+                UnityEngine.Vector3 derivative;
                 if (i == 0) {
                     position = PositionOnASegment(a, b, c, d, 0);
                     result.Add(position);
@@ -84,18 +84,18 @@ namespace MUtility
             return new Drawable(result1.ToArray());
         }
 
-        public Vector3 EvaluatePositionByNormalizedTime(float normalizedTime) => EvaluateByNormalizedTime(normalizedTime, PositionOnASegment);
+        public UnityEngine.Vector3 EvaluatePositionByNormalizedTime(float normalizedTime) => EvaluateByNormalizedTime(normalizedTime, PositionOnASegment);
 
-        public Vector3 EvaluateDerivativeByNormalizedTime(float normalizedTime) => EvaluateByNormalizedTime(normalizedTime, DerivativeOnASegment);
+        public UnityEngine.Vector3 EvaluateDerivativeByNormalizedTime(float normalizedTime) => EvaluateByNormalizedTime(normalizedTime, DerivativeOnASegment);
 
-        public Vector3 EvaluatePositionByTime(float normalizedTime) => EvaluateByTime(normalizedTime, PositionOnASegment);
+        public UnityEngine.Vector3 EvaluatePositionByTime(float normalizedTime) => EvaluateByTime(normalizedTime, PositionOnASegment);
 
-        public Vector3 EvaluateDerivativeByTime(float normalizedTime) => EvaluateByTime(normalizedTime, DerivativeOnASegment);
+        public UnityEngine.Vector3 EvaluateDerivativeByTime(float normalizedTime) => EvaluateByTime(normalizedTime, DerivativeOnASegment);
 
-        Vector3 EvaluateByNormalizedTime (float normalizedTime, Func<Vector3, Vector3, Vector3, Vector3, float, Vector3> segmentFunction)
+        UnityEngine.Vector3 EvaluateByNormalizedTime (float normalizedTime, Func<UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Vector3, float, UnityEngine.Vector3> segmentFunction)
         {
             if (points!=null && points.Count>0)
-                return Vector3.zero;
+                return UnityEngine.Vector3.zero;
             if (points.Count == 1)
                 return points[0];
 
@@ -118,26 +118,26 @@ namespace MUtility
                 inSegmentTime = (normalizedTime % (1f / segmentCount)) / (1f / segmentCount);
             } 
 
-            GetControlPoints(segmentIndex, out Vector3 a, out Vector3 b,  out Vector3 c, out Vector3 d); 
+            GetControlPoints(segmentIndex, out UnityEngine.Vector3 a, out UnityEngine.Vector3 b,  out UnityEngine.Vector3 c, out UnityEngine.Vector3 d); 
             return segmentFunction(a, b, c, d, inSegmentTime);
         }
          
-        Vector3 EvaluateByTime(float time, Func<Vector3, Vector3, Vector3, Vector3, float, Vector3> segmentFunction)
+        UnityEngine.Vector3 EvaluateByTime(float time, Func<UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Vector3, float, UnityEngine.Vector3> segmentFunction)
         {
             if (points!=null && points.Count>0)
-                return Vector3.zero;
+                return UnityEngine.Vector3.zero;
             if (points.Count == 1)
                 return points[0]; 
 
             time = MathHelper.Mod(time, SegmentCount);
             var segmentIndex = (int)time; 
-            GetControlPoints(segmentIndex, out Vector3 previous, out Vector3 start, out Vector3 end, out Vector3 next); 
+            GetControlPoints(segmentIndex, out UnityEngine.Vector3 previous, out UnityEngine.Vector3 start, out UnityEngine.Vector3 end, out UnityEngine.Vector3 next); 
 
             float inSegmentTime = time % 1f;
             return segmentFunction(previous, start,  end, next, inSegmentTime);
         }
 
-        void GetControlPoints(int segmentIndex, out Vector3 previous,  out Vector3 start, out Vector3 end, out Vector3 next)
+        void GetControlPoints(int segmentIndex, out UnityEngine.Vector3 previous,  out UnityEngine.Vector3 start, out UnityEngine.Vector3 end, out UnityEngine.Vector3 next)
         {
             int segmentCount = SegmentCount;
 
@@ -171,17 +171,17 @@ namespace MUtility
             return result;
         }
          
-        public void SetHandle(int index, Vector3 point)
+        public void SetHandle(int index, UnityEngine.Vector3 point)
         {
             points[index ] = point;
         }
 
-        public static Vector3 PositionOnASegment(Vector3 prev, Vector3 start, Vector3 end, Vector3 next, float normalizedTime)
+        public static UnityEngine.Vector3 PositionOnASegment(UnityEngine.Vector3 prev, UnityEngine.Vector3 start, UnityEngine.Vector3 end, UnityEngine.Vector3 next, float normalizedTime)
         {
             float progressSquared = normalizedTime * normalizedTime;
             float progressCubed = progressSquared * normalizedTime;
 
-            Vector3 result = prev * (-0.5f * progressCubed + progressSquared + -0.5f * normalizedTime);
+            UnityEngine.Vector3 result = prev * (-0.5f * progressCubed + progressSquared + -0.5f * normalizedTime);
             result += start * (1.5f * progressCubed + -2.5f * progressSquared + 1.0f);
             result += end * (-1.5f * progressCubed + 2.0f * progressSquared + 0.5f * normalizedTime);
             result += next * (0.5f * progressCubed + -0.5f * progressSquared);
@@ -189,12 +189,12 @@ namespace MUtility
             return result;
         }
         
-        public static Vector3 DerivativeOnASegment
-            (Vector3 previous, Vector3 start, Vector3 end, Vector3 next, float normalizedTime)
+        public static UnityEngine.Vector3 DerivativeOnASegment
+            (UnityEngine.Vector3 previous, UnityEngine.Vector3 start, UnityEngine.Vector3 end, UnityEngine.Vector3 next, float normalizedTime)
         {
             float progressSquared = normalizedTime * normalizedTime;
 
-            Vector3 result = previous * (-1.5f * progressSquared + 2.0f * normalizedTime + -0.5f);
+            UnityEngine.Vector3 result = previous * (-1.5f * progressSquared + 2.0f * normalizedTime + -0.5f);
             result += start * (4.5f * progressSquared + -5.0f * normalizedTime);
             result += end * (-4.5f * progressSquared + 4.0f * normalizedTime + 0.5f);
             result += next * (1.5f * progressSquared - normalizedTime);

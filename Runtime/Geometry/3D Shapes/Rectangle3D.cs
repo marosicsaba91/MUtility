@@ -6,59 +6,59 @@ namespace MUtility
     [Serializable]
     public struct Rectangle3D : IEquatable<Rectangle3D>, IDrawable, I2DArea, I2DCircumference
     {
-        public Vector3 center;
+        public UnityEngine.Vector3 center;
         public Vector2 size;
         public Quaternion orientation;
 
         public Rectangle3D(RectTransform rectTransform)
         {
             Rect rect =  rectTransform.rect;
-            Vector3 lossyScale = rectTransform.lossyScale;
+            UnityEngine.Vector3 lossyScale = rectTransform.lossyScale;
             center = rectTransform.TransformPoint(rect.center);
              
             size = new Vector2(rect.size.x * lossyScale.x, rect.size.y * lossyScale.y);
             orientation = rectTransform.rotation;
         }
 
-        public Rectangle3D(Vector3 center, Vector2 size)
+        public Rectangle3D(UnityEngine.Vector3 center, Vector2 size)
         {
             this.center = center;
             this.size = size;
             orientation = Quaternion.identity;
         }
-        public Rectangle3D(Vector3 center, Vector2 size, Quaternion orientation)
+        public Rectangle3D(UnityEngine.Vector3 center, Vector2 size, Quaternion orientation)
         {
             this.center = center;
             this.size = size;
             this.orientation = orientation;
         }
-        public Rectangle3D(Vector3 center, Vector2 size, Vector3 normal)
+        public Rectangle3D(UnityEngine.Vector3 center, Vector2 size, UnityEngine.Vector3 normal)
         {
             this.center = center;
             this.size = size;
             orientation = Quaternion.LookRotation(normal);
         }
 
-        public Rectangle3D(Vector3 center, Vector2 size, Vector3 normal, Vector3 up)
+        public Rectangle3D(UnityEngine.Vector3 center, Vector2 size, UnityEngine.Vector3 normal, UnityEngine.Vector3 up)
         {
             this.center = center;
             this.size = size;
             orientation = Quaternion.LookRotation(normal, up);
         }
 
-        public Vector3 Normal => orientation * Vector3.forward;
+        public UnityEngine.Vector3 Normal => orientation * UnityEngine.Vector3.forward;
 
-        public Vector3 Right => center + orientation * new Vector3(size.x / 2, 0);
-        public Vector3 Left => center + orientation * new Vector3(-size.x / 2, 0);
-        public Vector3 Top => center + orientation * new Vector3(0, size.y / 2);
-        public Vector3 Bottom => center + orientation * new Vector3(0, -size.y / 2);
+        public UnityEngine.Vector3 Right => center + orientation * new UnityEngine.Vector3(size.x / 2, 0);
+        public UnityEngine.Vector3 Left => center + orientation * new UnityEngine.Vector3(-size.x / 2, 0);
+        public UnityEngine.Vector3 Top => center + orientation * new UnityEngine.Vector3(0, size.y / 2);
+        public UnityEngine.Vector3 Bottom => center + orientation * new UnityEngine.Vector3(0, -size.y / 2);
 
-        public Vector3 TopRight => center + orientation * new Vector3(size.x / 2, size.y / 2);
-        public Vector3 TopLeft => center + orientation * new Vector3(-size.x / 2, size.y / 2);
-        public Vector3 BottomRight => center + orientation * new Vector3(size.x / 2, -size.y / 2);
-        public Vector3 BottomLeft => center + orientation * new Vector3(-size.x / 2, -size.y / 2);
+        public UnityEngine.Vector3 TopRight => center + orientation * new UnityEngine.Vector3(size.x / 2, size.y / 2);
+        public UnityEngine.Vector3 TopLeft => center + orientation * new UnityEngine.Vector3(-size.x / 2, size.y / 2);
+        public UnityEngine.Vector3 BottomRight => center + orientation * new UnityEngine.Vector3(size.x / 2, -size.y / 2);
+        public UnityEngine.Vector3 BottomLeft => center + orientation * new UnityEngine.Vector3(-size.x / 2, -size.y / 2);
 
-        public Vector3[] Corners => new[] { TopRight, TopLeft, BottomLeft, BottomRight};
+        public UnityEngine.Vector3[] Corners => new[] { TopRight, TopLeft, BottomLeft, BottomRight};
 
         public Rectangle To2DRectangle => new Rectangle(center, size);
 
@@ -78,9 +78,9 @@ namespace MUtility
             if (rate <= 0) return startPosition;
             if (rate >= 1) return endPosition;
  
-            Vector3 center = 
+            UnityEngine.Vector3 center = 
                 (startPosition.center == endPosition.center)? startPosition.center: 
-                Vector3.Lerp(startPosition.center, endPosition.center, rate);
+                UnityEngine.Vector3.Lerp(startPosition.center, endPosition.center, rate);
              
             Vector2 size =
                 (startPosition.size == endPosition.size)? startPosition.size:

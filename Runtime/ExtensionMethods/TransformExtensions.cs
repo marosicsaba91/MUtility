@@ -7,7 +7,7 @@ namespace MUtility
 {
 public static class TransformExtensions
 {
-	static Vector3 _cacheVector3;
+	static UnityEngine.Vector3 _cacheVector3;
 
 	public static void DestroyChildren(this Transform transform, params Transform[] exceptions)
 	{
@@ -70,9 +70,9 @@ public static class TransformExtensions
 	public static void SetParentAndAlignToDefault(this Transform self, Transform parent)
 	{
 		self.SetParent(parent);
-		self.localScale = Vector3.one;
+		self.localScale = UnityEngine.Vector3.one;
 		self.localRotation = Quaternion.identity;
-		self.localPosition = Vector3.zero;
+		self.localPosition = UnityEngine.Vector3.zero;
 		var rect = self.GetComponent<RectTransform>();
 		if (rect == null) return;
 		rect.sizeDelta = new Vector2(0, 0);
@@ -159,7 +159,7 @@ public static class TransformExtensions
 
 	public static void SetLocalScale(this Transform transform, float scale)
 	{
-		transform.localScale = new Vector3(scale, scale, scale);
+		transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
 	}
 	
 	public static void SetLocalScaleZ(this Transform self, float value)
@@ -169,11 +169,11 @@ public static class TransformExtensions
 		self.localScale = _cacheVector3;
 	}
 
-	public static void SetGlobalScale(this Transform transform, Vector3 globalScale)
+	public static void SetGlobalScale(this Transform transform, UnityEngine.Vector3 globalScale)
 	{
-		transform.localScale = Vector3.one;
-		Vector3 lossyScale = transform.lossyScale;
-		transform.localScale = new Vector3(
+		transform.localScale = UnityEngine.Vector3.one;
+		UnityEngine.Vector3 lossyScale = transform.lossyScale;
+		transform.localScale = new UnityEngine.Vector3(
 			globalScale.x / lossyScale.x, 
 			globalScale.y / lossyScale.y,
 			globalScale.z / lossyScale.z);
@@ -181,9 +181,9 @@ public static class TransformExtensions
 
 	public static void SetGlobalScale(this Transform transform, float globalScale)
 	{
-		transform.localScale = Vector3.one;
-		Vector3 lossyScale = transform.lossyScale;
-		transform.localScale = new Vector3(
+		transform.localScale = UnityEngine.Vector3.one;
+		UnityEngine.Vector3 lossyScale = transform.lossyScale;
+		transform.localScale = new UnityEngine.Vector3(
 			globalScale / lossyScale.x,
 			globalScale / lossyScale.y, 
 			globalScale / lossyScale.z);
@@ -191,35 +191,35 @@ public static class TransformExtensions
 	
 	public static float GetMaxGlobalScaleDimension(this Transform transform)
 	{
-		Vector3 scale = transform.lossyScale;
+		UnityEngine.Vector3 scale = transform.lossyScale;
 		return Mathf.Max(scale.x, scale.y, scale.z);
 	}
 
-	public static Vector3 TransformPointUnscaled(this Transform transform, Vector3 position)
+	public static UnityEngine.Vector3 TransformPointUnscaled(this Transform transform, UnityEngine.Vector3 position)
 	{
-		Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+		Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(transform.position, transform.rotation, UnityEngine.Vector3.one);
 		return localToWorldMatrix.MultiplyPoint3x4(position);
 	}
 
-	public static Vector3 InverseTransformPointUnscaled(this Transform transform, Vector3 position)
+	public static UnityEngine.Vector3 InverseTransformPointUnscaled(this Transform transform, UnityEngine.Vector3 position)
 	{
-		Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one).inverse;
+		Matrix4x4 worldToLocalMatrix = Matrix4x4.TRS(transform.position, transform.rotation, UnityEngine.Vector3.one).inverse;
 		return worldToLocalMatrix.MultiplyPoint3x4(position);
 	}
 
 	public static Quaternion TransformRotation(
 		this Transform transform, Quaternion rotation)
 	{
-		Vector3 forward = transform.TransformDirection(rotation * Vector3.forward);
-		Vector3 up = transform.TransformDirection(rotation * Vector3.up);
+		UnityEngine.Vector3 forward = transform.TransformDirection(rotation * UnityEngine.Vector3.forward);
+		UnityEngine.Vector3 up = transform.TransformDirection(rotation * UnityEngine.Vector3.up);
 		return Quaternion.LookRotation(forward, up);
 	}
 	
 	public static Quaternion InverseTransformRotation(
 		this Transform transform, Quaternion rotation)
 	{
-		Vector3 forward = transform.InverseTransformDirection(rotation * Vector3.forward);
-		Vector3 up = transform.InverseTransformDirection(rotation * Vector3.up);
+		UnityEngine.Vector3 forward = transform.InverseTransformDirection(rotation * UnityEngine.Vector3.forward);
+		UnityEngine.Vector3 up = transform.InverseTransformDirection(rotation * UnityEngine.Vector3.up);
 		return Quaternion.LookRotation(forward, up);
 	}
 

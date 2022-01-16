@@ -5,15 +5,24 @@ namespace MUtility
 public interface IInspectorElement
 { 
     object ParentObject { get; set; } 
-    string Text(object parentObject, string originalLabel);
+    string GetLabel(object parentObject, string originalLabel);
     Color GetColor(object parentObject);
     bool IsEnabled(object parentObject);
     bool IsVisible(object parentObject);
     Object[] ChangeableObjects(object parentObject);
 }
 
-public abstract class InspectorElement<TContainer> : IInspectorElement
+public abstract class InspectorElement<TParentObject> : IInspectorElement
 {
+    public delegate Color ColorGetter(TParentObject parentObject);
+    public delegate bool BoolGetter(TParentObject parentObject);
+    public delegate string StringGetter(TParentObject parentObject);
+     
+    public ColorGetter getColor;
+    public StringGetter getLabel;
+    public BoolGetter isEnabled;
+    public BoolGetter isVisible;
+    
     public object ParentObject { get; internal set; }
     object IInspectorElement.ParentObject
     {
@@ -21,16 +30,17 @@ public abstract class InspectorElement<TContainer> : IInspectorElement
         set => ParentObject = value;
     }
  
-    public string Text(object parentObject, string originalLabel) => Text((TContainer) parentObject, originalLabel);
-    public Color GetColor(object parentObject) => GetColor((TContainer) parentObject);
-    public bool IsEnabled(object parentObject) => IsEnabled((TContainer) parentObject);
-    public bool IsVisible(object parentObject) => IsVisible((TContainer) parentObject);
-    public Object[] ChangeableObjects(object parentObject) => ChangeableObjects((TContainer) parentObject);
+    public string GetLabel(object parentObject, string originalLabel) => GetLabel((TParentObject) parentObject, originalLabel);
+    public Color GetColor(object parentObject) => GetColor((TParentObject) parentObject);
+    public bool IsEnabled(object parentObject) => IsEnabled((TParentObject) parentObject);
+    public bool IsVisible(object parentObject) => IsVisible((TParentObject) parentObject);
+    public Object[] ChangeableObjects(object parentObject) => ChangeableObjects((TParentObject) parentObject);
 
-    protected virtual string Text(TContainer parentObject, string originalLabel) => null;
-    protected virtual Color GetColor(TContainer parentObject) => Color.white;
-    protected virtual bool IsEnabled(TContainer parentObject) => true;
-    protected virtual bool IsVisible(TContainer parentObject) => true;
-    protected virtual Object[] ChangeableObjects(TContainer parentObject) => null;
+    protected virtual string GetLabel(TParentObject parentObject, string originalLabel) => getLabel?.Invoke(parentObject);
+
+    protected virtual Color GetColor(TParentObject parentObject) => getColor?.Invoke(parentObject) ?? Color.white; 
+    protected virtual bool IsEnabled(TParentObject parentObject) => isEnabled?.Invoke(parentObject) ?? true; 
+    protected virtual bool IsVisible(TParentObject parentObject) => isVisible?.Invoke(parentObject) ?? true; 
+    protected virtual Object[] ChangeableObjects(TParentObject parentObject) => null;
 }
 }

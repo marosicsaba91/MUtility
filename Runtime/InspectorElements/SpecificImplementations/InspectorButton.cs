@@ -10,9 +10,9 @@ public interface IInspectorButton
 
 [Serializable]
 public abstract class InspectorButton<TParentObject> : InspectorElement<TParentObject>, IInspectorButton
-{
-	public delegate void Clicked(TParentObject parentObject);
-	public Clicked onClicked;
+{ 
+	public delegate void Action(TParentObject parentObject);
+	public Action onClicked;
 	public void OnClick(object parentObject) => OnClick((TParentObject) parentObject);
 
 	public string WarningMessage(object parentObject) => WarningMessage((TParentObject) parentObject);

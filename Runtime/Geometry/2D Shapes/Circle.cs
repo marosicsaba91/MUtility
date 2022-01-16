@@ -67,7 +67,7 @@ namespace MUtility
             var right = new Vector2(radius, 0); ;
             var up = new Vector2(0, radius);
 
-            var polygons = new Vector3[fregmentCount][];
+            var polygons = new UnityEngine.Vector3[fregmentCount][];
 
             float angle = Mathf.PI * 2f / (fregmentCount*2);
             for (var i = 0; i < polygons.Length; i++)
@@ -76,24 +76,24 @@ namespace MUtility
                 float phase2 = angle * ((2 * i) + 1);
                 Vector2 p1 = (Mathf.Sin(phase1) * right) + (Mathf.Cos(phase1) * up) + center;
                 Vector2 p2 = (Mathf.Sin(phase2) * right) + (Mathf.Cos(phase2) * up) + center;
-                polygons[i] = new Vector3[] { p1, p2 };
+                polygons[i] = new UnityEngine.Vector3[] { p1, p2 };
             }
             return new Drawable(polygons);
         }
 
-        public Vector3[] ToPolygon(int segmentCount = defaultSegmentCount)
+        public UnityEngine.Vector3[] ToPolygon(int segmentCount = defaultSegmentCount)
         {
-            Vector3 right = new Vector2(radius, 0); ;
-            Vector3 up = new Vector2(0, radius);
+            UnityEngine.Vector3 right = new Vector2(radius, 0); ;
+            UnityEngine.Vector3 up = new Vector2(0, radius);
 
-            var points = new Vector3[segmentCount + 1];
+            var points = new UnityEngine.Vector3[segmentCount + 1];
 
             float angle = Mathf.PI * 2f / segmentCount;
             for (var i = 0; i < segmentCount; i++)
             {
                 float phase = angle * i;
                 points[i] = (Mathf.Sin(phase) * right) + (Mathf.Cos(phase) * up);
-                points[i] += (Vector3)center;
+                points[i] += (UnityEngine.Vector3)center;
             }
             points[points.Length - 1] = points[0];
 
@@ -108,7 +108,7 @@ namespace MUtility
             };
         }
 
-        public void SetHandle(int i, Vector3 newPoint)
+        public void SetHandle(int i, UnityEngine.Vector3 newPoint)
         { 
             if (i == 0) 
                 center = newPoint; 

@@ -88,16 +88,16 @@ namespace MUtility
             }
         }
 
-        public static Vector3 ToVector(this GeneralDirection3D dir)
+        public static UnityEngine.Vector3 ToVector(this GeneralDirection3D dir)
         {
             switch (dir)
             {
-                case GeneralDirection3D.Up: return new Vector3(0, 1, 0);
-                case GeneralDirection3D.Down: return new Vector3(0, -1, 0);
-                case GeneralDirection3D.Right: return new Vector3(1, 0, 0);
-                case GeneralDirection3D.Left: return new Vector3(-1, 0, 0);
-                case GeneralDirection3D.Forward: return new Vector3(0, 0, 1);
-                case GeneralDirection3D.Back: return new Vector3(0, 0, -1);
+                case GeneralDirection3D.Up: return new UnityEngine.Vector3(0, 1, 0);
+                case GeneralDirection3D.Down: return new UnityEngine.Vector3(0, -1, 0);
+                case GeneralDirection3D.Right: return new UnityEngine.Vector3(1, 0, 0);
+                case GeneralDirection3D.Left: return new UnityEngine.Vector3(-1, 0, 0);
+                case GeneralDirection3D.Forward: return new UnityEngine.Vector3(0, 0, 1);
+                case GeneralDirection3D.Back: return new UnityEngine.Vector3(0, 0, -1);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
             }

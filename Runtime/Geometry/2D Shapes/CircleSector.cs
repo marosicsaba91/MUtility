@@ -64,7 +64,7 @@ namespace MUtility
         public Drawable ToDrawable(int fullCircleFragmentCount, float width = 0) =>
             new Drawable ( ToPolygon(fullCircleFragmentCount, width));
         
-        public Vector3[] ToPolygon(int fullCircleFragmentCount = defaultFragmentCount, float width = 0)
+        public UnityEngine.Vector3[] ToPolygon(int fullCircleFragmentCount = defaultFragmentCount, float width = 0)
         {
             if (fullRate >= 1)
                 return new Circle(center, radius).ToPolygon(fullCircleFragmentCount);
@@ -83,13 +83,13 @@ namespace MUtility
 
             segmentLength *= Mathf.Deg2Rad;
 
-            var points = new Vector3[
+            var points = new UnityEngine.Vector3[
                 width >= radius ? circleFragmentCount + 2 :
                 width > 0 ? (circleFragmentCount * 2 + 1) :
                 circleFragmentCount];
 
-            Vector3 right = new Vector2(radius, 0);
-            Vector3 up = new Vector2(0, radius);
+            UnityEngine.Vector3 right = new Vector2(radius, 0);
+            UnityEngine.Vector3 up = new Vector2(0, radius);
 
             var pointIndex = 0;
             AddSegmentPoints( center, true);
@@ -110,7 +110,7 @@ namespace MUtility
 
             return points;
             
-            void AddSegmentPoints(Vector3 center, bool dir)
+            void AddSegmentPoints(UnityEngine.Vector3 center, bool dir)
             {   
                 for (var i = 0; i < circleFragmentCount; i++)
                 {
@@ -132,7 +132,7 @@ namespace MUtility
             };
         }
 
-        public void SetHandle(int i, Vector3 newPoint)
+        public void SetHandle(int i, UnityEngine.Vector3 newPoint)
         {
             if (i == 0)
             {

@@ -10,7 +10,7 @@ public interface IInspectorUnityObject :  IInspectorProperty<Object>
     Type ContentType { get; }
 }
 
-[Serializable] public abstract class UnityObjectProperty<TParentObject, TUnityObject> : 
+[Serializable] public abstract class InspectorUnityObject<TParentObject, TUnityObject> : 
     InspectorProperty<TParentObject, TUnityObject>, IInspectorUnityObject where TUnityObject: Object
 {
     public new Object GetValue(object parentObject) => base.GetValue(parentObject);
@@ -21,12 +21,12 @@ public interface IInspectorUnityObject :  IInspectorProperty<Object>
     public virtual Type ContentType => typeof(TUnityObject); 
 }
 
-[Serializable] public abstract class UnityObjectProperty<TParentObject> :  UnityObjectProperty<TParentObject, Object> 
+[Serializable] public abstract class InspectorUnityObject<TParentObject> :  InspectorUnityObject<TParentObject, Object> 
 {     
     public Type type = typeof(Object);
     public override Type ContentType => type;
 }
 
-[Serializable] public class UnityObjectProperty :  UnityObjectProperty<object> 
+[Serializable] public class InspectorUnityObject :  InspectorUnityObject<object> 
 { }
 }

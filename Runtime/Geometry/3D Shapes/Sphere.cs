@@ -7,25 +7,25 @@ namespace MUtility
     [Serializable]
     public struct Sphere : IDrawable, IHandleable, I3DContaining, I3DSurface, I3DVolume, IDrag, IMesh
     {
-        public Vector3 center;
+        public UnityEngine.Vector3 center;
         public float radius;
 
-        public Sphere(Vector3 center, float radius)
+        public Sphere(UnityEngine.Vector3 center, float radius)
         {
             this.center = center;
             this.radius = radius;
         }
 
         public float DragCoefficient => 0.47f;
-        public float CrossSectionArea(Vector3 direction) => radius * radius * Mathf.PI;
+        public float CrossSectionArea(UnityEngine.Vector3 direction) => radius * radius * Mathf.PI;
 
         public float Surface => 4f * Mathf.PI * radius * radius;
 
         public float Volume => (4f / 3f) * Mathf.PI * radius * radius * radius;
 
-        public bool IsPointInside(Vector3 point) => (point - center).sqrMagnitude <= (radius * radius);
+        public bool IsPointInside(UnityEngine.Vector3 point) => (point - center).sqrMagnitude <= (radius * radius);
 
-        public void SetHandle(int i, Vector3 newPoint)
+        public void SetHandle(int i, UnityEngine.Vector3 newPoint)
         {
             if (i == 0)
                 center = newPoint;
@@ -37,7 +37,7 @@ namespace MUtility
         {
             return new List<HandlePoint> {
                 new HandlePoint(center,  HandlePoint.Shape.Rectangle),
-                new HandlePoint(center + (Vector3.right * radius), HandlePoint.Shape.Circle)
+                new HandlePoint(center + (UnityEngine.Vector3.right * radius), HandlePoint.Shape.Circle)
             };
         }
 
@@ -47,17 +47,17 @@ namespace MUtility
 
         public Drawable ToDrawable(int complexity, int circleSegmentCount)
         {
-            var polygons = new Vector3[complexity * 2][];
-            var unitCircle = new Circle(Vector3.zero, radius);
+            var polygons = new UnityEngine.Vector3[complexity * 2][];
+            var unitCircle = new Circle(UnityEngine.Vector3.zero, radius);
             for (var i = 0; i < complexity; i++)
             {
                 // Szélességi
                 float h = (-radius) + ((1 + i) * (2 * radius) / (complexity + 1));
                 float circleRadius = Mathf.Sqrt((radius * radius) - (h * h));
-                var c1 = new Circle(Vector3.zero, circleRadius);
+                var c1 = new Circle(UnityEngine.Vector3.zero, circleRadius);
                 var polygon = c1.ToPolygon(circleSegmentCount);
                 polygon.Rotate(Quaternion.Euler(90, 0, 0));
-                polygon.Offset(new Vector3(center.x, center.y + h, center.z));
+                polygon.Offset(new UnityEngine.Vector3(center.x, center.y + h, center.z));
                 polygons[i] = polygon;
 
                 // Hosszúsági
@@ -93,11 +93,11 @@ namespace MUtility
 
             resultMesh.Clear();
             #region Vertices
-            var vertices = new Vector3[(nbLong + 1) * nbLat + 2];
+            var vertices = new UnityEngine.Vector3[(nbLong + 1) * nbLat + 2];
             float pi = Mathf.PI;
             float _2pi = pi * 2f;
 
-            vertices[0] = Vector3.up * radius;
+            vertices[0] = UnityEngine.Vector3.up * radius;
             for (var lat = 0; lat < nbLat; lat++)
             {
                 float a1 = pi * (lat + 1) / (nbLat + 1);
@@ -111,17 +111,17 @@ namespace MUtility
                     float cos2 = Mathf.Cos(a2);
 
                     vertices[lon + lat * (nbLong + 1) + 1] =
-                        new Vector3(
+                        new UnityEngine.Vector3(
                             sin1 * cos2 * radius,
                             cos1 * radius,
                             sin1 * sin2 * radius);
                 }
             }
-            vertices[vertices.Length - 1] = Vector3.up * -radius;
+            vertices[vertices.Length - 1] = UnityEngine.Vector3.up * -radius;
             #endregion
 
             #region Normales		
-            var normales = new Vector3[vertices.Length];
+            var normales = new UnityEngine.Vector3[vertices.Length];
             for (var n = 0; n < vertices.Length; n++)
                 normales[n] = vertices[n].normalized;
             #endregion
@@ -189,7 +189,7 @@ namespace MUtility
             ;
         }
 
-        public float GetDrag(Vector3 direction)
+        public float GetDrag(UnityEngine.Vector3 direction)
         {
             throw new NotImplementedException();
         }

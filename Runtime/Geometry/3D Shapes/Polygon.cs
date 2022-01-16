@@ -9,7 +9,7 @@ namespace MUtility
     public struct Polygon : I2DArea, IHandleable, I2DCircumference, IDrawable
     {
         [FormerlySerializedAs("verticles")]
-        public List<Vector3> points;
+        public List<UnityEngine.Vector3> points;
         public bool closed;
 
         int SegmentCount => closed ? points.Count : points.Count - 1;
@@ -19,7 +19,7 @@ namespace MUtility
         public void Clear()
         {
             if (points == null)
-                points = new List<Vector3>();
+                points = new List<UnityEngine.Vector3>();
             else
                 points.Clear();
         }
@@ -75,9 +75,9 @@ namespace MUtility
         public Drawable ToDrawable()
         {
             if (points == null || points.Count <= 1)
-                return new Drawable(new Vector3 [0][]);
+                return new Drawable(new UnityEngine.Vector3 [0][]);
              
-            var polygon = new Vector3[SegmentCount+1];
+            var polygon = new UnityEngine.Vector3[SegmentCount+1];
 
             for (var i = 0; i < points.Count; i++)            
                 polygon[i] = points[i];
@@ -98,7 +98,7 @@ namespace MUtility
             return result;
         }
 
-        public void SetHandle(int index, Vector3 point)
+        public void SetHandle(int index, UnityEngine.Vector3 point)
         {
             points[index] = point;
         }

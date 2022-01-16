@@ -6,16 +6,16 @@ namespace MUtility
 {
     public struct Drawable
     {
-        public readonly List<Vector3[]> polygons;
+        public readonly List<UnityEngine.Vector3[]> polygons;
 
-        public Drawable(List<Vector3[]> polygons)
+        public Drawable(List<UnityEngine.Vector3[]> polygons)
         { 
             this.polygons = polygons;
         }
 
-        public Drawable(params Vector3[][] polygons)
+        public Drawable(params UnityEngine.Vector3[][] polygons)
         {
-            this.polygons = new List<Vector3[]>();
+            this.polygons = new List<UnityEngine.Vector3[]>();
             for (var i = 0; i < polygons.Length; i++)
                 this.polygons.Add(polygons[i]);
         }
@@ -24,13 +24,13 @@ namespace MUtility
             polygons.AddRange(other.polygons);
         }
 
-        public void AddPolygon(Vector3[] polygon) =>        
+        public void AddPolygon(UnityEngine.Vector3[] polygon) =>        
             polygons.Add(polygon);
         
         public Drawable Transform(Transform transform) =>
             ModifyEach((polygon) => polygon.Transform(transform));
 
-        public Drawable Offset(Vector3 offset) =>
+        public Drawable Offset(UnityEngine.Vector3 offset) =>
             ModifyEach((polygon) => polygon.Offset(offset));
 
         public Drawable Rotate(Quaternion rotate) =>
@@ -48,13 +48,13 @@ namespace MUtility
         public Drawable Scale(float scale) =>
             ModifyEach((polygon) => polygon.Scale(scale));
 
-        public Drawable Scale(Vector3 scale) =>
+        public Drawable Scale(UnityEngine.Vector3 scale) =>
             ModifyEach((polygon) => polygon.Scale(scale));
 
-        public Drawable Transform(Vector3 offset, Quaternion rotate, float scale) =>
+        public Drawable Transform(UnityEngine.Vector3 offset, Quaternion rotate, float scale) =>
             ModifyEach((polygon) => polygon.Transform(offset, rotate, scale));
 
-        public Drawable Transform(Vector3 offset, Quaternion rotate, Vector3 scale) =>
+        public Drawable Transform(UnityEngine.Vector3 offset, Quaternion rotate, UnityEngine.Vector3 scale) =>
             ModifyEach((polygon) => polygon.Transform(offset, rotate, scale));
 
         public void DrawGizmo(Transform transform, Color color) =>
@@ -81,10 +81,10 @@ namespace MUtility
                 Transform(transform).DrawDebug(color);
         }
 
-        public void DrawGizmo(Vector3 offset, Color color) =>
+        public void DrawGizmo(UnityEngine.Vector3 offset, Color color) =>
             Offset(offset).DrawGizmo(color);
 
-        public void DrawDebug(Vector3 offset, Color color) =>
+        public void DrawDebug(UnityEngine.Vector3 offset, Color color) =>
             Offset(offset).DrawDebug(color);
 
         public void DrawGizmo(Quaternion rotate, Color color) =>
@@ -93,16 +93,16 @@ namespace MUtility
         public void DrawDebug(Quaternion rotate, Color color) =>
             Rotate(rotate).DrawDebug(color);
 
-        public void DrawGizmo(Vector3 offset, Quaternion rotate, float scale, Color color) =>
+        public void DrawGizmo(UnityEngine.Vector3 offset, Quaternion rotate, float scale, Color color) =>
             Transform(offset, rotate, scale).DrawGizmo(color);
 
-        public void DrawDebug(Vector3 offset, Quaternion rotate, float scale, Color color) =>
+        public void DrawDebug(UnityEngine.Vector3 offset, Quaternion rotate, float scale, Color color) =>
             Transform(offset, rotate, scale).DrawDebug(color);
 
-        public void DrawGizmo(Vector3 offset, Quaternion rotate, Vector3 scale, Color color) =>
+        public void DrawGizmo(UnityEngine.Vector3 offset, Quaternion rotate, UnityEngine.Vector3 scale, Color color) =>
             Transform(offset, rotate, scale).DrawGizmo(color);
 
-        public  void DrawDebug(Vector3 offset, Quaternion rotate, Vector3 scale, Color color) =>
+        public  void DrawDebug(UnityEngine.Vector3 offset, Quaternion rotate, UnityEngine.Vector3 scale, Color color) =>
             Transform(offset, rotate, scale).DrawDebug(color);
 
         public void DrawGizmo(Color color) =>
@@ -111,12 +111,12 @@ namespace MUtility
         public void DrawDebug(Color color) =>
             Each((polygon) => polygon.DrawDebug(color));
 
-        void Each(Action<Vector3[]> action)
+        void Each(Action<UnityEngine.Vector3[]> action)
         {
             for (var i = 0; i < polygons.Count; i++)
                 action(polygons[i]);
         }
-        Drawable ModifyEach(Action<Vector3[]> action)
+        Drawable ModifyEach(Action<UnityEngine.Vector3[]> action)
         {
             for (var i = 0; i < polygons.Count; i++)
                 action(polygons[i]);

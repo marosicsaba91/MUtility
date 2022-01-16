@@ -8,7 +8,7 @@ namespace Utility_Examples
 	public partial class Temperature
 	{
 		[Serializable]
-		class TemperatureKelvinProperty : FloatProperty<Temperature>
+		class TemperatureKelvin : InspectorFloat<Temperature>
 		{
 			protected override float GetValue(Temperature parentObject) => Math.Abs(value) < epsilon ? 0 : value;
 
@@ -21,7 +21,7 @@ namespace Utility_Examples
 		}
 
 		[Serializable]
-		class TemperatureFahrenheitProperty : FloatProperty<Temperature>
+		class TemperatureFahrenheit : InspectorFloat<Temperature>
 		{
 			protected override float GetValue(Temperature parentObject) => parentObject.TemperatureInFahrenheit;
 
@@ -35,7 +35,7 @@ namespace Utility_Examples
 		}
 
 		[Serializable]
-		class TemperatureCelsiusProperty : FloatProperty<Temperature>
+		class TemperatureCelsius : InspectorFloat<Temperature>
 		{
 			protected override float GetValue(Temperature parentObject) => parentObject.TemperatureInCelsius;
 			protected override void SetValue(Temperature parentObject, float newValue)
@@ -56,7 +56,7 @@ namespace Utility_Examples
 		}
 
 		[Serializable]
-		class OneDigitProperty : IntProperty<Temperature>
+		class OneDigit : InspectorInt<Temperature>
 		{
 			protected override IList<int> PopupElements(Temperature container)
 			{

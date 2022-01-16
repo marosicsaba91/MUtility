@@ -60,7 +60,7 @@ namespace MUtility
             Mathf.Abs(center.x - point.x) < (size.x / 2f) &&
             Mathf.Abs(center.y - point.y) < (size.y / 2f);
 
-        public void SetHandle(int i, Vector3 newPoint)
+        public void SetHandle(int i, UnityEngine.Vector3 newPoint)
         {
             float rescale = 0;
             float offset = 0;
@@ -108,7 +108,7 @@ namespace MUtility
         internal Rect ToRect() => new Rect(center - (size / 2f), size);        
 
         public Drawable ToDrawable() =>
-            new Drawable(new Vector3[] { TopRight, TopLeft, BottomLeft, BottomRight, TopRight });
+            new Drawable(new UnityEngine.Vector3[] { TopRight, TopLeft, BottomLeft, BottomRight, TopRight });
 
         static readonly Vector2Int defaultMeshGridSize = new Vector2Int(10,10);
     }

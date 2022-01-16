@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using MUtility;
 using UnityEngine;
- 
+using Vector3 = UnityEngine.Vector3;
+
 public class NormalDistributionTest : MonoBehaviour
 {
     [SerializeField] NormalDistributionFunction normalDistributionFunction = default; 
     [Space]
-    [SerializeField] SampleCountProperty sampleCount;
+    [SerializeField] SampleCount sampleCount;
     [SerializeField] ClearButton clear;
     [SerializeField] AddSamplesButton addSamples;
     
@@ -68,7 +69,7 @@ public class NormalDistributionTest : MonoBehaviour
      }
      
      [Serializable]
-     class SampleCountProperty : IntProperty<NormalDistributionTest>
+     class SampleCount : InspectorInt<NormalDistributionTest>
      { 
          protected override int GetValue(NormalDistributionTest parentObject) => parentObject.AllSampleCount;
          protected override void SetValue(NormalDistributionTest parentObject, int newValue) 

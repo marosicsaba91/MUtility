@@ -7,10 +7,10 @@ namespace MUtility
 [Serializable]
 public struct Line : IDrawable, IHandleable
 {
-    public Vector3 a;
-    public Vector3 b;
+    public UnityEngine.Vector3 a;
+    public UnityEngine.Vector3 b;
 
-    public Line(Vector3 a, Vector3 b)
+    public Line(UnityEngine.Vector3 a, UnityEngine.Vector3 b)
     {
         this.a = a;
         this.b = b;
@@ -28,7 +28,7 @@ public struct Line : IDrawable, IHandleable
         b = ray.origin + ray.direction;
     }
 
-    Vector3 DirectionNormal
+    UnityEngine.Vector3 DirectionNormal
     {
         get => (b - a).normalized;
         set => b = a + value;
@@ -40,15 +40,15 @@ public struct Line : IDrawable, IHandleable
 
     public Drawable ToDrawable(float length)
     {
-        Vector3 center = (a + b) / 2f;
-        Vector3 dir = DirectionNormal * (length / 2f);
+        UnityEngine.Vector3 center = (a + b) / 2f;
+        UnityEngine.Vector3 dir = DirectionNormal * (length / 2f);
         return new Drawable(new[] {center - dir, center + dir});
     }
 
     public List<HandlePoint> GetHandles() =>
         new List<HandlePoint> {new HandlePoint(a), new HandlePoint(b)};
 
-    public void SetHandle(int index, Vector3 point)
+    public void SetHandle(int index, UnityEngine.Vector3 point)
     {
         if (index == 0)
             a = point;
@@ -56,11 +56,11 @@ public struct Line : IDrawable, IHandleable
             b = point;
     }
 
-    public float ClosestPointOnLineToPointRate(Vector3 point) =>
+    public float ClosestPointOnLineToPointRate(UnityEngine.Vector3 point) =>
         ClosestPointOnLineToPointRate(a, b, point);
 
-    public Vector3 ClosestPointOnLineToPoint(Vector3 point) =>
-        Vector3.LerpUnclamped(a, b, ClosestPointOnLineToPointRate(point));
+    public UnityEngine.Vector3 ClosestPointOnLineToPoint(UnityEngine.Vector3 point) =>
+        UnityEngine.Vector3.LerpUnclamped(a, b, ClosestPointOnLineToPointRate(point));
 
     public bool TryGetShortestSegmentToLine(Line l2, out LineSegment shortest) =>
         TryGetShortestSegmentBetweenLines(this, l2, out shortest);
@@ -78,11 +78,11 @@ public struct Line : IDrawable, IHandleable
     
     // STATIC
     
-    public static float ClosestPointOnLineToPointRate(Vector3 lineA, Vector3 lineB, Vector3 point)
+    public static float ClosestPointOnLineToPointRate(UnityEngine.Vector3 lineA, UnityEngine.Vector3 lineB, UnityEngine.Vector3 point)
     {
-        Vector3 u = lineB - lineA;
-        Vector3 v = point - lineA;
-        return Vector3.Dot(v, u) / u.sqrMagnitude;
+        UnityEngine.Vector3 u = lineB - lineA;
+        UnityEngine.Vector3 v = point - lineA;
+        return UnityEngine.Vector3.Dot(v, u) / u.sqrMagnitude;
     }
 
     public static bool TryGetShortestSegmentBetweenLines(Line l1, Line l2, out LineSegment shortest) =>
@@ -107,8 +107,8 @@ public struct Line : IDrawable, IHandleable
             l1AClosed, l1BClosed, l2AClosed, l2BClosed,
             out float rate1, out float rate2))
         {
-            Vector3 resultA = Vector3.Lerp(l1.a, l1.b, rate1);
-            Vector3 resultB = Vector3.Lerp(l2.a, l2.b, rate2);
+            UnityEngine.Vector3 resultA = UnityEngine.Vector3.Lerp(l1.a, l1.b, rate1);
+            UnityEngine.Vector3 resultB = UnityEngine.Vector3.Lerp(l2.a, l2.b, rate2);
             shortest = new LineSegment(resultA, resultB);
             return true;
         }
@@ -166,12 +166,12 @@ public struct Line : IDrawable, IHandleable
         rate1 = 0;
         rate2 = 0;
 
-        Vector3 v1 = l1.a - l2.a;
-        Vector3 v2 = l2.b - l2.a;
+        UnityEngine.Vector3 v1 = l1.a - l2.a;
+        UnityEngine.Vector3 v2 = l2.b - l2.a;
 
         if (v2.sqrMagnitude < epsilon) return false;
 
-        Vector3 v3 = l1.b - l1.a;
+        UnityEngine.Vector3 v3 = l1.b - l1.a;
 
         if (v3.sqrMagnitude < epsilon) return false;
 

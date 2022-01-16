@@ -15,10 +15,10 @@ public static class QuaternionExtensions
         return true;
     }
 
-    public static void DrawGizmo(this Quaternion rotation, Vector3 position, float size = 1) =>
+    public static void DrawGizmo(this Quaternion rotation, UnityEngine.Vector3 position, float size = 1) =>
         DrawGizmo(rotation, position, Color.white, size);
 
-    public static void DrawGizmo(this Quaternion rotation, Vector3 position, Color color, float size = 1) =>
+    public static void DrawGizmo(this Quaternion rotation, UnityEngine.Vector3 position, Color color, float size = 1) =>
         new Pose(position, rotation).DrawGizmo(color, size);
 }
 }

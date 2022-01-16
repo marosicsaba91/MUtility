@@ -21,9 +21,9 @@ public struct HermiteCurve : IDrawable
             Auto
         }
 
-        public Vector3 position;
-        public Vector3 speedIn;
-        public Vector3 speedOut;
+        public UnityEngine.Vector3 position;
+        public UnityEngine.Vector3 speedIn;
+        public UnityEngine.Vector3 speedOut;
         public EditingStyle editingStyle;
     }
 
@@ -45,10 +45,10 @@ public struct HermiteCurve : IDrawable
 
     int SegmentCount => isClosed ? nodes.Count : nodes.Count - 1;
 
-    public Vector3 Evaluate(float time)
+    public UnityEngine.Vector3 Evaluate(float time)
     {
         int count = nodes.Count;
-        if (count == 0) return Vector3.zero;
+        if (count == 0) return UnityEngine.Vector3.zero;
         int index0 = Mathf.FloorToInt(time);
         int index1 = Mathf.CeilToInt(time);
 
@@ -67,10 +67,10 @@ public struct HermiteCurve : IDrawable
 
         Node node0 = nodes[index0];
         Node node1 = nodes[index1];
-        Vector3 p0 = node0.position;
-        Vector3 p1 = node1.position;
-        Vector3 v0 = node0.speedOut;
-        Vector3 v1 = node1.speedIn;
+        UnityEngine.Vector3 p0 = node0.position;
+        UnityEngine.Vector3 p1 = node1.position;
+        UnityEngine.Vector3 v0 = node0.speedOut;
+        UnityEngine.Vector3 v1 = node1.speedIn;
 
         float t = time % 1;
         float t2 = t * t;
@@ -85,21 +85,21 @@ public struct HermiteCurve : IDrawable
 
     public Drawable ToDrawable() => ToDrawable(defaultDrawingPointsOnSegment);
 
-    public Drawable ToDrawable(int drawingPointsOnSegment) => new Drawable(new List<Vector3[]>
+    public Drawable ToDrawable(int drawingPointsOnSegment) => new Drawable(new List<UnityEngine.Vector3[]>
     {
         ToVectorArray(drawingPointsOnSegment)
     });
 
-    public Vector3[] ToVectorArray() => ToVectorArray(defaultDrawingPointsOnSegment);
+    public UnityEngine.Vector3[] ToVectorArray() => ToVectorArray(defaultDrawingPointsOnSegment);
 
-    public Vector3[] ToVectorArray(int drawingPointsOnSegment)
+    public UnityEngine.Vector3[] ToVectorArray(int drawingPointsOnSegment)
     {
         if (nodes == null) return default;
         int nodeCount = nodes.Count;
         if (nodeCount == 0) return default;
 
         int curvePointCount = drawingPointsOnSegment * SegmentCount + 1;
-        var points = new Vector3[curvePointCount];
+        var points = new UnityEngine.Vector3[curvePointCount];
         for (var i = 0; i < curvePointCount; i++)
         {
             float t = (float) i / drawingPointsOnSegment;

@@ -14,12 +14,12 @@ namespace MUtility
     public interface IDrag
     {
         float DragCoefficient { get; }
-        float CrossSectionArea(Vector3 direction);
+        float CrossSectionArea(UnityEngine.Vector3 direction);
     }
 
     public interface I3DContaining
     {
-        bool IsPointInside(Vector3 point);
+        bool IsPointInside(UnityEngine.Vector3 point);
     }
 
     public interface IMesh

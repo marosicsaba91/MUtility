@@ -2,8 +2,8 @@
 
 namespace MUtility
 {
-[Serializable] public abstract class InspectoreBool<TParentObject> : InspectorProperty<TParentObject, bool>
+[Serializable] public abstract class InspectorBool<TParentObject> : InspectorProperty<TParentObject, bool>
 { }
 
-[Serializable] public class InspectoreBool : InspectoreBool<object> { }
+[Serializable] public class InspectorBool : InspectorBool<object> { }
 }

@@ -10,14 +10,14 @@ namespace MUtility
     public interface IHandleable
     {
         List<HandlePoint> GetHandles();
-        void SetHandle(int index, Vector3 point);
+        void SetHandle(int index, UnityEngine.Vector3 point);
     }
 
     public static class HandleableExtensions
     {
         const float defaultSize = 0.25f;
         static GUIStyle _style = new GUIStyle();
-        static Vector3 _snap = new Vector3(.5f, .5f, .5f);
+        static UnityEngine.Vector3 _snap = new UnityEngine.Vector3(.5f, .5f, .5f);
 
         public static IHandleable ApplyHandles(this IHandleable iHandleable, Transform transform, Object objectToRecord, Color color, Space space = Space.Self, float size = defaultSize)
         {
@@ -28,7 +28,7 @@ namespace MUtility
             for (var i = 0; i < handles.Count; i++)
             {
                 HandlePoint handle = handles[i];
-                Vector3 pos = handle.position;
+                UnityEngine.Vector3 pos = handle.position;
 
                 if (space == Space.Self)
                     pos = transform.TransformPoint(pos);
@@ -39,7 +39,7 @@ namespace MUtility
                 }
 
                 var capFunction = handle.shape.ToCapFunction();
-                Vector3 newPos = Handles.FreeMoveHandle(pos, Quaternion.identity, size, _snap, capFunction);
+                UnityEngine.Vector3 newPos = Handles.FreeMoveHandle(pos, Quaternion.identity, size, _snap, capFunction);
                 if (pos == newPos) continue;
                 if (space == Space.Self)
                     newPos = transform.InverseTransformPoint(newPos);

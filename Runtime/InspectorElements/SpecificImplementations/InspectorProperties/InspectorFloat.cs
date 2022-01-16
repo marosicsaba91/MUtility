@@ -4,25 +4,37 @@ namespace MUtility
 {
 public interface IFloatProperty : IInspectorProperty<float>
 {
-	bool TryGetRange(object parentObject, out float min, out float max);
+	bool TryGetMin(object parentObject, out float min);
+	bool TryGetMax(object parentObject, out float max);
 }
 
 [Serializable]
-public abstract class FloatProperty<TParentObject> : InspectorProperty<TParentObject, float>, IFloatProperty
+public abstract class InspectorFloat<TParentObject> : InspectorProperty<TParentObject, float>, IFloatProperty
 {
-	public bool TryGetRange(object parentObject, out float min, out float max) =>
-		TryGetRange((TParentObject) parentObject, out min, out max);
+	public delegate float FloatGetter(TParentObject parentObject);
+	public FloatGetter getMinimum;
+	public FloatGetter getMaximum;
+	
+	public bool TryGetMin(object parentObject, out float min) =>
+		TryGetMin((TParentObject) parentObject, out min);
+ 
+	public bool TryGetMax(object parentObject, out float max) =>
+		TryGetMax((TParentObject) parentObject,  out max);
 
-	protected virtual bool TryGetRange(TParentObject container, out float min, out float max)
+	protected virtual bool TryGetMin(TParentObject container, out float min)
 	{
-		min = 0;
-		max = 0;
-		return false;
+		min = getMinimum?.Invoke(container) ?? 0; 
+		return getMinimum != null;
+	}
+	protected virtual bool TryGetMax(TParentObject container, out float max)
+	{
+		max = getMaximum?.Invoke(container) ?? 0; 
+		return getMaximum != null;
 	}
 }
 
 [Serializable]
-public class FloatProperty : FloatProperty<object>
+public class InspectorFloat : InspectorFloat<object>
 {
 }
 

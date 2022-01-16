@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MUtility
 {
@@ -12,29 +13,46 @@ public interface IInspectorCurve
 }
 
 
-public abstract class InspectorCurve<TContainer> : InspectorElement<TContainer>, IInspectorCurve
+public abstract class InspectorCurve<TParentObject> : InspectorElement<TParentObject>, IInspectorCurve
 {
     public const float defaultCurveHeight = 150f;
     
-    public float Evaluate(object parentObject, float time) => Evaluate((TContainer) parentObject, time);
-    public Rect DefaultArea(object parentObject) => DefaultArea((TContainer) parentObject);
+    public delegate float EvaluateFunction(TParentObject parentObject, float time);
+    public EvaluateFunction evaluateFunction;
+    public delegate Rect RectGetter(TParentObject parentObject);
+    public RectGetter getDefaultRect;
+    public delegate float FloatGetter(TParentObject parentObject);
+    public FloatGetter getUIElementHeight;
+    public ColorGetter getCurveColor;
+    
+    
+    public float Evaluate(object parentObject, float time) => Evaluate((TParentObject) parentObject, time);
+    public Rect DefaultArea(object parentObject) => DefaultArea((TParentObject) parentObject);
 
-    public Color GetCurveColor(object parentObject) => GetCurveColor((TContainer) parentObject);
+    public Color GetCurveColor(object parentObject) => GetCurveColor((TParentObject) parentObject);
 
-    public float Height(object parentObject) => Height((TContainer) parentObject);
+    public float Height(object parentObject) => Height((TParentObject) parentObject);
 
-    protected abstract float Evaluate(TContainer parentObject, float time);
+    protected virtual float Evaluate(TParentObject parentObject, float time) =>
+        evaluateFunction?.Invoke(parentObject, time) ?? 0;
 
-    protected virtual Rect DefaultArea(TContainer parentObject) => new Rect(x: -1, y: -1, width: 2, height: 2);
-    protected virtual float Height(TContainer parentObject) => defaultCurveHeight;
-    protected virtual Color GetCurveColor(TContainer parentObject)
+    protected virtual Rect DefaultArea(TParentObject parentObject) => new Rect(x: -1, y: -1, width: 2, height: 2);
+    protected virtual float Height(TParentObject parentObject) => 
+        getUIElementHeight?.Invoke(parentObject) ?? defaultCurveHeight;
+    protected virtual Color GetCurveColor(TParentObject parentObject)
     {
+        if (getCurveColor != null)
+            return getCurveColor(parentObject);
+        
 #if UNITY_EDITOR
         return EditorHelper.functionColor;
+#else 
+        return Color.yellow; 
 #endif
-#pragma warning disable 162
-        return Color.yellow;
-#pragma warning restore 162
     } 
+    
 }
+
+[Serializable]
+public class InspectorCurve : InspectorCurve<object> { }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace MUtility
 {
-
     public interface IInspectorProperty<T>
     {
         T GetValue(object parentObject);
@@ -19,6 +18,10 @@ namespace MUtility
         InspectorElement<TParentObject>, IInspectorProperty<TPropertyType>
     {
         [SerializeField] protected TPropertyType value;
+        public delegate TPropertyType ValueGetter(TParentObject parentObject);
+        public delegate TPropertyType ValueSetter(TParentObject parentObject, TPropertyType inputValue);
+        public ValueGetter valueGetter;
+        public ValueSetter valueSetter;
 
         public delegate void ValueChangedDelegate(TParentObject parent, TPropertyType oldValue, TPropertyType newValue);
 
@@ -41,10 +44,12 @@ namespace MUtility
             set => SetValue(ParentObject, value);
         }
 
-        protected virtual TPropertyType GetValue(TParentObject parentObject) => value;
+        protected virtual TPropertyType GetValue(TParentObject parentObject) =>
+            valueGetter == null? value : valueGetter.Invoke(parentObject);
 
-        protected virtual void SetValue(TParentObject parentObject, TPropertyType newValue) => value = newValue;
-
+        protected virtual void SetValue(TParentObject parentObject, TPropertyType newValue) =>
+            value = valueSetter == null ? newValue : valueSetter.Invoke(parentObject, newValue);
+        
         protected virtual IList<TPropertyType> PopupElements(TParentObject container) => null;
 
         public static implicit operator TPropertyType(InspectorProperty<TParentObject, TPropertyType> obj) =>

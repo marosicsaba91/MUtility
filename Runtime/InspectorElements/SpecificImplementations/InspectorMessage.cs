@@ -35,7 +35,7 @@ public interface IInspectorMessage
 		string message = messageGetter?.Invoke(parentObject);
 
 		if (string.IsNullOrEmpty(message))
-			message = Text(parentObject, null);
+			message = GetLabel(parentObject, null);
 		
 		if (string.IsNullOrEmpty(message))
 		{

@@ -9,11 +9,11 @@ namespace MUtility
         const int defaultComplexity1 = 20;
         const int defaultComplexity2 = 10;
 
-        public Vector3 center;
+        public UnityEngine.Vector3 center;
         public float radius;
         public float thickness;
 
-        public Torus(Vector3 center, float radius =1, float thickness = 0.5f)
+        public Torus(UnityEngine.Vector3 center, float radius =1, float thickness = 0.5f)
         {
             this.center = center;
             this.radius = radius;
@@ -31,22 +31,22 @@ namespace MUtility
 			resultMesh.Clear();
 
 			#region Vertices		
-			var vertices = new Vector3[(nbRadSeg + 1) * (nbSides + 1)];
+			var vertices = new UnityEngine.Vector3[(nbRadSeg + 1) * (nbSides + 1)];
 			float _2pi = Mathf.PI * 2f;
 			for (var seg = 0; seg <= nbRadSeg; seg++)
 			{
 				int currSeg = seg == nbRadSeg ? 0 : seg;
 
 				float t1 = (float)currSeg / nbRadSeg * _2pi;
-				var r1 = new Vector3(Mathf.Cos(t1) * radius, 0f, Mathf.Sin(t1) * radius);
+				var r1 = new UnityEngine.Vector3(Mathf.Cos(t1) * radius, 0f, Mathf.Sin(t1) * radius);
 
 				for (var side = 0; side <= nbSides; side++)
 				{
 					int currSide = side == nbSides ? 0 : side;
 
-					Vector3 normale = Vector3.Cross(r1, Vector3.up);
+					UnityEngine.Vector3 normale = UnityEngine.Vector3.Cross(r1, UnityEngine.Vector3.up);
 					float t2 = (float)currSide / nbSides * _2pi;
-					Vector3 r2 = Quaternion.AngleAxis(-t1 * Mathf.Rad2Deg, Vector3.up) * new Vector3(Mathf.Sin(t2) * thickness, Mathf.Cos(t2) * thickness);
+					UnityEngine.Vector3 r2 = Quaternion.AngleAxis(-t1 * Mathf.Rad2Deg, UnityEngine.Vector3.up) * new UnityEngine.Vector3(Mathf.Sin(t2) * thickness, Mathf.Cos(t2) * thickness);
 
 					vertices[side + seg * (nbSides + 1)] = r1 + r2;
 				}
@@ -54,13 +54,13 @@ namespace MUtility
 			#endregion
 
 			#region Normales		
-			var normales = new Vector3[vertices.Length];
+			var normales = new UnityEngine.Vector3[vertices.Length];
 			for (var seg = 0; seg <= nbRadSeg; seg++)
 			{
 				int currSeg = seg == nbRadSeg ? 0 : seg;
 
 				float t1 = (float)currSeg / nbRadSeg * _2pi;
-				var r1 = new Vector3(Mathf.Cos(t1) * radius, 0f, Mathf.Sin(t1) * radius);
+				var r1 = new UnityEngine.Vector3(Mathf.Cos(t1) * radius, 0f, Mathf.Sin(t1) * radius);
 
 				for (var side = 0; side <= nbSides; side++)
 				{

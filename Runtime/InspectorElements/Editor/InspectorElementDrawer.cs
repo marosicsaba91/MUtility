@@ -45,7 +45,7 @@ public abstract class InspectorElementDrawer : PropertyDrawer
 			GUI.enabled = false;
 
 		GUI.color = inspectorElement.GetColor(containerObject);
-		string labelText = inspectorElement.Text(containerObject, label.text);
+		string labelText = inspectorElement.GetLabel(containerObject, label.text);
 		if (!string.IsNullOrEmpty(labelText))
 			label.text = labelText;
 

@@ -11,10 +11,10 @@ namespace MUtility
             float cX = rectangle.center.x;
             float cY = rectangle.center.y;
 
-            var _00 = new Vector3(cX - halfX, cY - halfY, 0);
-            var _01 = new Vector3(cX - halfX, cY + halfY, 0);
-            var _10 = new Vector3(cX + halfX, cY - halfY, 0);
-            var _11 = new Vector3(cX + halfX, cY + halfY, 0);
+            var _00 = new UnityEngine.Vector3(cX - halfX, cY - halfY, 0);
+            var _01 = new UnityEngine.Vector3(cX - halfX, cY + halfY, 0);
+            var _10 = new UnityEngine.Vector3(cX + halfX, cY - halfY, 0);
+            var _11 = new UnityEngine.Vector3(cX + halfX, cY + halfY, 0);
 
             return new Drawable(new[] { _00, _01, _11, _10, _00 });
         }
@@ -28,14 +28,14 @@ namespace MUtility
             float cY = bounds.center.y;
             float cZ = bounds.center.z;
 
-            var _000 = new Vector3(cX - halfX, cY - halfY, cZ - halfZ);
-            var _001 = new Vector3(cX - halfX, cY - halfY, cZ + halfZ);
-            var _010 = new Vector3(cX - halfX, cY + halfY, cZ - halfZ);
-            var _011 = new Vector3(cX - halfX, cY + halfY, cZ + halfZ);
-            var _100 = new Vector3(cX + halfX, cY - halfY, cZ - halfZ);
-            var _101 = new Vector3(cX + halfX, cY - halfY, cZ + halfZ);
-            var _110 = new Vector3(cX + halfX, cY + halfY, cZ - halfZ);
-            var _111 = new Vector3(cX + halfX, cY + halfY, cZ + halfZ);
+            var _000 = new UnityEngine.Vector3(cX - halfX, cY - halfY, cZ - halfZ);
+            var _001 = new UnityEngine.Vector3(cX - halfX, cY - halfY, cZ + halfZ);
+            var _010 = new UnityEngine.Vector3(cX - halfX, cY + halfY, cZ - halfZ);
+            var _011 = new UnityEngine.Vector3(cX - halfX, cY + halfY, cZ + halfZ);
+            var _100 = new UnityEngine.Vector3(cX + halfX, cY - halfY, cZ - halfZ);
+            var _101 = new UnityEngine.Vector3(cX + halfX, cY - halfY, cZ + halfZ);
+            var _110 = new UnityEngine.Vector3(cX + halfX, cY + halfY, cZ - halfZ);
+            var _111 = new UnityEngine.Vector3(cX + halfX, cY + halfY, cZ + halfZ);
             return new Drawable
             (
                new[] { _000, _010, _110, _100, _000 },
@@ -48,16 +48,16 @@ namespace MUtility
         }
 
         const float defaultCrossRadius = 0.5f;
-        public static Drawable ToDrawable(this Vector3 position) => position.ToDrawable(defaultCrossRadius);
+        public static Drawable ToDrawable(this UnityEngine.Vector3 position) => position.ToDrawable(defaultCrossRadius);
 
-        public static Drawable ToDrawable(this Vector3 position, float crossRadius)
+        public static Drawable ToDrawable(this UnityEngine.Vector3 position, float crossRadius)
         {
 
             float c = 1 / Mathf.Sqrt(2f);
-            Vector3 _00 = position + new Vector3(-c * crossRadius, -c * crossRadius);
-            Vector3 _01 = position + new Vector3(-c * crossRadius, c * crossRadius);
-            Vector3 _10 = position + new Vector3(c * crossRadius, -c * crossRadius);
-            Vector3 _11 = position + new Vector3(c * crossRadius, c * crossRadius);
+            UnityEngine.Vector3 _00 = position + new UnityEngine.Vector3(-c * crossRadius, -c * crossRadius);
+            UnityEngine.Vector3 _01 = position + new UnityEngine.Vector3(-c * crossRadius, c * crossRadius);
+            UnityEngine.Vector3 _10 = position + new UnityEngine.Vector3(c * crossRadius, -c * crossRadius);
+            UnityEngine.Vector3 _11 = position + new UnityEngine.Vector3(c * crossRadius, c * crossRadius);
 
             return new Drawable
             (
