@@ -5,5 +5,11 @@
   "description": "Csaba Marosi's Unity Utility package",
   "unity": "2019.4",
   "type": "library",
-  "hideInEditor": false
+  "hideInEditor": false,
+  "author":
+  {
+    "name": "Csaba Marosi",
+    "email": "marosicsaba91@gmail.com",
+    "url": "csabamarosi.net/unity-tools/"
+  }
 }
