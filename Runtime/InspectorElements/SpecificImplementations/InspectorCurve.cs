@@ -36,8 +36,7 @@ public abstract class InspectorCurve<TParentObject> : InspectorElement<TParentOb
     protected virtual float Evaluate(TParentObject parentObject, float time) =>
         evaluateFunction?.Invoke(parentObject, time) ?? 0;
 
-    protected virtual Rect DefaultArea(TParentObject parentObject) =>
-        getDefaultRect?.Invoke(parentObject) ?? new Rect(x: -1, y: -1, width: 2, height: 2);
+    protected virtual Rect DefaultArea(TParentObject parentObject) => new Rect(x: -1, y: -1, width: 2, height: 2);
     protected virtual float Height(TParentObject parentObject) => 
         getUIElementHeight?.Invoke(parentObject) ?? defaultCurveHeight;
     protected virtual Color GetCurveColor(TParentObject parentObject)
