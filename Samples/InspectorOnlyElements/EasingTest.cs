@@ -13,4 +13,5 @@ namespace Utility_Examples
         [SerializeField] InfiniteEasingFunction infiniteEasingFunction = default;
         #pragma warning restore 414
     }
+
 }

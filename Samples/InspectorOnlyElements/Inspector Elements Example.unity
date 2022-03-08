@@ -324,20 +324,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1383170812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb7abcccb2514e1ea449e1020397c3cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 11dd14546de9229469e2baa2b611c44c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iAmAmerican: 1
+  rangedVector1: {x: -0.4900389, y: -0.27272728}
+  rangedVector2: {x: 1, y: -1}
+  iAmAmerican: 0
   temperatureInKelvin:
-    value: 286.21
+    value: 273.15
   temperatureInCelsius:
     value: 0
   temperatureInFahrenheit:
     value: 0
-  testEnumProperty:
-    value: 4
-  someInt:
-    value: 120
+  testEnum:
+    value: 0
+  someInspectorInt:
+    value: 0
+  oneDigit:
+    value: 0
 --- !u!4 &1383170814
 Transform:
   m_ObjectHideFlags: 0

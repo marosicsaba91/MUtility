@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MUtility;
-using UnityEngine;
-using Vector3 = UnityEngine.Vector3;
+using UnityEngine; 
 
 public class NormalDistributionTest : MonoBehaviour
 {

@@ -292,7 +292,6 @@ public static class SerializedPropertyExtensions
                     destinationEnumerator.MoveNext();
                     sourceEnumerator.Current.CopyPropertyValueTo(destinationEnumerator.Current);
                 }
-
                 sourceEnumerator.Dispose();
                 sourceEnumerator.Dispose();
 

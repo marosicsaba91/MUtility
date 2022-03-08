@@ -14,6 +14,9 @@ namespace Utility_Examples
 		const float kelvinToFahrenheitMultiplier = 1.8f;
 		const float zeroCelsiusZeroFahrenheitDifference = 32f;
 		const float epsilon =  0.0001f;
+
+		[SerializeField, Range2(xMin: -1,xMax: 0,yMin:-1,yMax:1)] Vector2 rangedVector1; 
+		[SerializeField, Range2(xMin: -10, xMax: 10, yMin: -2, yMax: 2)] Vector2Int rangedVector2;
 		 
 		[SerializeField] bool iAmAmerican = false;
 

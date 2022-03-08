@@ -10,5 +10,6 @@ public class IntRange
     public int max;
     public int Range => max - min;
     public int GetRandom() => Random.Range(min, max);
+    public override string ToString() => "(" + this.min.ToString() + "/" + this.max.ToString() + ")";
 }
 }
