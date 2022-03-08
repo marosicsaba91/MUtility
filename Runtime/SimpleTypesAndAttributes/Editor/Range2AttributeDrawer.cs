@@ -1,10 +1,12 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+
+using UnityEditor;
 using UnityEngine;
 
 namespace MUtility.Editor
 {
 [CustomPropertyDrawer(typeof(Range2Attribute))]
-public class Range2Drawer : PropertyDrawer
+public class Range2AttributeDrawer : PropertyDrawer
 {
     const float drawingHeight = 70; 
     const float minimumDrawingHeight = 30; 
@@ -132,3 +134,5 @@ public class Range2Drawer : PropertyDrawer
     }
 }
 }
+
+#endif

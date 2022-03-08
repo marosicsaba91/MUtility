@@ -327,8 +327,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11dd14546de9229469e2baa2b611c44c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangedVector1: {x: -0.4900389, y: -0.27272728}
-  rangedVector2: {x: 1, y: -1}
+  rangedVector1: {x: -0.1465537, y: -0.4181818}
+  rangedVector2: {x: -9, y: 1}
   iAmAmerican: 0
   temperatureInKelvin:
     value: 273.15
