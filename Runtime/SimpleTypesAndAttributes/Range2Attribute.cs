@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MUtility
 {
 [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-class Range2Attribute : PropertyAttribute
+public class Range2Attribute : PropertyAttribute
 {
     public readonly float xMin;
     public readonly float xMax;
