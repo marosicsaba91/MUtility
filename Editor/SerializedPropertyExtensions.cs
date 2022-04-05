@@ -84,31 +84,6 @@ public static class SerializedPropertyExtensions
         return obj;
     }
 
-    public static void SetObjectOfProperty(this SerializedProperty prop, object value)
-    {
-        if (prop == null) return;
-
-        string path = prop.propertyPath.Replace(".Array.data[", "[");
-        object obj = prop.serializedObject.targetObject;
-        string[] elements = path.Split('.');
-        foreach (string element in elements)
-        {
-            if (element.Contains("["))
-            {
-                string elementName = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
-                var index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal)).Replace("[", "").Replace("]", ""));
-                obj = GetValue_Imp(obj, elementName, index);
-            }
-            else
-            {
-                obj = GetValue_Imp(obj, element);
-            }
-        }
-
-        obj = value;
-    }
-
-
     /// Gets the object that the property is a member of
     public static object GetObjectWithProperty(this SerializedProperty prop)
     {

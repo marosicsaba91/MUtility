@@ -26,10 +26,12 @@ namespace MUtility
         public delegate void ValueChangedDelegate(TParentObject parent, TPropertyType oldValue, TPropertyType newValue);
 
         public ValueChangedDelegate valueChanged;
-        public TPropertyType GetValue(object parentObject) => GetValue((TParentObject) parentObject);
+        public TPropertyType GetValue(object parentObject) => 
+            parentObject ==null ? default : GetValue((TParentObject) parentObject);
 
         public void SetValue(object parentObject, TPropertyType newValue)
         {
+            if (parentObject == null) return;
             if (Equals(value, newValue)) return;
             TPropertyType oldValue = value;
             SetValue((TParentObject) parentObject, newValue);
