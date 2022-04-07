@@ -10,6 +10,20 @@ public static class MathHelper
     {
         return minOutput + (input - minInput) / (maxInput - minInput) * (maxOutput - minOutput);
     }
+    
+    public static float Towards(float current, float target, float maxDelta)
+    {
+        if (Mathf.Abs(target - current) > float.Epsilon)
+        { 
+            float difference = target - current;
+            if (maxDelta >= Mathf.Abs(difference))
+                current = target;
+            else
+                current += maxDelta * (target > current ? 1 : -1);
+        }
+
+        return current;
+    }
 
     public static float Lerp(float input, float minOutput, float maxOutput, float minInput = 0,
         float maxInput = 1)
