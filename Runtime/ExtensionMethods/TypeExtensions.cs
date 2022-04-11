@@ -32,34 +32,29 @@ namespace MUtility
             return result;
         }
 
-        public static bool IsBaseclassOf_GenericsSupported(this Type baseType, Type subType)
-        {
-            return subType.IsSubclassOf_GenericsSupported(baseType);
-        }
+        public static bool IsBaseclassOf_GenericsSupported(this Type baseType, Type subType) =>
+            subType.IsSubclassOf_GenericsSupported(baseType);
 
         public static bool IsSubclassOf_GenericsSupported(this Type subType, Type baseType)
         {
             if (baseType.IsGenericType)
             {
-                return IsSubclassOfRawGeneric(baseType, subType);
+                return subType.IsSubclassOfRawGeneric(baseType);
             }
-            else
-            {
-                return subType.IsSubclassOf(baseType);
-            }
+            return subType.IsSubclassOf(baseType);
         }
 
-        static bool IsSubclassOfRawGeneric(Type genericBaseClass, Type typeTotest)
+        static bool IsSubclassOfRawGeneric(this Type typeToTest, Type genericBaseClass)
         {
-            while (typeTotest != null && typeTotest != typeof(object))
+            while (typeToTest != null && typeToTest != typeof(object))
             {
-                var cur = typeTotest.IsGenericType ? typeTotest.GetGenericTypeDefinition() : typeTotest;
+                var cur = typeToTest.IsGenericType ? typeToTest.GetGenericTypeDefinition() : typeToTest;
                 if (genericBaseClass == cur)
                 {
                     return true;
                 }
 
-                typeTotest = typeTotest.BaseType;
+                typeToTest = typeToTest.BaseType;
             }
 
             return false;

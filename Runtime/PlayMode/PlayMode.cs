@@ -11,7 +11,9 @@ using UnityEditor;
      Paused
  }
 
+#if UNITY_EDITOR
  [InitializeOnLoad]
+#endif
  public class PlayMode
  {
      public static PlayModeState CurrentState { get; private set; } = PlayModeState.Stopped;
@@ -54,9 +56,10 @@ using UnityEditor;
              PlayModeChanged(currentState, changedState);
      }
 
-     static void OnUnityPlayModeChanged(PlayModeStateChange obj)
-     {
+     
 #if UNITY_EDITOR
+     static void OnUnityPlayModeChanged(PlayModeStateChange obj)
+     { 
          var changedState = PlayModeState.Stopped;
          switch (CurrentState)
          {
@@ -97,8 +100,8 @@ using UnityEditor;
          OnPlayModeChanged(CurrentState, changedState);
 
          // Set current state.
-         CurrentState = changedState;
-#endif
+         CurrentState = changedState; 
      }
+#endif
 
  }

@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 namespace MUtility
 {
 [Serializable]
-public class FloatRange
+public struct FloatRange
 {
     public float min;
     public float max;

@@ -329,9 +329,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rangedVector1: {x: -0.1465537, y: -0.4181818}
   rangedVector2: {x: -9, y: 1}
-  iAmAmerican: 0
+  rangedFloat:
+    min: 0.44
+    max: 1.51
+  rangedInt:
+    min: 20
+    max: 28
+  iAmAmerican: 1
   temperatureInKelvin:
-    value: 273.15
+    value: 273.09
   temperatureInCelsius:
     value: 0
   temperatureInFahrenheit:

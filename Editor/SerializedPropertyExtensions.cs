@@ -69,19 +69,57 @@ public static class SerializedPropertyExtensions
         string[] elements = path.Split('.');
         foreach (string element in elements)
         {
-            if (element.Contains("["))
-            {
-                string elementName = element.Substring(0, element.IndexOf("["));
-                var index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
-                obj = GetValue_Imp(obj, elementName, index);
-            }
+            if (TryDecomposeIndexedName(element, out int index, out string elementName))
+                obj = GetValue_(obj, elementName, index);
             else
-            {
-                obj = GetValue_Imp(obj, element);
-            }
+                obj = GetValue_(obj, element);
         }
 
         return obj;
+    }
+    
+    // Sets value from SerializedProperty - even if value is nested
+    const BindingFlags mask = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+    public static void SetValue( this SerializedProperty property, object newValue, string actionName = null)
+    {  
+        var parentAndFields = new List<(object containingObject, FieldInfo field, int index)>();
+        object containingObject = property.serializedObject.targetObject;
+
+        string propertyPath = property.propertyPath;
+        propertyPath = propertyPath.Replace(".Array.data[", "[");
+        string[] path = propertyPath.Split('.');
+        foreach (string element in path)
+        {
+            Type containingType = containingObject.GetType();
+            if (!TryDecomposeIndexedName(element, out int index, out string elementName))
+                elementName = element;
+
+            FieldInfo field = containingType.GetField(elementName, mask);
+            parentAndFields.Add((containingObject, field, index));
+            containingObject = index >= 0
+                    ? GetValue_(containingObject, field, index)
+                    : field.GetValue(containingObject);
+        }
+
+        Object target = property.serializedObject.targetObject;
+        Undo.RecordObject(target, actionName ?? "Property Changed");
+        bool changed = false;
+
+        for( int i = parentAndFields.Count - 1; i >= 0; --i )
+        {
+            FieldInfo field = parentAndFields[i].field;
+            object containerObject = parentAndFields[i].containingObject;
+            int index = parentAndFields[i].index;
+
+            if (index >= 0)
+                changed |= TrySetValue_(containerObject, field, index, newValue);
+            else
+                changed |= TrySetValue_(containerObject, field, newValue);
+            newValue = containerObject;
+        }
+        
+        if (changed && property.serializedObject.targetObject.GetType() == typeof(ScriptableObject)) 
+            EditorUtility.SetDirty(target);
     }
 
     /// Gets the object that the property is a member of
@@ -92,35 +130,47 @@ public static class SerializedPropertyExtensions
         string[] elements = path.Split('.');
         foreach (string element in elements.Take(elements.Length - 1))
         {
-            if (element.Contains("["))
-            {
-                string elementName = element.Substring(0, element.IndexOf("["));
-                var index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
-                obj = GetValue_Imp(obj, elementName, index);
-            }
+            if (TryDecomposeIndexedName(element, out int index, out string elementName))
+                obj = GetValue_(obj, elementName, index);
             else
-            {
-                obj = GetValue_Imp(obj, element);
-            }
+                obj = GetValue_(obj, element);
         }
-
+        
         return obj;
     }
 
-    static object GetValue_Imp(object source, string name)
+    static bool TryDecomposeIndexedName(string indexedName, out int index, out string name)
+    {
+        if (!indexedName.Contains("["))
+        {
+            index = -1;
+            name = null;
+            return false;
+        }
+
+        name = indexedName.Substring(0, indexedName.IndexOf("[", StringComparison.Ordinal));
+        string insideBrackets = indexedName.Substring(indexedName.IndexOf("[", StringComparison.Ordinal))
+            .Replace("[", "")
+            .Replace("]", "");
+        index = Convert.ToInt32(insideBrackets);
+        return true;
+    }
+    
+    static object GetValue_(object source, string name)
     {
         if (source == null)
             return null;
         Type type = source.GetType();
-
+ 
+        
         while (type != null)
         {
-            FieldInfo f = type.GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-            if (f != null)
-                return f.GetValue(source);
+            FieldInfo field = type.GetField(name, mask);
+            if (field != null)
+                return field.GetValue(source);
 
             PropertyInfo p =
-                type.GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                type.GetProperty(name, mask);
             if (p != null)
                 return p.GetValue(source, null);
 
@@ -131,65 +181,66 @@ public static class SerializedPropertyExtensions
     }
 
 
-    static object GetValue_Imp(object source, string name, int index)
+    static object GetValue_(object source,  string name, int index)
     {
-        var enumerable = GetValue_Imp(source, name) as IEnumerable;
+        IEnumerable enumerable = GetValue_(source, name) as IEnumerable;
         if (enumerable == null) return null;
         IEnumerator enm = enumerable.GetEnumerator();
 
-        for (var i = 0; i <= index; i++)
+        for (int i = 0; i <= index; i++)
         {
             if (!enm.MoveNext()) return null;
         }
 
         return enm.Current;
     }
-
-    public static object GetPropertyValue(this SerializedProperty prop)
+    
+    static object GetValue_(object source, FieldInfo field, int index)
     {
-        if (prop == null) throw new ArgumentNullException("prop");
-
-        switch (prop.propertyType)
+        if (source == null) return null;
+        if (field == null) return null;
+        
+        Type fieldType = field.FieldType;
+        if (fieldType.IsSubclassOf_GenericsSupported(typeof(Array)) ||
+            fieldType.IsSubclassOf_GenericsSupported(typeof(List<>)))
         {
-            case SerializedPropertyType.Integer:
-                return prop.intValue;
-            case SerializedPropertyType.Boolean:
-                return prop.boolValue;
-            case SerializedPropertyType.Float:
-                return prop.floatValue;
-            case SerializedPropertyType.String:
-                return prop.stringValue;
-            case SerializedPropertyType.Color:
-                return prop.colorValue;
-            case SerializedPropertyType.ObjectReference:
-                return prop.objectReferenceValue;
-            case SerializedPropertyType.LayerMask:
-                return (LayerMask) prop.intValue;
-            case SerializedPropertyType.Enum:
-                return prop.enumValueIndex;
-            case SerializedPropertyType.Vector2:
-                return prop.vector2Value;
-            case SerializedPropertyType.Vector3:
-                return prop.vector3Value;
-            case SerializedPropertyType.Vector4:
-                return prop.vector4Value;
-            case SerializedPropertyType.Rect:
-                return prop.rectValue;
-            case SerializedPropertyType.ArraySize:
-                return prop.arraySize;
-            case SerializedPropertyType.Character:
-                return (char) prop.intValue;
-            case SerializedPropertyType.AnimationCurve:
-                return prop.animationCurveValue;
-            case SerializedPropertyType.Bounds:
-                return prop.boundsValue;
-            case SerializedPropertyType.Gradient:
-                throw new InvalidOperationException("Can not handle Gradient types.");
-
+            IList list = (IList)field.GetValue(source);
+            return list[index];
         }
-
         return null;
     }
+
+    static bool TrySetValue_(object source, FieldInfo field, object newValue)
+    {
+        if (source == null)
+            return false; 
+        if (field == null) return false;
+        object oldValue = field.GetValue(source);
+        if (newValue.Equals(oldValue)) return false; 
+        
+        field.SetValue(source, newValue);
+        return true;
+    }
+
+    static bool TrySetValue_(object source, FieldInfo field, int index, object newValue)
+    {
+        if (source == null) return false;
+        if (field == null) return false;
+        
+        Type fieldType = field.FieldType;
+        if (fieldType.IsSubclassOf_GenericsSupported(typeof(Array)) ||
+            fieldType.IsSubclassOf_GenericsSupported(typeof(List<>)))
+        {
+            IList list = (IList)field.GetValue(source);
+            if (!list[index].Equals(newValue))
+            {
+                list[index] = newValue;
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public static void CopyPropertyValueTo(this SerializedProperty source, SerializedProperty destination)
     {
@@ -261,14 +312,14 @@ public static class SerializedPropertyExtensions
             {
                 IEnumerator<SerializedProperty> sourceEnumerator = source.GetChildren().GetEnumerator();
                 IEnumerator<SerializedProperty> destinationEnumerator = destination.GetChildren().GetEnumerator();
-                for (var i = 0; i < source.GetChildPropertyCount(includeGrandChildren: false); i++)
+                for (int i = 0; i < source.GetChildPropertyCount(includeGrandChildren: false); i++)
                 {
                     sourceEnumerator.MoveNext();
                     destinationEnumerator.MoveNext();
                     sourceEnumerator.Current.CopyPropertyValueTo(destinationEnumerator.Current);
                 }
                 sourceEnumerator.Dispose();
-                sourceEnumerator.Dispose();
+                destinationEnumerator.Dispose();
 
                 break;
             }
@@ -276,7 +327,7 @@ public static class SerializedPropertyExtensions
 
         if (!source.isArray || !destination.isArray) return;
 
-        for (var i = 0; i < source.arraySize; i++)
+        for (int i = 0; i < source.arraySize; i++)
         {
             SerializedProperty sourceElement = source.GetArrayElementAtIndex(i);
             if (destination.arraySize - 1 < i)
@@ -328,7 +379,7 @@ public static class SerializedPropertyExtensions
     {
         SerializedProperty pStart = property.Copy();
         SerializedProperty pEnd = property.GetEndProperty();
-        var cnt = 0;
+        int cnt = 0;
 
         pStart.Next(true);
         while (!SerializedProperty.EqualContents(pStart, pEnd))

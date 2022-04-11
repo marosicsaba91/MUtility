@@ -1,15 +1,19 @@
 ﻿using System;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace MUtility
 {
 [Serializable]
-public class IntRange
+public struct IntRange
 {
     public int min;
     public int max;
     public int Range => max - min;
     public int GetRandom() => Random.Range(min, max);
+    public float Lerp(float t) => Mathf.Lerp(min, max, t);
+    public float LerpUnclamped(float t) => Mathf.LerpUnclamped(min, max, t);
+
     public override string ToString() => "(" + this.min.ToString() + "/" + this.max.ToString() + ")";
 }
 }

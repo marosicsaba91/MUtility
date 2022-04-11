@@ -77,7 +77,9 @@ namespace MUtility
          public static float LabelWidth => NotIndentedLabelWidth - IndentsWidth;
         
         public static float ContentStartX => startSpace + IndentsWidth + LabelWidth;
-        public static float ContentWidth => FullWith - NotIndentedLabelWidth - startSpace - endSpace;
+        public static float ContentWidth(Rect fullRect) => 
+            fullRect.xMax + EditorGUIUtility.standardVerticalSpacing
+            - EditorHelper.ContentStartX - EditorGUIUtility.standardVerticalSpacing;
         
         public static bool IsModernEditorUI => UnityVersion.Get().IsHigherOrEqualThan("2019.3");
         

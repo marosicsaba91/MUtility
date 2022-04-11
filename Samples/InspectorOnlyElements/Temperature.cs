@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; 
 using MUtility;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -17,6 +17,9 @@ namespace Utility_Examples
 
 		[SerializeField, Range2(xMin: -1,xMax: 0,yMin:-1,yMax:1)] Vector2 rangedVector1; 
 		[SerializeField, Range2(xMin: -10, xMax: 10, yMin: -2, yMax: 2)] Vector2Int rangedVector2;
+ 
+		[SerializeField] FloatRange rangedFloat;
+		[SerializeField] IntRange rangedInt;
 		 
 		[SerializeField] bool iAmAmerican = false;
 
