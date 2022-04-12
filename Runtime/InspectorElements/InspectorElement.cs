@@ -29,6 +29,11 @@ public abstract class InspectorElement<TParentObject> : IInspectorElement
         get => ParentObject;
         set => ParentObject = value;
     }
+    
+    void Setup(TParentObject parent)
+    {
+        ParentObject = parent;
+    }
  
     public string GetLabel(object parentObject, string originalLabel) => GetLabel((TParentObject) parentObject, originalLabel);
     public Color GetColor(object parentObject) => GetColor((TParentObject) parentObject);
