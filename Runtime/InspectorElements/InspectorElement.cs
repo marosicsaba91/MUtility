@@ -30,7 +30,7 @@ public abstract class InspectorElement<TParentObject> : IInspectorElement
         set => ParentObject = value;
     }
     
-    void Setup(TParentObject parent)
+    public void Setup(TParentObject parent)
     {
         ParentObject = parent;
     }
