@@ -1,4 +1,5 @@
-﻿using System; 
+﻿using System;
+using System.Collections.Generic;
 using MUtility;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -20,7 +21,9 @@ namespace Utility_Examples
  
 		[SerializeField] FloatRange rangedFloat;
 		[SerializeField] IntRange rangedInt;
-		 
+		[SerializeField] Position3 pos;
+		[SerializeField] List<Position3> positions;
+
 		[SerializeField] bool iAmAmerican = false;
 
 		[SerializeField] TemperatureKelvin temperatureInKelvin = 

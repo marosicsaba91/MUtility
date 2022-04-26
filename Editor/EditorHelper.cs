@@ -2,6 +2,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace MUtility
 {
@@ -77,9 +78,12 @@ namespace MUtility
          public static float LabelWidth => NotIndentedLabelWidth - IndentsWidth;
         
         public static float ContentStartX => startSpace + IndentsWidth + LabelWidth;
-        public static float ContentWidth(Rect fullRect) => 
-            fullRect.xMax + EditorGUIUtility.standardVerticalSpacing
-            - EditorHelper.ContentStartX - EditorGUIUtility.standardVerticalSpacing;
+        public static float ContentWidth(Rect position) => 
+            position.xMax + EditorGUIUtility.standardVerticalSpacing
+            - ContentStartX - EditorGUIUtility.standardVerticalSpacing;
+
+        public static Rect ContentRect(Rect position) =>
+            new Rect(ContentStartX, position.y, ContentWidth(position), position.height);
         
         public static bool IsModernEditorUI => UnityVersion.Get().IsHigherOrEqualThan("2019.3");
         

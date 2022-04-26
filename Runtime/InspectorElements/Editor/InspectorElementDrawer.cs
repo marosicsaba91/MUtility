@@ -11,12 +11,12 @@ public abstract class InspectorElementDrawer : PropertyDrawer
 	Color _tempColor;
 	bool _tempEnabled;
 
-	public InspectorElementDrawer() { }
+	protected InspectorElementDrawer() { }
 
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
 		object containerObject = property.GetObjectWithProperty();
-		var inspectorElement = (IInspectorElement) property.GetObjectOfProperty();
+		IInspectorElement inspectorElement = (IInspectorElement) property.GetObjectOfProperty();
 		Object serializedObject = property.serializedObject.targetObject;
 
 		if (!inspectorElement.IsVisible(containerObject))
