@@ -335,6 +335,20 @@ MonoBehaviour:
   rangedInt:
     min: 20
     max: 28
+  pos:
+    transformSource: {fileID: 0}
+    vectorSource: {x: 0, y: 0.06, z: 0.27}
+    sourceType: 1
+  positions:
+  - transformSource: {fileID: 0}
+    vectorSource: {x: 0, y: 0, z: 0}
+    sourceType: 1
+  - transformSource: {fileID: 0}
+    vectorSource: {x: 0, y: 0, z: 0}
+    sourceType: 1
+  - transformSource: {fileID: 0}
+    vectorSource: {x: 0, y: 0, z: 0}
+    sourceType: 1
   iAmAmerican: 1
   temperatureInKelvin:
     value: 273.09

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [Serializable]
-struct Position3
+public struct Position3
 {
     public enum SourceType
     {

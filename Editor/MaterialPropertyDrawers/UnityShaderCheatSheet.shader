@@ -40,7 +40,7 @@ Shader "Hidden/Main Category/Secondary Category/Shader Name"
         [Toggle] _BoolProperty ("Bool Display Name", Int) = 0
 		[Toggle(SOME_SHADER_KEYWORD)] _ShaderKeywordProperty ("Shader Keyword Display Name", Int) = 0 
 			// Will set shader keyword to a specific value set.
-		[Enum(MUtility.Direction2D)] _EnumProperty ("Enum Display Name", Int) = 0	
+		[Enum(MarosiUtility.Direction2D)] _EnumProperty ("Enum Display Name", Int) = 0	
         [KeywordEnum(None, Add, Multiply)] _KeywordEnumProperty ("Keyword Enum Display Name", Int) = 0
 		_FloatProperty ("Float Display Name", Float) = 2.5
 		_RangedFloatProperty ("Ranged Float Display Name", Range (0, 1)) = 0.5
@@ -63,11 +63,11 @@ Shader "Hidden/Main Category/Secondary Category/Shader Name"
 		_Texture3DDProperty ("Texture3D Display Name", 3D) = "" {}
 		_CubemapProperty ("Cubemap Display Name", Cube) = "" {}
 		_CubemapArrayProperty ("Cubemap Array Display Name", CubeArray) = "" {}
-		// [Vector2] _Vector2Property ("2D Vector Display Name", Vector) = (1, 1, 0, 0)  // [Vector2] is in MUtility
-		// [Vector3] _Vector3Property ("3D Vector Display Name", Vector) = (1, 1, 1, 0)  // [Vector3] is in MUtility
-		// [Vector4] _Vector4Property ("4D Vector Display Name", Vector) = (1, 1, 1, 1)  // [Vector4] is in MUtility (Just for formatting)
-		// [Vector2Int] _Vector2IntProperty ("2D Int Vector Display Name", Vector) = (1, 1, 0, 0)  // [Vector2Int] is in MUtility
-		// [Vector3Int] _Vector3IntProperty ("3D Int Vector Display Name", Vector) = (1, 1, 1, 0)  // [Vector3Int] is in MUtility 
+		// [Vector2] _Vector2Property ("2D Vector Display Name", Vector) = (1, 1, 0, 0)  // [Vector2] is in MarosiUtility
+		// [Vector3] _Vector3Property ("3D Vector Display Name", Vector) = (1, 1, 1, 0)  // [Vector3] is in MarosiUtility
+		// [Vector4] _Vector4Property ("4D Vector Display Name", Vector) = (1, 1, 1, 1)  // [Vector4] is in MarosiUtility (Just for formatting)
+		// [Vector2Int] _Vector2IntProperty ("2D Int Vector Display Name", Vector) = (1, 1, 0, 0)  // [Vector2Int] is in MarosiUtility
+		// [Vector3Int] _Vector3IntProperty ("3D Int Vector Display Name", Vector) = (1, 1, 1, 0)  // [Vector3Int] is in MarosiUtility 
 		
 		// Universal Property Attributes:
         // [HideInInspector] - Does not show the property in the material inspector.

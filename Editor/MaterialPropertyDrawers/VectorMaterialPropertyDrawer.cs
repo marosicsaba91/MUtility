@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
-namespace MUtility
+namespace MarosiUtility
 {
 
 public abstract class VectorMaterialPropertyDrawer : MaterialPropertyDrawer
