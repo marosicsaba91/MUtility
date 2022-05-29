@@ -426,11 +426,15 @@ public static class SerializedPropertyExtensions
     
     public static bool IsExpandable(this SerializedProperty property)
     {
-        if (property.propertyType == SerializedPropertyType.Generic ||
-            property.propertyType == SerializedPropertyType.Vector4 ||
-            property.propertyType == SerializedPropertyType.Quaternion)
-            return true;
-        return false;
+        if (property.propertyType == SerializedPropertyType.Integer ||
+            property.propertyType == SerializedPropertyType.Boolean ||
+            property.propertyType == SerializedPropertyType.String ||
+            property.propertyType == SerializedPropertyType.Vector2 ||
+            property.propertyType == SerializedPropertyType.Vector3 ||
+            property.propertyType == SerializedPropertyType.AnimationCurve||
+            property.propertyType == SerializedPropertyType.LayerMask)
+            return false; 
+        return true;
     }
 }
 }
