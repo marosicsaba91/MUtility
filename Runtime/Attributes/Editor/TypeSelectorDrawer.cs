@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Attributes;
 using MUtility;
 using UnityEditor; 
 using UnityEngine;
@@ -25,7 +26,8 @@ public class TypeSelectorDrawer : PropertyDrawer
         }
         else
         {
-
+            position.height = EditorGUIUtility.singleLineHeight;
+            
             Type managedReferenceFieldType = GetManagedReferenceFieldType(property);
             if (managedReferenceFieldType == null)
                 return;
@@ -55,22 +57,31 @@ public class TypeSelectorDrawer : PropertyDrawer
 
             int tempIndent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
-            int resultIndex = EditorGUI.Popup(popupPosition, currentTypeIndex, options);
+            int resultTypeIndex = EditorGUI.Popup(popupPosition, currentTypeIndex, options);
             EditorGUI.indentLevel = tempIndent;
-            
-            if (resultIndex != currentTypeIndex)
+
+            if (resultTypeIndex != currentTypeIndex)
             {
                 Undo.RecordObject(property.serializedObject.targetObject, "Reference Type Changed");
-                if (resultIndex == 0)
+                if (resultTypeIndex == 0)
                 {
                     property.managedReferenceValue = null;
                 }
                 else
                 {
-                    Type newType = inheritedTypes[resultIndex - 1];
-                    object newInstance = Activator.CreateInstance(newType);
-                    TrySetupProperties(property, newInstance, newType);
-                    property.managedReferenceValue = newInstance;
+                    Type newType = inheritedTypes[resultTypeIndex - 1];
+                    if (newType.IsSubclassOf(typeof(UnityEngine.Object)))
+                    {
+                        TestSO tso = ScriptableObject.CreateInstance<TestSO>();
+                        property.managedReferenceValue = tso;
+                        // TODO: HA EZT NEM SIKERÜL MEGOLDANI!!!!
+                    }
+                    else
+                    {
+                        object newInstance = Activator.CreateInstance(newType);
+                        TrySetupProperties(property, newInstance, newType);
+                        property.managedReferenceValue = newInstance;
+                    }
                 }
                 property.serializedObject.ApplyModifiedProperties();
             }
