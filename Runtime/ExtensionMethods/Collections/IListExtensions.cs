@@ -6,7 +6,13 @@ namespace MUtility
 {
 public static class IListExtensions 
 {
-    public static float Average(this IList<int> source) => ((float)source.Sum()) / source.Count;
+    public static bool IsNullOrEmpty<T>( IList <T> list)
+        => list == null || list.Count == 0;
+
+    public static bool NotNullOrEmpty<T>(IList <T> list)
+        => !IsNullOrEmpty(list);
+    
+    public static float Average(this IList<int> source) => (float)source.Sum() / source.Count;
 
     public static float Average(this IList<float> source) => source.Sum() / source.Count;
 

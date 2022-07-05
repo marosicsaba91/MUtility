@@ -156,7 +156,7 @@ public class CurveEditorPreview
 
             else if (Event.current.type == EventType.ScrollWheel)
             {
-                Zoom *= 1 + (Event.current.delta.y / 20);
+                Zoom *= 1 + Event.current.delta.y / 20;
                 Event.current.Use();
             }
             else if (Event.current.type == EventType.MouseDown)
@@ -203,14 +203,14 @@ public class CurveEditorPreview
         if (showValuePreview)
         {
             var r = new Rect(
-                Event.current.mousePosition.x - valueLabelWidth, valuePreviewPixel.y - (valueLabelHeight / 2),
+                Event.current.mousePosition.x - valueLabelWidth, valuePreviewPixel.y - valueLabelHeight / 2,
                 valueLabelWidth, valueLabelHeight
             );
 
             const float valuePreviewLineHeight = 10;
             float x = (valuePreviewPixel.x - position.x) / position.width;
-            float y1 = (valuePreviewPixel.y - position.y - (valuePreviewLineHeight / 2)) / position.height;
-            float y2 = (valuePreviewPixel.y - position.y + (valuePreviewLineHeight / 2)) / position.height;
+            float y1 = (valuePreviewPixel.y - position.y - valuePreviewLineHeight / 2) / position.height;
+            float y2 = (valuePreviewPixel.y - position.y + valuePreviewLineHeight / 2) / position.height;
             EditorHelper.DrawLine(position, x, y1, x, y2, color);
             EditorGUI.LabelField(r, "Y:" + valuePreviewY.ToString("0.00"), centerRightAlignedText);
             r.y -= valueLabelHeight;
@@ -339,7 +339,7 @@ public class CurveEditorPreview
         float x = Mathf.Lerp(
             position.x,
             position.x + position.width, rate);
-        int xPixel = Mathf.RoundToInt(x - (valueLabelWidth / 2f));
+        int xPixel = Mathf.RoundToInt(x - valueLabelWidth / 2f);
         var pos = new Rect(xPixel, position.y - valueLabelHeight, valueLabelWidth, valueLabelHeight);
         EditorGUI.LabelField(pos, NormalString(value), centerRightAlignedText);
     }
@@ -350,7 +350,7 @@ public class CurveEditorPreview
         if (value < min || value > max)
             return;
 
-        float rate = 1 - ((value - min) / (max - min));
+        float rate = 1 - (value - min) / (max - min);
 
         if (showLine)
             EditorHelper.DrawLine(position, 0, rate, 1, rate, color);
@@ -359,7 +359,7 @@ public class CurveEditorPreview
         float y = Mathf.Lerp(
             position.y,
             position.y + position.height, rate);
-        int yPixel = Mathf.RoundToInt(y - (valueLabelHeight / 2f));
+        int yPixel = Mathf.RoundToInt(y - valueLabelHeight / 2f);
         var pos = new Rect(position.x - valueLabelWidth, yPixel, valueLabelWidth, valueLabelHeight);
         EditorGUI.LabelField(pos, NormalString(value), upperRightAlignedText);
     }

@@ -42,7 +42,7 @@ public class InfiniteEasingFunction
 
         float h = maximumValue - p;
 
-        return p + ((1f - (h / (h + t - p))) * h);
+        return p + (1f - h / (h + t - p)) * h;
     }
     
     [Serializable] class CurvePreview : InspectorCurve<InfiniteEasingFunction>
@@ -51,7 +51,7 @@ public class InfiniteEasingFunction
         protected override Rect DefaultArea(InfiniteEasingFunction function) => new Rect(
             0, 
             0, 
-            function.maximumValue / ((0.8f * function.linearPart) + 0.2f), 
+            function.maximumValue / (0.8f * function.linearPart + 0.2f), 
             function.maximumValue);
     }
 }

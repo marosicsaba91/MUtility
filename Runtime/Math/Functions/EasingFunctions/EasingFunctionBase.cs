@@ -30,7 +30,7 @@ public abstract class EasingFunctionBase
             float maxH =
                 smooth == Smooth.EndSmooth ? easeIn01Rect.yMax :
                 smooth == Smooth.StartSmooth ? 1 - easeIn01Rect.yMin :
-                1 - ((1 - easeIn01Rect.yMax) / 2);
+                1 - (1 - easeIn01Rect.yMax) / 2;
             float minH =
                 smooth == Smooth.EndSmooth ? easeIn01Rect.yMin :
                 smooth == Smooth.StartSmooth ? 1 - easeIn01Rect.yMax :
@@ -72,7 +72,7 @@ public abstract class EasingFunctionBase
             }
             else
             {
-                time = ((0.5f - time) * 2);
+                time = (0.5f - time) * 2;
                 result = 1 - EaseIn01Evaluate(time);
                 result /= 2f;
             }

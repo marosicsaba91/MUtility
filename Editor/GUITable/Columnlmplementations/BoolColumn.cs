@@ -17,8 +17,8 @@ public class BoolColumn<TRow> : ValueColumn<TRow, bool>
     {
         const float checkBoxWidth = 14;
         GUI.enabled = false;
-        float x = position.x + ((position.width - checkBoxWidth) / 2);
-        var pos = new Rect(x, position.y, checkBoxWidth, position.height);
+        float x = position.x + (position.width - checkBoxWidth) / 2;
+        Rect pos = new Rect(x, position.y, checkBoxWidth, position.height);
         EditorGUI.Toggle(pos, value, style);
         GUI.enabled = true;
     }

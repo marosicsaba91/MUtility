@@ -64,7 +64,7 @@ public static class RectTransformExtensions
             return new List<Rect>();
         if (lengths.Length == 1)
             return new List<Rect>{inputRect};
-        float fullWidth = inputRect.width - ((lengths.Length - 1) * space);
+        float fullWidth = inputRect.width - (lengths.Length - 1) * space;
 
         float fullWidthControlledByWeight = fullWidth;
         float allWeight = 0;

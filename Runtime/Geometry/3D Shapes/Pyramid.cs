@@ -43,7 +43,7 @@ namespace MUtility
             float h = 2f * Mathf.Tan(alphaRad) * fullHeight;
             float w = h * camera.aspect;
             baseRect = new Vector2(w, h);
-            frustum = (camera.nearClipPlane) / fullHeight;
+            frustum = camera.nearClipPlane / fullHeight;
         }
 
         public Drawable Slice(Plain plain) => CubeSliceHelper.Slice(plain,

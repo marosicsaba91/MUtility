@@ -17,7 +17,7 @@ public static class AlignmentHelper
 
     public static GUIStyle ToGUIStyle(this Alignment alignment, int fontSize = 12, FontStyle fontStyle  = FontStyle.Normal)
     { 
-        var result = new GUIStyle(GUI.skin.label) 
+        GUIStyle result = new GUIStyle(GUI.skin.label) 
             {
                 alignment = alignment.ToTextAnchor(),
                 fontSize = fontSize,

@@ -93,7 +93,7 @@ namespace MUtility
         {
             DrawBox(position, buttonBackgroundColor, buttonBorderColor, borderInside: true);
             if (string.IsNullOrEmpty(label)) return;
-            var style = new GUIStyle("Label") { alignment = alignment };
+            GUIStyle style = new GUIStyle("Label") { alignment = alignment };
             position.x += 4;
             position.width -= 8;
             GUI.Label(position, label, style);
@@ -182,7 +182,7 @@ namespace MUtility
             Mat.SetPass(0);
             GL.Begin(GL.LINE_STRIP);
             GL.Color(color);
-            for (var xp = 0; xp < rect.width; xp++)
+            for (int xp = 0; xp < rect.width; xp++)
             {
                 float x = MathHelper.LerpUnclamped(xp, functionArea.xMin, functionArea.xMax, 0, rect.width);
                 float fx = function(x);

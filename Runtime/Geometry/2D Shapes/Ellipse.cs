@@ -52,7 +52,7 @@ namespace MUtility
             for (var i = 0; i < fragmentCount - 1; i++)
             {
                 float phase = i * angle;
-                points[i] = (Mathf.Sin(phase) * UnityEngine.Vector3.right) + (Mathf.Cos(phase) * UnityEngine.Vector3.up);
+                points[i] = Mathf.Sin(phase) * UnityEngine.Vector3.right + Mathf.Cos(phase) * UnityEngine.Vector3.up;
                 points[i].x *= radiusHorizontal;
                 points[i].y *= radiusVertical;
                 points[i].x += center.x;
@@ -66,8 +66,8 @@ namespace MUtility
 
         public List<HandlePoint> GetHandles()
         {
-            Vector2 ph = (center + (Vector2.right * radiusHorizontal));
-            Vector2 pv = (center + (Vector2.up * radiusVertical));
+            Vector2 ph = center + Vector2.right * radiusHorizontal;
+            Vector2 pv = center + Vector2.up * radiusVertical;
             return new List<HandlePoint> {
                 new HandlePoint(center, HandlePoint.Shape.Rectangle ),
                 new HandlePoint(ph, HandlePoint.Shape.Circle),
@@ -96,8 +96,8 @@ namespace MUtility
             float a = UnityEngine.Random.Range(0, 2 * Mathf.PI);
             float r = Mathf.Sqrt(UnityEngine.Random.Range(0f,1f));
 
-            float x = (r * Mathf.Sin(a) * radiusHorizontal) + center.x;
-            float y = (r * Mathf.Cos(a) * radiusVertical ) + center.y;
+            float x = r * Mathf.Sin(a) * radiusHorizontal + center.x;
+            float y = r * Mathf.Cos(a) * radiusVertical + center.y;
 
             return new Vector2(x, y);
         }

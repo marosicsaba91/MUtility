@@ -33,7 +33,7 @@ public struct TimeStamp
         var time = new DateTime(ticks);
         int hours = time.Hour;
         int minutes = time.Minute;
-        float seconds = time.Second + (time.Millisecond / 1000f);
+        float seconds = time.Second + time.Millisecond / 1000f;
         return ToHeaderShortString(hours, minutes, seconds);
     }
 

@@ -23,10 +23,10 @@ namespace MUtility
         public float Width => size.x;
         public float Height => size.y;
 
-        public float XMin => center.x - (size.x / 2f);
-        public float XMax => center.x + (size.x / 2f);
-        public float YMin => center.y - (size.y / 2f);
-        public float YMax => center.y + (size.y / 2f);
+        public float XMin => center.x - size.x / 2f;
+        public float XMax => center.x + size.x / 2f;
+        public float YMin => center.y - size.y / 2f;
+        public float YMax => center.y + size.y / 2f;
 
         public Vector2 Right =>         new Vector2(XMax, center.y);
         public Vector2 Left =>          new Vector2(XMin, center.y);
@@ -57,8 +57,8 @@ namespace MUtility
         
 
         public bool IsPointInside(Vector2 point) =>
-            Mathf.Abs(center.x - point.x) < (size.x / 2f) &&
-            Mathf.Abs(center.y - point.y) < (size.y / 2f);
+            Mathf.Abs(center.x - point.x) < size.x / 2f &&
+            Mathf.Abs(center.y - point.y) < size.y / 2f;
 
         public void SetHandle(int i, UnityEngine.Vector3 newPoint)
         {
@@ -71,20 +71,20 @@ namespace MUtility
                     center = newPoint;
                     return;
                 case 1: // Right
-                    rescale = ((newPoint.x - center.x) - (size.x / 2f));
-                    offset = (newPoint.x - (center.x + (size.x / 2))) / 2f;
+                    rescale = newPoint.x - center.x - size.x / 2f;
+                    offset = (newPoint.x - (center.x + size.x / 2)) / 2f;
                     break;
                 case 2: // Left
-                    rescale = ((center.x - newPoint.x) - (size.x / 2f));
-                    offset = (newPoint.x - (center.x - (size.x / 2))) / 2f;
+                    rescale = center.x - newPoint.x - size.x / 2f;
+                    offset = (newPoint.x - (center.x - size.x / 2)) / 2f;
                     break;
                 case 3: // Top
-                    rescale = ((newPoint.y - center.y) - (size.y / 2f));
-                    offset = (newPoint.y - (center.y + (size.y / 2))) / 2f;
+                    rescale = newPoint.y - center.y - size.y / 2f;
+                    offset = (newPoint.y - (center.y + size.y / 2)) / 2f;
                     break;
                 case 4: // Bottom
-                    rescale = ((center.y - newPoint.y) - (size.y / 2f));
-                    offset = (newPoint.y - (center.y - (size.y / 2))) / 2f;
+                    rescale = center.y - newPoint.y - size.y / 2f;
+                    offset = (newPoint.y - (center.y - size.y / 2)) / 2f;
                     break;
                 case 5: // Rescale
                     float rescaleX = (newPoint.x - center.x) * 2;
@@ -105,7 +105,7 @@ namespace MUtility
             }
         }
 
-        internal Rect ToRect() => new Rect(center - (size / 2f), size);        
+        internal Rect ToRect() => new Rect(center - size / 2f, size);        
 
         public Drawable ToDrawable() =>
             new Drawable(new UnityEngine.Vector3[] { TopRight, TopLeft, BottomLeft, BottomRight, TopRight });

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Attributes;
+using MUtility;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -18,8 +19,8 @@ public class TypePickerTester : MonoBehaviour
     }
 
     [SerializeField] MyClass<int> testt;
-    
-    [SerializeField] NoesArk ark;
+    [SerializeField] bool show;
+    [SerializeField, ConditionalField("show")] NoesArk ark;
     [SerializeField] Cat cat;
     [SerializeField] Dog dog;  
     [SerializeField] Animal animal;

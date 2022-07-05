@@ -47,7 +47,7 @@ public class KeyCodeDrawer : PropertyDrawer
 		if (property.type != "Enum")
 		{
 			GUIStyle errorStyle = "CN EntryErrorIconSmall";
-			var r = new Rect(position)
+			Rect r = new Rect(position)
 			{
 				width = errorStyle.fixedWidth
 			};
@@ -66,7 +66,7 @@ public class KeyCodeDrawer : PropertyDrawer
 		label = EditorGUI.BeginProperty(position, label, property);
 		position = EditorGUI.PrefixLabel(position, id, label);
 
-		var buttonText =
+		GUIContent buttonText =
 			new GUIContent(property.enumDisplayNames[property.enumValueIndex]);
 		if (DropdownButton(id, position, buttonText))
 		{
@@ -153,7 +153,7 @@ public class SearchablePopup : PopupWindowContent
 	/// </param>
 	public static void Show(Rect activatorRect, string[] options, int current, Action<int> onSelectionMade)
 	{
-		var win =
+		SearchablePopup win =
 			new SearchablePopup(options, current, onSelectionMade);
 		PopupWindow.Show(activatorRect, win);
 	}
@@ -239,11 +239,11 @@ public class SearchablePopup : PopupWindowContent
 			Filter = filter;
 			Entries.Clear();
 
-			for (var i = 0; i < _allItems.Length; i++)
+			for (int i = 0; i < _allItems.Length; i++)
 			{
 				if (string.IsNullOrEmpty(Filter) || _allItems[i].ToLower().Contains(Filter.ToLower()))
 				{
-					var entry = new Entry
+					Entry entry = new Entry
 					{
 						index = i,
 						text = _allItems[i]
@@ -350,8 +350,8 @@ public class SearchablePopup : PopupWindowContent
 
 	public override void OnGUI(Rect rect)
 	{
-		var searchRect = new Rect(0, 0, rect.width, EditorStyles.toolbar.fixedHeight);
-		var scrollRect = Rect.MinMaxRect(0, searchRect.yMax, rect.xMax, rect.yMax);
+		Rect searchRect = new Rect(0, 0, rect.width, EditorStyles.toolbar.fixedHeight);
+		Rect scrollRect = Rect.MinMaxRect(0, searchRect.yMax, rect.xMax, rect.yMax);
 
 		HandleKeyboard();
 		DrawSearch(searchRect);
@@ -364,13 +364,13 @@ public class SearchablePopup : PopupWindowContent
 
 	void DrawSearch(Rect rect)
 	{
-		var searchRect = new Rect(rect);
+		Rect searchRect = new Rect(rect);
 		searchRect.xMin += 4;
 		searchRect.xMax -= 2;
 		searchRect.y += 3;
 
 
-		var searchRectX = searchRect;
+		Rect searchRectX = searchRect;
 		searchRectX.x = searchRectX.xMax - cancelButton.fixedWidth;
 		searchRectX.width = cancelButton.fixedWidth;
 
@@ -397,21 +397,21 @@ public class SearchablePopup : PopupWindowContent
 
 	void DrawSelectionArea(Rect scrollRect)
 	{
-		var contentRect = new Rect(0, 0,
+		Rect contentRect = new Rect(0, 0,
 			scrollRect.width - GUI.skin.verticalScrollbar.fixedWidth,
 			_list.Entries.Count * rowHeight);
 
 		_scroll = GUI.BeginScrollView(scrollRect, _scroll, contentRect);
 
-		var rowRect = new Rect(0, 0, scrollRect.width, rowHeight);
+		Rect rowRect = new Rect(0, 0, scrollRect.width, rowHeight);
 
-		for (var i = 0; i < _list.Entries.Count; i++)
+		for (int i = 0; i < _list.Entries.Count; i++)
 		{
 			if (_scrollToIndex == i &&
 			    (Event.current.type == EventType.Repaint
 			     || Event.current.type == EventType.Layout))
 			{
-				var r = new Rect(rowRect);
+				Rect r = new Rect(rowRect);
 				r.y += _scrollOffset;
 				GUI.ScrollTo(r);
 				_scrollToIndex = -1;
@@ -445,7 +445,7 @@ public class SearchablePopup : PopupWindowContent
 		else if (i == _hoverIndex)
 			DrawBox(rowRect, Color.white);
 
-		var labelRect = new Rect(rowRect);
+		Rect labelRect = new Rect(rowRect);
 		labelRect.xMin += rowIndent;
 
 		GUI.Label(labelRect, _list.Entries[i].text);

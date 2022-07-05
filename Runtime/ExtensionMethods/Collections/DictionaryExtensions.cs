@@ -66,25 +66,25 @@ public static class DictionaryExtensions
     public static TKey MinKey<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey maxPossibleValue)
         where TKey : IComparable =>
         dictionary.Aggregate (
-            (accumulator, key, value) => (key.CompareTo(accumulator) == -1) ? key : accumulator,
+            (accumulator, key, value) => key.CompareTo(accumulator) == -1 ? key : accumulator,
             maxPossibleValue);
 
     public static TKey MaxKey<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey minPossibleValue) 
         where TKey : IComparable =>
         dictionary.Aggregate ( 
-            (accumulator, key, value) => (key.CompareTo(accumulator) == 1) ? key : accumulator,
+            (accumulator, key, value) => key.CompareTo(accumulator) == 1 ? key : accumulator,
             minPossibleValue);
 
     public static TValue MinValue<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TValue maxPossibleValue)
         where TValue : IComparable =>
         dictionary.Aggregate (
-            (accumulator, key, value) => (value.CompareTo(accumulator) == -1) ? value : accumulator,
+            (accumulator, key, value) => value.CompareTo(accumulator) == -1 ? value : accumulator,
             maxPossibleValue);
 
     public static TValue MaxValue<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TValue minPossibleValue)
         where TValue : IComparable =>
         dictionary.Aggregate (
-            (accumulator, key, value) => (value.CompareTo(accumulator) == 1) ? value : accumulator,
+            (accumulator, key, value) => value.CompareTo(accumulator) == 1 ? value : accumulator,
             minPossibleValue);
     
     

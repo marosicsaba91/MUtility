@@ -81,9 +81,9 @@ public static class MathHelper
         return new UnityEngine.Vector3(outX, outY, outZ);
     }
 
-    public static int Mod(int n, int m) => ((n % m) + m) % m;
+    public static int Mod(int n, int m) => (n % m + m) % m;
 
-    public static float Mod(float n, float m) => ((n % m) + m) % m;
+    public static float Mod(float n, float m) => (n % m + m) % m;
 
     public static Vector2Int Mod(Vector2Int n, int w, int h) =>
         new Vector2Int(Mod(n.x, w), Mod(n.y, h));

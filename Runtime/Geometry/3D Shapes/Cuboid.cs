@@ -16,8 +16,8 @@ namespace MUtility
             Transform cameraTransform = camera.transform;
             UnityEngine.Vector3 pos = cameraTransform.position;
             UnityEngine.Vector3 forward = cameraTransform.forward;
-            UnityEngine.Vector3 near = pos + (forward * camera.nearClipPlane);
-            UnityEngine.Vector3 far = pos + (forward * camera.farClipPlane);
+            UnityEngine.Vector3 near = pos + forward * camera.nearClipPlane;
+            UnityEngine.Vector3 far = pos + forward * camera.farClipPlane;
 
             center = (near + far) / 2;
             size = new UnityEngine.Vector3(
@@ -50,24 +50,24 @@ namespace MUtility
         public float Height => size.y;
         public float Length => size.z;
 
-        public UnityEngine.Vector3 RightCenter => center + rotation * new UnityEngine.Vector3((size.x / 2f), 0, 0);
+        public UnityEngine.Vector3 RightCenter => center + rotation * new UnityEngine.Vector3(size.x / 2f, 0, 0);
         public UnityEngine.Vector3 LeftCenter => center + rotation * new UnityEngine.Vector3(- (size.x / 2f), 0,0);
-        public UnityEngine.Vector3 TopCenter => center + rotation * new UnityEngine.Vector3(0, (size.y / 2f), 0);
+        public UnityEngine.Vector3 TopCenter => center + rotation * new UnityEngine.Vector3(0, size.y / 2f, 0);
         public UnityEngine.Vector3 BottomCenter => center + rotation * new UnityEngine.Vector3(0, - (size.y / 2f), 0);
-        public UnityEngine.Vector3 FrontCenter => center + rotation * new UnityEngine.Vector3(0, 0,  (size.z / 2f));
+        public UnityEngine.Vector3 FrontCenter => center + rotation * new UnityEngine.Vector3(0, 0,  size.z / 2f);
         public UnityEngine.Vector3 BackCenter => center + rotation * new UnityEngine.Vector3(0, 0,- (size.z / 2f));
         
         public UnityEngine.Vector3[] SideCenters => new[] {
             RightCenter, TopCenter, FrontCenter, LeftCenter, BottomCenter, BackCenter };
 
-        public UnityEngine.Vector3 RightTopFrontCorner => center + rotation * new UnityEngine.Vector3( (size.x / 2f), (size.y / 2f), - (size.z / 2f));
-        public UnityEngine.Vector3 LeftTopFrontCorner => center + rotation * new UnityEngine.Vector3( - (size.x / 2f), (size.y / 2f), - (size.z / 2f));
-        public UnityEngine.Vector3 RightBottomFrontCorner => center + rotation * new UnityEngine.Vector3( (size.x / 2f), - (size.y / 2f), - (size.z / 2f));
+        public UnityEngine.Vector3 RightTopFrontCorner => center + rotation * new UnityEngine.Vector3( size.x / 2f, size.y / 2f, - (size.z / 2f));
+        public UnityEngine.Vector3 LeftTopFrontCorner => center + rotation * new UnityEngine.Vector3( - (size.x / 2f), size.y / 2f, - (size.z / 2f));
+        public UnityEngine.Vector3 RightBottomFrontCorner => center + rotation * new UnityEngine.Vector3( size.x / 2f, - (size.y / 2f), - (size.z / 2f));
         public UnityEngine.Vector3 LeftBottomFrontCorner => center + rotation * new UnityEngine.Vector3( - (size.x / 2f), - (size.y / 2f), - (size.z / 2f));
-        public UnityEngine.Vector3 RightTopBackCorner => center + rotation * new UnityEngine.Vector3( (size.x / 2f), (size.y / 2f), (size.z / 2f));
-        public UnityEngine.Vector3 LeftTopBackCorner => center + rotation * new UnityEngine.Vector3( - (size.x / 2f), (size.y / 2f), (size.z / 2f));
-        public UnityEngine.Vector3 RightBottomBackCorner => center + rotation * new UnityEngine.Vector3( (size.x / 2f), - (size.y / 2f), (size.z / 2f));
-        public UnityEngine.Vector3 LeftBottomBackCorner => center + rotation * new UnityEngine.Vector3( - (size.x / 2f), - (size.y / 2f), (size.z / 2f));
+        public UnityEngine.Vector3 RightTopBackCorner => center + rotation * new UnityEngine.Vector3( size.x / 2f, size.y / 2f, size.z / 2f);
+        public UnityEngine.Vector3 LeftTopBackCorner => center + rotation * new UnityEngine.Vector3( - (size.x / 2f), size.y / 2f, size.z / 2f);
+        public UnityEngine.Vector3 RightBottomBackCorner => center + rotation * new UnityEngine.Vector3( size.x / 2f, - (size.y / 2f), size.z / 2f);
+        public UnityEngine.Vector3 LeftBottomBackCorner => center + rotation * new UnityEngine.Vector3( - (size.x / 2f), - (size.y / 2f), size.z / 2f);
 
         public UnityEngine.Vector3[] Corners => new[] {
             RightTopFrontCorner, LeftTopFrontCorner, RightBottomFrontCorner, LeftBottomFrontCorner,
@@ -119,9 +119,9 @@ namespace MUtility
         }
 
         public bool IsPointInside(UnityEngine.Vector3 point) =>
-            Mathf.Abs(center.x - point.x) < (size.x / 2f) &&
-            Mathf.Abs(center.y - point.y) < (size.y / 2f) &&
-            Mathf.Abs(center.z - point.z) < (size.z / 2f);
+            Mathf.Abs(center.x - point.x) < size.x / 2f &&
+            Mathf.Abs(center.y - point.y) < size.y / 2f &&
+            Mathf.Abs(center.z - point.z) < size.z / 2f;
 
         public void SetHandle(int i, UnityEngine.Vector3 newPoint)
         {
@@ -134,28 +134,28 @@ namespace MUtility
                     center = newPoint;
                     return;
                 case 1: // Right
-                    rescale = (newPoint.x - center.x) - (size.x / 2f);
-                    offset = (newPoint.x - (center.x + (size.x / 2))) / 2f;
+                    rescale = newPoint.x - center.x - size.x / 2f;
+                    offset = (newPoint.x - (center.x + size.x / 2)) / 2f;
                     break;
                 case 2: // Left
-                    rescale = (center.x - newPoint.x) - (size.x / 2f);
-                    offset = (newPoint.x - (center.x - (size.x / 2))) / 2f;
+                    rescale = center.x - newPoint.x - size.x / 2f;
+                    offset = (newPoint.x - (center.x - size.x / 2)) / 2f;
                     break;
                 case 3: // Top
-                    rescale = (newPoint.y - center.y) - (size.y / 2f);
-                    offset = (newPoint.y - (center.y + (size.y / 2))) / 2f;
+                    rescale = newPoint.y - center.y - size.y / 2f;
+                    offset = (newPoint.y - (center.y + size.y / 2)) / 2f;
                     break;
                 case 4: // Bottom
-                    rescale = (center.y - newPoint.y) - (size.y / 2f);
-                    offset = (newPoint.y - (center.y - (size.y / 2))) / 2f;
+                    rescale = center.y - newPoint.y - size.y / 2f;
+                    offset = (newPoint.y - (center.y - size.y / 2)) / 2f;
                     break;
                 case 5: // Back
-                    rescale = (center.z - newPoint.z) - (size.z / 2f);
-                    offset = (newPoint.z - (center.z - (size.z / 2))) / 2f;
+                    rescale = center.z - newPoint.z - size.z / 2f;
+                    offset = (newPoint.z - (center.z - size.z / 2)) / 2f;
                     break;
                 case 6: // Front
-                    rescale = (newPoint.z - center.z) - (size.z / 2f);
-                    offset = (newPoint.z - (center.z + (size.z / 2))) / 2f;
+                    rescale = newPoint.z - center.z - size.z / 2f;
+                    offset = (newPoint.z - (center.z + size.z / 2)) / 2f;
                     break;
                 case 7: // Rescale
                     float rescaleX = (newPoint.x - center.x) * 2;

@@ -67,11 +67,11 @@ namespace MUtility
 
         // Convert
         public static Direction2D ToDirection8(this GeneralDirection2D self) =>
-            (Direction2D) ((int) self);
+            (Direction2D) (int) self;
         
 
         public static GeneralDirection3D ToDirection6(this GeneralDirection2D self) =>
-            (GeneralDirection3D) ((int) self);
+            (GeneralDirection3D) (int) self;
         
 
         // To Vector Float
@@ -210,14 +210,14 @@ namespace MUtility
 
         public static GeneralDirection2D Opposite(this GeneralDirection2D dir)
         {
-            return (GeneralDirection2D) ((((int) dir) + 4) % 8);
+            return (GeneralDirection2D) (((int) dir + 4) % 8);
         }
 
         public static GeneralDirection3D Opposite(this GeneralDirection3D dir)
         {
             if ((int) dir < 8)
             {
-                return (GeneralDirection3D) ((((int) dir) + 4) % 8);
+                return (GeneralDirection3D) (((int) dir + 4) % 8);
             }
             else
             {
@@ -229,13 +229,13 @@ namespace MUtility
 
         public static Direction2D Opposite(this Direction2D dir)
         {
-            return (Direction2D) ((((int) dir) + 4) % 8);
+            return (Direction2D) (((int) dir + 4) % 8);
         }
 
         // Right
         public static GeneralDirection2D Right(this GeneralDirection2D dir, int step)
         {
-            return (GeneralDirection2D) ((int) (dir + (step * 2)) % 8);
+            return (GeneralDirection2D) ((int) (dir + step * 2) % 8);
         }
 
         public static Direction2D Right(this Direction2D dir, int step)
@@ -246,7 +246,7 @@ namespace MUtility
         // Left
         public static GeneralDirection2D Left(this GeneralDirection2D dir, int step)
         {
-            int n = (int) (dir - (step * 2)) % 8;
+            int n = (int) (dir - step * 2) % 8;
             if (n < 0) n = 8 + n;
             return (GeneralDirection2D) n;
         }

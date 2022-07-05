@@ -79,11 +79,11 @@ namespace MUtility
             if (rate >= 1) return endPosition;
  
             UnityEngine.Vector3 center = 
-                (startPosition.center == endPosition.center)? startPosition.center: 
+                startPosition.center == endPosition.center? startPosition.center: 
                 UnityEngine.Vector3.Lerp(startPosition.center, endPosition.center, rate);
              
             Vector2 size =
-                (startPosition.size == endPosition.size)? startPosition.size:
+                startPosition.size == endPosition.size? startPosition.size:
                 Vector2.Lerp(startPosition.size, endPosition.size, rate);
  
             Quaternion orientation = startPosition.orientation.CompareApproximately(endPosition.orientation) 

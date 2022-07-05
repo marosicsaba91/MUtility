@@ -29,7 +29,7 @@ namespace MUtility
             if (isSegment && (t < 0 || t > 1))
                 return null;
 
-            return a + (t * u);
+            return a + t * u;
         }
 
         const float defaultRadius = 100;
@@ -39,7 +39,7 @@ namespace MUtility
 
         public Drawable ToDrawable(float radius, float normalLength)
         {
-            UnityEngine.Vector3 v1 = (normal.x == 0 && normal.y==0) ? UnityEngine.Vector3.up: UnityEngine.Vector3.forward;
+            UnityEngine.Vector3 v1 = normal.x == 0 && normal.y==0 ? UnityEngine.Vector3.up: UnityEngine.Vector3.forward;
 
             UnityEngine.Vector3 up = UnityEngine.Vector3.Cross(v1, normal).normalized;
             UnityEngine.Vector3 right = UnityEngine.Vector3.Cross(up, normal).normalized;

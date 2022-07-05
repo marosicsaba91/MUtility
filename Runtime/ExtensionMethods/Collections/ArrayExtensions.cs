@@ -4,6 +4,12 @@ namespace MUtility
 {
 public static class ArrayExtensions
 {
+    public static bool IsNullOrEmpty<T>(this T[] array)
+        => array == null || array.Length == 0;
+
+    public static bool NotNullOrEmpty<T>(this T[] array)
+        => !IsNullOrEmpty(array);
+
     public static void Fill<T>(this T[] array, T value)
     {
         for (var i = 0; i < array.Length; i++)

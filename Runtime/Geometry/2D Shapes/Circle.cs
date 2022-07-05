@@ -29,7 +29,7 @@ namespace MUtility
             float angle = UnityEngine.Random.Range(0f, 2*Mathf.PI);
             float rad = UnityEngine.Random.Range(0, radius);
 
-            return center + (rad * GeometryHelper.RadianToVector2D(angle));
+            return center + rad * GeometryHelper.RadianToVector2D(angle);
         }
 
         public float Diameter
@@ -46,7 +46,7 @@ namespace MUtility
 
         public float Distance(Ray ray)
         {
-            float centerLineDistance = GeometryHelper.DistanceBetweenPointAndLine(center, new Line(ray.origin, (ray.origin + ray.direction)));
+            float centerLineDistance = GeometryHelper.DistanceBetweenPointAndLine(center, new Line(ray.origin, ray.origin + ray.direction));
             if (centerLineDistance <= radius)
                 return 0;
             return centerLineDistance - radius;
@@ -73,9 +73,9 @@ namespace MUtility
             for (var i = 0; i < polygons.Length; i++)
             {
                 float phase1 = angle * 2 * i;
-                float phase2 = angle * ((2 * i) + 1);
-                Vector2 p1 = (Mathf.Sin(phase1) * right) + (Mathf.Cos(phase1) * up) + center;
-                Vector2 p2 = (Mathf.Sin(phase2) * right) + (Mathf.Cos(phase2) * up) + center;
+                float phase2 = angle * (2 * i + 1);
+                Vector2 p1 = Mathf.Sin(phase1) * right + Mathf.Cos(phase1) * up + center;
+                Vector2 p2 = Mathf.Sin(phase2) * right + Mathf.Cos(phase2) * up + center;
                 polygons[i] = new UnityEngine.Vector3[] { p1, p2 };
             }
             return new Drawable(polygons);
@@ -92,7 +92,7 @@ namespace MUtility
             for (var i = 0; i < segmentCount; i++)
             {
                 float phase = angle * i;
-                points[i] = (Mathf.Sin(phase) * right) + (Mathf.Cos(phase) * up);
+                points[i] = Mathf.Sin(phase) * right + Mathf.Cos(phase) * up;
                 points[i] += (UnityEngine.Vector3)center;
             }
             points[points.Length - 1] = points[0];
@@ -104,7 +104,7 @@ namespace MUtility
         { 
             return new List<HandlePoint> {
                 new HandlePoint(center,  HandlePoint.Shape.Rectangle),
-                new HandlePoint(center + (Vector2.right * radius), HandlePoint.Shape.Circle)
+                new HandlePoint(center + Vector2.right * radius, HandlePoint.Shape.Circle)
             };
         }
 
@@ -121,8 +121,8 @@ namespace MUtility
             float a = UnityEngine.Random.Range(0, 2 * Mathf.PI);
             float r = Mathf.Sqrt(UnityEngine.Random.Range(0f, radius));
 
-            float x = (r * Mathf.Sin(a)) + center.x;
-            float y = (r * Mathf.Cos(a)) + center.y;
+            float x = r * Mathf.Sin(a) + center.x;
+            float y = r * Mathf.Cos(a) + center.y;
 
             return new Vector2(x, y);
         }

@@ -16,7 +16,7 @@ public class ElasticEasingFunction : EasingFunctionBase
         float d = 1 - t;
 
         float sinusoidalPart = sinusoidalAmplitude * sin * d;
-        float exponentialPart = 1 - (d * d);
+        float exponentialPart = 1 - d * d;
 
         return sinusoidalPart + exponentialPart;
     }

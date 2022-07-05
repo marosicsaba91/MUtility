@@ -42,12 +42,12 @@ public class GUITable<TRowType> : GUITable
 	public void Draw(Rect position, IReadOnlyList<TRowType> rows)
 	{
 		int rowCount = rows.Count;
-		float areaH = HeaderHeight + (rowHeight * rowCount);
+		float areaH = HeaderHeight + rowHeight * rowCount;
 		float areaW = position.width - (position.height >= areaH ? 0 : 13);
-		var area = new Rect(0f, 0f, areaW, areaH);
+		Rect area = new Rect(0f, 0f, areaW, areaH);
 
-		var summaFixWidth = 0f;
-		var summaRelativeWidth = 0f;
+		float summaFixWidth = 0f;
+		float summaRelativeWidth = 0f;
 		foreach (IColumn<TRowType> column in columns.Where(column => column.IsVisible))
 		{
 			summaFixWidth += column.FixWidth;
@@ -60,7 +60,7 @@ public class GUITable<TRowType> : GUITable
 			summaRelativeWidth == 0 ? 0 : leftoverWidth / summaRelativeWidth;
 
 		bool wasScrolledToEnd = _lastRowCount != rowCount &&
-		                        position.height + _scrollPos.y + 0.01f >= HeaderHeight + (rowHeight * _lastRowCount);
+		                        position.height + _scrollPos.y + 0.01f >= HeaderHeight + rowHeight * _lastRowCount;
 
 		Vector2 newScrollPos = GUI.BeginScrollView(position, _scrollPos, area);
 		bool manuallyScrolled = Math.Abs(newScrollPos.y - _scrollPos.y) > 0.01f;
@@ -131,7 +131,7 @@ public class GUITable<TRowType> : GUITable
 				List<Cell> cells = columns.Select(columnSelector => columnSelector.GetCell(row, onRowsChanged))
 					.ToList();
 
-				var rowPosition = new Rect(0, currentY, size.x, rowHeight);
+				Rect rowPosition = new Rect(0, currentY, size.x, rowHeight);
 				bool clickedOnRow = DrawRow(
 					rowPosition,
 					i,
@@ -169,14 +169,14 @@ public class GUITable<TRowType> : GUITable
 
 		float currentX = position.x;
 
-		for (var i = 0; i < cells.Count; i++)
+		for (int i = 0; i < cells.Count; i++)
 		{
 			IColumn<TRowType> column = columns[i];
 			Cell cell = cells[i];
 
 			if (!column.IsVisible) continue;
 			float width = column.GetWidth(relativeWidthMultiplier);
-			var cellPosition = new Rect(currentX, position.y, width, position.height);
+			Rect cellPosition = new Rect(currentX, position.y, width, position.height);
 			if (_mouseMoved && cellPosition.Contains(Event.current.mousePosition))
 				_currentCellHoverIndex = new Vector2Int(rowIndex, i);
 
@@ -198,13 +198,13 @@ public class GUITable<TRowType> : GUITable
 		float currentX = 0;
 		float height = HeaderHeight;
 		IColumn<TRowType>[] columnArray = columns.ToArray();
-		for (var i = 0; i < columnArray.Length; i++)
+		for (int i = 0; i < columnArray.Length; i++)
 		{
 			IColumn<TRowType> column = columnArray[i];
 			if (!column.IsVisible) continue;
 
 			float width = column.GetWidth(relativeWidthMultiplier);
-			var headerRect = new Rect(currentX, currentY, width + (i == columnArray.Length - 1 ? 0 : 1), height);
+			Rect headerRect = new Rect(currentX, currentY, width + (i == columnArray.Length - 1 ? 0 : 1), height);
 			currentX += width;
 			Rect labelPosition = EditorHelper.DrawBox(headerRect);
 

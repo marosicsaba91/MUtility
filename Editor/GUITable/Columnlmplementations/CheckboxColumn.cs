@@ -18,8 +18,8 @@ public class CheckboxColumn<TRow> : EditableColumn<TRow, bool>
     protected override bool DrawEditableCell(Rect position, bool value, GUIStyle style)
     {
         const float checkBoxWidth = 14;
-        float x = position.x + ((position.width - checkBoxWidth) / 2);
-        var pos = new Rect(x, position.y, checkBoxWidth, position.height);
+        float x = position.x + (position.width - checkBoxWidth) / 2;
+        Rect pos = new Rect(x, position.y, checkBoxWidth, position.height);
         return EditorGUI.Toggle(pos, value, style);
     }
 

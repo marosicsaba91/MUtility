@@ -25,7 +25,7 @@ public static class SerializedPropertyExtensions
         property.NextVisible(true);
         while (true)
         {
-            if ((SerializedProperty.EqualContents(property, nextElement)))
+            if (SerializedProperty.EqualContents(property, nextElement))
             {
                 yield break;
             }
@@ -77,11 +77,12 @@ public static class SerializedPropertyExtensions
 
         return obj;
     }
-    
+
     // Sets value from SerializedProperty - even if value is nested
     const BindingFlags mask = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-    public static void SetValue( this SerializedProperty property, object newValue, string actionName = null)
-    {  
+
+    public static void SetValue(this SerializedProperty property, object newValue, string actionName = null)
+    {
         var parentAndFields = new List<(object containingObject, FieldInfo field, int index)>();
         object containingObject = property.serializedObject.targetObject;
 
@@ -97,15 +98,15 @@ public static class SerializedPropertyExtensions
             FieldInfo field = containingType.GetField(elementName, mask);
             parentAndFields.Add((containingObject, field, index));
             containingObject = index >= 0
-                    ? GetValue_(containingObject, field, index)
-                    : field.GetValue(containingObject);
+                ? GetValue_(containingObject, field, index)
+                : field.GetValue(containingObject);
         }
 
         Object target = property.serializedObject.targetObject;
         Undo.RecordObject(target, actionName ?? "Property Changed");
         bool changed = false;
 
-        for( int i = parentAndFields.Count - 1; i >= 0; --i )
+        for (int i = parentAndFields.Count - 1; i >= 0; --i)
         {
             FieldInfo field = parentAndFields[i].field;
             object containerObject = parentAndFields[i].containingObject;
@@ -117,8 +118,8 @@ public static class SerializedPropertyExtensions
                 changed |= TrySetValue_(containerObject, field, newValue);
             newValue = containerObject;
         }
-        
-        if (changed && property.serializedObject.targetObject.GetType() == typeof(ScriptableObject)) 
+
+        if (changed && property.serializedObject.targetObject.GetType() == typeof(ScriptableObject))
             EditorUtility.SetDirty(target);
     }
 
@@ -135,7 +136,7 @@ public static class SerializedPropertyExtensions
             else
                 obj = GetValue_(obj, element);
         }
-        
+
         return obj;
     }
 
@@ -156,13 +157,16 @@ public static class SerializedPropertyExtensions
         return true;
     }
     
+    public static  object GetValue(this SerializedProperty property) => 
+        GetFieldInfo(property).GetValue(property.serializedObject.targetObject);
+
     static object GetValue_(object source, string name)
     {
         if (source == null)
             return null;
         Type type = source.GetType();
- 
-        
+
+
         while (type != null)
         {
             FieldInfo field = type.GetField(name, mask);
@@ -181,7 +185,7 @@ public static class SerializedPropertyExtensions
     }
 
 
-    static object GetValue_(object source,  string name, int index)
+    static object GetValue_(object source, string name, int index)
     {
         IEnumerable enumerable = GetValue_(source, name) as IEnumerable;
         if (enumerable == null) return null;
@@ -194,12 +198,12 @@ public static class SerializedPropertyExtensions
 
         return enm.Current;
     }
-    
+
     static object GetValue_(object source, FieldInfo field, int index)
     {
         if (source == null) return null;
         if (field == null) return null;
-        
+
         Type fieldType = field.FieldType;
         if (fieldType.IsSubclassOf_GenericsSupported(typeof(Array)) ||
             fieldType.IsSubclassOf_GenericsSupported(typeof(List<>)))
@@ -207,17 +211,18 @@ public static class SerializedPropertyExtensions
             IList list = (IList)field.GetValue(source);
             return list[index];
         }
+
         return null;
     }
 
     static bool TrySetValue_(object source, FieldInfo field, object newValue)
     {
         if (source == null)
-            return false; 
+            return false;
         if (field == null) return false;
         object oldValue = field.GetValue(source);
-        if (newValue.Equals(oldValue)) return false; 
-        
+        if (newValue.Equals(oldValue)) return false;
+
         field.SetValue(source, newValue);
         return true;
     }
@@ -226,7 +231,7 @@ public static class SerializedPropertyExtensions
     {
         if (source == null) return false;
         if (field == null) return false;
-        
+
         Type fieldType = field.FieldType;
         if (fieldType.IsSubclassOf_GenericsSupported(typeof(Array)) ||
             fieldType.IsSubclassOf_GenericsSupported(typeof(List<>)))
@@ -238,6 +243,7 @@ public static class SerializedPropertyExtensions
                 return true;
             }
         }
+
         return false;
     }
 
@@ -318,6 +324,7 @@ public static class SerializedPropertyExtensions
                     destinationEnumerator.MoveNext();
                     sourceEnumerator.Current.CopyPropertyValueTo(destinationEnumerator.Current);
                 }
+
                 sourceEnumerator.Dispose();
                 destinationEnumerator.Dispose();
 
@@ -423,7 +430,7 @@ public static class SerializedPropertyExtensions
 
         return null;
     }
-    
+
     public static bool IsExpandable(this SerializedProperty property)
     {
         if (property.propertyType == SerializedPropertyType.Integer ||
@@ -431,10 +438,107 @@ public static class SerializedPropertyExtensions
             property.propertyType == SerializedPropertyType.String ||
             property.propertyType == SerializedPropertyType.Vector2 ||
             property.propertyType == SerializedPropertyType.Vector3 ||
-            property.propertyType == SerializedPropertyType.AnimationCurve||
+            property.propertyType == SerializedPropertyType.AnimationCurve ||
             property.propertyType == SerializedPropertyType.LayerMask)
-            return false; 
+            return false;
         return true;
+    }
+
+    // Found here http://answers.unity.com/answers/425602/view.html
+    // Update here https://gist.github.com/AdrienVR/1548a145c039d2fddf030ebc22f915de to support inherited private members.
+    /// <summary>
+    /// Get parent object of SerializedProperty
+    /// </summary>
+    public static object GetParent(this SerializedProperty prop)
+    {
+        string path = prop.propertyPath.Replace(".Array.data[", "[");
+        object obj = prop.serializedObject.targetObject;
+        string[] elements = path.Split('.');
+        foreach (string element in elements.Take(elements.Length - 1))
+        {
+            if (element.Contains("["))
+            {
+                string elementName = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
+                int index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal))
+                    .Replace("[", "").Replace("]", ""));
+                obj = GetValueAt(obj, elementName, index);
+            }
+            else
+            {
+                obj = GetFieldValue(obj, element);
+            }
+        }
+
+        return obj;
+
+
+        object GetValueAt(object source, string name, int index)
+        {
+            IEnumerable enumerable = GetFieldValue(source, name) as IEnumerable;
+            if (enumerable == null) return null;
+
+            IEnumerator enm = enumerable.GetEnumerator();
+            while (index-- >= 0)
+                enm.MoveNext();
+            return enm.Current;
+        }
+
+        object GetFieldValue(object source, string name)
+        {
+            if (source == null)
+                return null;
+
+            foreach (Type type in GetHierarchyTypes(source.GetType()))
+            {
+                FieldInfo f = type.GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                if (f != null)
+                    return f.GetValue(source);
+
+                PropertyInfo p = type.GetProperty(name,
+                    BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                if (p != null)
+                    return p.GetValue(source, null);
+            }
+
+            return null;
+
+
+            IEnumerable<Type> GetHierarchyTypes(Type sourceType)
+            {
+                yield return sourceType;
+                while (sourceType.BaseType != null)
+                {
+                    yield return sourceType.BaseType;
+                    sourceType = sourceType.BaseType;
+                }
+            }
+        }
+    }
+    
+    public static string AsStringValue(this SerializedProperty property)
+    {
+        switch (property.propertyType)
+        {
+            case SerializedPropertyType.String:
+                return property.stringValue;
+
+            case SerializedPropertyType.Character:
+            case SerializedPropertyType.Integer:
+                if (property.type == "char") return Convert.ToChar(property.intValue).ToString();
+                return property.intValue.ToString();
+
+            case SerializedPropertyType.ObjectReference:
+                return property.objectReferenceValue != null ? property.objectReferenceValue.ToString() : "null";
+
+            case SerializedPropertyType.Boolean:
+                return property.boolValue.ToString();
+
+            case SerializedPropertyType.Enum:
+                return property.GetValue().ToString();
+
+            default:
+                return string.Empty;
+        }
     }
 }
 }

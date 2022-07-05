@@ -46,7 +46,7 @@ public class NormalDistributionFunction
         const float e = 2.71828182845904523536028747135f;
 
         float n = (input - mean) / stdDev;
-        float p = (-0.5f) * n * n;
+        float p = -0.5f * n * n;
 
         return Mathf.Pow(e, p) / (stdDev * sqrt2PI);
     }
@@ -60,7 +60,7 @@ public class NormalDistributionFunction
         {
             float h = function.MaxY;
             float w = 6 * function.stdDev; 
-            return new Rect(function.mean - (w / 2), y:0, w, h);
+            return new Rect(function.mean - w / 2, y:0, w, h);
         }
 
     }

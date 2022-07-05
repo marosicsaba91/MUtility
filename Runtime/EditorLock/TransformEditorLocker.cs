@@ -45,7 +45,7 @@ namespace Utility.SimpleComponents
 
             static float Lock(LockSate state, float input, float original, float grid) =>
                 state == LockSate.Lock ? original :
-                state == LockSate.GridLock ? input - (input % grid) :
+                state == LockSate.GridLock ? input - input % grid :
                 input;
 
             public bool AnyLock => x != LockSate.Unlock || y != LockSate.Unlock || z != LockSate.Unlock;

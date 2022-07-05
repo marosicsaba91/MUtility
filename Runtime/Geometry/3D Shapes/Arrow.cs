@@ -64,7 +64,7 @@ namespace MUtility
         
         UnityEngine.Vector3 Head
         {
-            get => origin + (DirectionNormalized * magnitude);
+            get => origin + DirectionNormalized * magnitude;
             set
             {
                 UnityEngine.Vector3 vec = value - origin;
@@ -114,7 +114,7 @@ namespace MUtility
 
             UnityEngine.Vector3 normalizedDirection = DirectionNormalized;
             float middleLength = magnitude - (showArrowHead ? arrowHeadLength : 0);
-            UnityEngine.Vector3 backOfHead = origin + (middleLength * normalizedDirection);
+            UnityEngine.Vector3 backOfHead = origin + middleLength * normalizedDirection;
             UnityEngine.Vector3 perpendicular = UnityEngine.Vector3.Cross(normalizedDirection, normal).normalized;
             if (perpendicular == UnityEngine.Vector3.zero)
             {

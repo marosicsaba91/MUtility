@@ -51,9 +51,9 @@ namespace MUtility
             {
                 polygon[i] = rotate * polygon[i];
                 polygon[i] = new UnityEngine.Vector3(
-                    (scale * polygon[i].x) + offset.x,
-                    (scale * polygon[i].y) + offset.y,
-                    (scale * polygon[i].z) + offset.z);
+                    scale * polygon[i].x + offset.x,
+                    scale * polygon[i].y + offset.y,
+                    scale * polygon[i].z + offset.z);
             }
             return polygon;
         }
@@ -64,9 +64,9 @@ namespace MUtility
             {
                 polygon[i] = rotate * polygon[i];
                 polygon[i] = new UnityEngine.Vector3(
-                    (scale.x * polygon[i].x) + offset.x,
-                    (scale.y * polygon[i].y) + offset.y,
-                    (scale.z * polygon[i].z) + offset.z);
+                    scale.x * polygon[i].x + offset.x,
+                    scale.y * polygon[i].y + offset.y,
+                    scale.z * polygon[i].z + offset.z);
             }
             return polygon;
         }

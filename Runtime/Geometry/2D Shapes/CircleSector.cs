@@ -71,7 +71,7 @@ namespace MUtility
             
             if (fullRate <= 0)
             {
-                Vector2 b = center + (GeometryHelper.RadianToVector2D(startAngleDeg * Mathf.Deg2Rad) * radius);
+                Vector2 b = center + GeometryHelper.RadianToVector2D(startAngleDeg * Mathf.Deg2Rad) * radius;
                 return new LineSegment(center, b).ToDrawable().polygons[0];
             }
             
@@ -85,7 +85,7 @@ namespace MUtility
 
             var points = new UnityEngine.Vector3[
                 width >= radius ? circleFragmentCount + 2 :
-                width > 0 ? (circleFragmentCount * 2 + 1) :
+                width > 0 ? circleFragmentCount * 2 + 1 :
                 circleFragmentCount];
 
             UnityEngine.Vector3 right = new Vector2(radius, 0);
@@ -116,8 +116,8 @@ namespace MUtility
                 {
                     float rate = (float) i / (circleFragmentCount - 1);
                     if (!dir) rate = 1 - rate;
-                    float phase = startAngleInRad - (rate * segmentLength);
-                    points[pointIndex] = (Mathf.Sin(phase) * right) + (Mathf.Cos(phase) * up) + center;
+                    float phase = startAngleInRad - rate * segmentLength;
+                    points[pointIndex] = Mathf.Sin(phase) * right + Mathf.Cos(phase) * up + center;
                     pointIndex++;
                 }
             }
@@ -128,7 +128,7 @@ namespace MUtility
         {
             return new List<HandlePoint> {
                 new HandlePoint(center,  HandlePoint.Shape.Rectangle),
-                new HandlePoint(center + (GeometryHelper.RadianToVector2D(startAngleDeg* Mathf.Deg2Rad) * radius))
+                new HandlePoint(center + GeometryHelper.RadianToVector2D(startAngleDeg* Mathf.Deg2Rad) * radius)
             };
         }
 
@@ -151,8 +151,8 @@ namespace MUtility
             float a = UnityEngine.Random.Range(0, 2 * Mathf.PI); // TODO: Just On Segment
             float r = Mathf.Sqrt(UnityEngine.Random.Range(0f, radius));
 
-            float x = (r * Mathf.Sin(a)) + center.x;
-            float y = (r * Mathf.Cos(a)) + center.y;
+            float x = r * Mathf.Sin(a) + center.x;
+            float y = r * Mathf.Cos(a) + center.y;
 
             return new Vector2(x, y);
         }

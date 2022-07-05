@@ -66,7 +66,7 @@ public static class HashSetExtensions
         return source.Aggregate(func);
     }
 
-    public static float Average(this HashSet<int> source) => ((float)source.Sum()) / source.Count;
+    public static float Average(this HashSet<int> source) => (float)source.Sum() / source.Count;
 
     public static float Average(this HashSet<float> source) => source.Sum() / source.Count;
 

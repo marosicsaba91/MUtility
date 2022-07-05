@@ -28,8 +28,8 @@ namespace MUtility
 
             float oldX = vector.x;
             float oldY = vector.y;
-            vector.x = (cosinus * oldX) - (sinus * oldY);
-            vector.y = (sinus * oldX) + (cosinus * oldY);
+            vector.x = cosinus * oldX - sinus * oldY;
+            vector.y = sinus * oldX + cosinus * oldY;
             return vector;
         }
 
@@ -45,7 +45,7 @@ namespace MUtility
             float angle = Vector2.Angle(vectorA, vectorB);
             UnityEngine.Vector3 cross = UnityEngine.Vector3.Cross(vectorA, vectorB);
 
-            return (cross.z > 0) ? 360 - angle : angle;
+            return cross.z > 0 ? 360 - angle : angle;
         }
 
         public static float DistanceBetweenPointAndLine(UnityEngine.Vector3 point, Line line) =>
@@ -61,10 +61,10 @@ namespace MUtility
             UnityEngine.Vector3 lhs = vector2;
             if (magnitude > 1E-06f)
             {
-                lhs = (lhs / magnitude);
+                lhs = lhs / magnitude;
             }
             float num2 = Mathf.Clamp(UnityEngine.Vector3.Dot(lhs, rhs), 0f, magnitude);
-            return line.a + (lhs * num2);
+            return line.a + lhs * num2;
         }
 
         public static bool TryGet2DLineSegmentsIntersectionPoint(LineSegment line1, LineSegment line2, out Vector2 intersection)

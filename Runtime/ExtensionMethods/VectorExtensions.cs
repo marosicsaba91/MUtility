@@ -48,7 +48,7 @@ public static class VectorExtensions
     public static float GetAngle(this Vector2 original)
     {
         float angle = Vector2.Angle(Vector2.right, original);
-        return (original.y > 0) ? angle : (360f - angle);
+        return original.y > 0 ? angle : 360f - angle;
     }
 
     public static float GetAngle(this UnityEngine.Vector3 original) =>
@@ -62,8 +62,8 @@ public static class VectorExtensions
 
         float tx = v.x;
         float ty = v.y;
-        v.x = (cos * tx) - (sin * ty);
-        v.y = (sin * tx) + (cos * ty);
+        v.x = cos * tx - sin * ty;
+        v.y = sin * tx + cos * ty;
         return v;
     }
 
@@ -72,31 +72,31 @@ public static class VectorExtensions
     public static Vector2 Clamp(this Vector2 input, float min, float max)
     {
         return new Vector2(
-            input.x < min ? min : (input.x > max ? max : input.x),
-            input.y < min ? min : (input.y > max ? max : input.y));
+            input.x < min ? min : input.x > max ? max : input.x,
+            input.y < min ? min : input.y > max ? max : input.y);
     }
 
     public static Vector2 Clamp(this Vector2 input, Vector2 min, Vector2 max)
     {
         return new Vector2(
-            input.x < min.x ? min.x : (input.x > max.x ? max.x : input.x),
-            input.y < min.y ? min.y : (input.y > max.y ? max.y : input.y));
+            input.x < min.x ? min.x : input.x > max.x ? max.x : input.x,
+            input.y < min.y ? min.y : input.y > max.y ? max.y : input.y);
     }
 
     public static UnityEngine.Vector3 Clamp(this UnityEngine.Vector3 input, float min, float max)
     {
         return new UnityEngine.Vector3(
-            input.x < min ? min : (input.x > max ? max : input.x),
-            input.y < min ? min : (input.y > max ? max : input.y),
-            input.z < min ? min : (input.z > max ? max : input.z));
+            input.x < min ? min : input.x > max ? max : input.x,
+            input.y < min ? min : input.y > max ? max : input.y,
+            input.z < min ? min : input.z > max ? max : input.z);
     }
 
     public static UnityEngine.Vector3 Clamp(this UnityEngine.Vector3 input, UnityEngine.Vector3 min, UnityEngine.Vector3 max)
     {
         return new UnityEngine.Vector3(
-            input.x < min.x ? min.x : (input.x > max.x ? max.x : input.x),
-            input.y < min.y ? min.y : (input.y > max.y ? max.y : input.y),
-            input.z < min.z ? min.z : (input.z > max.y ? max.z : input.z));
+            input.x < min.x ? min.x : input.x > max.x ? max.x : input.x,
+            input.y < min.y ? min.y : input.y > max.y ? max.y : input.y,
+            input.z < min.z ? min.z : input.z > max.y ? max.z : input.z);
     }
 
     public static Vector2 Clamp01(this Vector2 areaPos) => areaPos.Clamp(0, 1);

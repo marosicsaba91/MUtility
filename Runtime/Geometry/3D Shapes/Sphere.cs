@@ -21,9 +21,9 @@ namespace MUtility
 
         public float Surface => 4f * Mathf.PI * radius * radius;
 
-        public float Volume => (4f / 3f) * Mathf.PI * radius * radius * radius;
+        public float Volume => 4f / 3f * Mathf.PI * radius * radius * radius;
 
-        public bool IsPointInside(UnityEngine.Vector3 point) => (point - center).sqrMagnitude <= (radius * radius);
+        public bool IsPointInside(UnityEngine.Vector3 point) => (point - center).sqrMagnitude <= radius * radius;
 
         public void SetHandle(int i, UnityEngine.Vector3 newPoint)
         {
@@ -37,7 +37,7 @@ namespace MUtility
         {
             return new List<HandlePoint> {
                 new HandlePoint(center,  HandlePoint.Shape.Rectangle),
-                new HandlePoint(center + (UnityEngine.Vector3.right * radius), HandlePoint.Shape.Circle)
+                new HandlePoint(center + UnityEngine.Vector3.right * radius, HandlePoint.Shape.Circle)
             };
         }
 
@@ -52,8 +52,8 @@ namespace MUtility
             for (var i = 0; i < complexity; i++)
             {
                 // Szélességi
-                float h = (-radius) + ((1 + i) * (2 * radius) / (complexity + 1));
-                float circleRadius = Mathf.Sqrt((radius * radius) - (h * h));
+                float h = -radius + (1 + i) * (2 * radius) / (complexity + 1);
+                float circleRadius = Mathf.Sqrt(radius * radius - h * h);
                 var c1 = new Circle(UnityEngine.Vector3.zero, circleRadius);
                 var polygon = c1.ToPolygon(circleSegmentCount);
                 polygon.Rotate(Quaternion.Euler(90, 0, 0));
@@ -132,7 +132,7 @@ namespace MUtility
             uvs[uvs.Length - 1] = Vector2.zero;
             for (var lat = 0; lat < nbLat; lat++)
                 for (var lon = 0; lon <= nbLong; lon++)
-                    uvs[lon + lat * (nbLong + 1) + 1] = new Vector2(((float)lon / nbLong) + 0.5f, 1f - (float)(lat + 1) / (nbLat + 1));
+                    uvs[lon + lat * (nbLong + 1) + 1] = new Vector2((float)lon / nbLong + 0.5f, 1f - (float)(lat + 1) / (nbLat + 1));
             #endregion
 
             #region Triangles

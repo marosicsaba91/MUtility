@@ -63,7 +63,7 @@ namespace MUtility
                     if (derivativeSizeMultiplier > 0)
                     {
                         derivative = DerivativeOnASegment(a, b, c, d, 0);
-                        result1.Add(new[] { position, position + (derivative * derivativeSizeMultiplier) });
+                        result1.Add(new[] { position, position + derivative * derivativeSizeMultiplier });
                     }
                 }
 
@@ -75,7 +75,7 @@ namespace MUtility
                     if (derivativeSizeMultiplier>0)
                     {
                         derivative = DerivativeOnASegment(a, b, c, d, rate);
-                        result1.Add(new[] { position, position + (derivative * derivativeSizeMultiplier) });
+                        result1.Add(new[] { position, position + derivative * derivativeSizeMultiplier });
                     }
                 } 
             } 
@@ -115,7 +115,7 @@ namespace MUtility
             else
             { 
                 segmentIndex = (int)(segmentCount * normalizedTime);
-                inSegmentTime = (normalizedTime % (1f / segmentCount)) / (1f / segmentCount);
+                inSegmentTime = normalizedTime % (1f / segmentCount) / (1f / segmentCount);
             } 
 
             GetControlPoints(segmentIndex, out UnityEngine.Vector3 a, out UnityEngine.Vector3 b,  out UnityEngine.Vector3 c, out UnityEngine.Vector3 d); 

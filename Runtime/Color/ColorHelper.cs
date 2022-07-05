@@ -16,7 +16,7 @@ public static class ColorHelper
         var i1 = (int)((colorsCount - 1) * t);
         int i2 = i1 + 1;
         float f = 1f / (colorsCount - 1);
-        float innerT = (t - (i1 * f)) / f;
+        float innerT = (t - i1 * f) / f;
         return Color.Lerp(colors[i1], colors[i2], innerT);
     }
 }

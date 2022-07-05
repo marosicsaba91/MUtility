@@ -27,7 +27,7 @@ public static class PoseExtensions
         {
             Gizmos.color = lineColor;
             up = r * up;
-            UnityEngine.Vector3 start = pose.position + (size * cubeSize * 0.5f * up);
+            UnityEngine.Vector3 start = pose.position + size * cubeSize * 0.5f * up;
             UnityEngine.Vector3 end =  pose.position + up * size; 
             Gizmos.DrawLine(start, end);
         }

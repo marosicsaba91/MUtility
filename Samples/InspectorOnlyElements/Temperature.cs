@@ -75,11 +75,11 @@ namespace Utility_Examples
 		{
 			get
 			{
-				float result = (TemperatureInCelsius * kelvinToFahrenheitMultiplier) + zeroCelsiusZeroFahrenheitDifference;
+				float result = TemperatureInCelsius * kelvinToFahrenheitMultiplier + zeroCelsiusZeroFahrenheitDifference;
 				return Math.Abs(result) < epsilon ? 0 : result;
 			}
 			set => temperatureInKelvin.Value = 
-				((value - zeroCelsiusZeroFahrenheitDifference) / kelvinToFahrenheitMultiplier) - zeroKelvinInCelsius;
+				(value - zeroCelsiusZeroFahrenheitDifference) / kelvinToFahrenheitMultiplier - zeroKelvinInCelsius;
 		}
 
 		bool IsDefault => Math.Abs(temperatureInKelvin + zeroKelvinInCelsius) < epsilon;

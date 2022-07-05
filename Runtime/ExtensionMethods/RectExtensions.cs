@@ -21,7 +21,7 @@ public static class RectExtensions
         float bottom = Mathf.Max(self.yMin, crop.yMin);
         float top = Mathf.Min(self.yMax, crop.yMax);
 
-        return new Rect(left, bottom, (right - left), (top - bottom));
+        return new Rect(left, bottom, right - left, top - bottom);
     }
 
     public static Rect ChangeLeft(this Rect self, float newValue)

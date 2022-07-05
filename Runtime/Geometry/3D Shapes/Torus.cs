@@ -88,7 +88,7 @@ namespace MUtility
 				for (var side = 0; side <= nbSides - 1; side++)
 				{
 					int current = side + seg * (nbSides + 1);
-					int next = side + (seg < (nbRadSeg) ? (seg + 1) * (nbSides + 1) : 0);
+					int next = side + (seg < nbRadSeg ? (seg + 1) * (nbSides + 1) : 0);
 
 					if (i < triangles.Length - 6)
 					{
