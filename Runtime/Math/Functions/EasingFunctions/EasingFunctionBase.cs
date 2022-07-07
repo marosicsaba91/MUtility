@@ -18,9 +18,11 @@ public abstract class EasingFunctionBase
         EndSmooth,
         FullSmooth
     }
+    
 
     public Increasing increasing = Increasing.Up;
     public Smooth smooth = Smooth.FullSmooth; 
+    [SerializeField] DisplayField curvePreview = new DisplayField(nameof(Evaluate));
 
     public Rect DefaultArea
     {
@@ -87,11 +89,5 @@ public abstract class EasingFunctionBase
     protected abstract float EaseIn01Evaluate(float time);
         
     public virtual Rect EaseIn01ContainingRect => new Rect(0, 0, 1, 1);
-        
-    [Serializable] protected class CurvePreview : InspectorCurve<EasingFunctionBase>
-    {
-        protected override float Evaluate(EasingFunctionBase function, float time) => function.Evaluate(time);
-        protected override Rect DefaultArea(EasingFunctionBase function) => function.DefaultArea;
-    }
 }
 } 

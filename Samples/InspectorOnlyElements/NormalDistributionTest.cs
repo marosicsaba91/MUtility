@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MUtility;
 using UnityEngine; 
 
@@ -7,9 +6,7 @@ public class NormalDistributionTest : MonoBehaviour
 {
     [SerializeField] NormalDistributionFunction normalDistributionFunction = default; 
     [Space]
-    [SerializeField] SampleCount sampleCount;
-    [SerializeField] ClearButton clear;
-    [SerializeField] AddSamplesButton addSamples;
+    [SerializeField] int sampleCount;
     
     Dictionary<int, int> _valueDictionary = new Dictionary<int, int>();
     readonly Rect _rect = new Rect(-5,-2,10,4);
@@ -49,45 +46,4 @@ public class NormalDistributionTest : MonoBehaviour
      }
 
      public int AllSampleCount => _valueDictionary.Aggregate((sum, key, value) => sum + value, 0);
-
-    [Serializable]
-     class ClearButton :InspectorButton<NormalDistributionTest>
-     {
-         protected override void OnClick(NormalDistributionTest obj) => obj._valueDictionary.Clear();
-     }
-
-     [Serializable]
-     class AddSamplesButton : InspectorButton<NormalDistributionTest>
-     {
-         protected override void OnClick(NormalDistributionTest obj)
-         {
-             int count = Mathf.Max(obj.AllSampleCount, 1);
-             for (var i = 0; i < count; i++)
-                 obj.NewSample();
-         }
-     }
-     
-     [Serializable]
-     class SampleCount : InspectorInt<NormalDistributionTest>
-     { 
-         protected override int GetValue(NormalDistributionTest parentObject) => parentObject.AllSampleCount;
-         protected override void SetValue(NormalDistributionTest parentObject, int newValue) 
-         {
-             int sampleCount = parentObject.AllSampleCount;
-             if (newValue == sampleCount) return;
-             if (newValue <= 0)
-             {
-                 parentObject._valueDictionary.Clear();
-                 return;
-             }
-
-             while (sampleCount < newValue)
-             {
-                 parentObject.NewSample();
-                 sampleCount++;
-             }
-
-             ;
-         }
-     }
 } 

@@ -2,7 +2,6 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace MUtility
 {
@@ -84,6 +83,8 @@ namespace MUtility
 
         public static Rect ContentRect(Rect position) =>
             new Rect(ContentStartX, position.y, ContentWidth(position), position.height);
+        public static Rect LabelRect(Rect position) =>
+            new Rect(position.x, position.y, LabelWidth, EditorGUIUtility.singleLineHeight);
         
         public static bool IsModernEditorUI => UnityVersion.Get().IsHigherOrEqualThan("2019.3");
         

@@ -1,8 +1,8 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Attributes;
+using System.Reflection; 
 using MUtility;
 using UnityEditor; 
 using UnityEngine;
@@ -12,8 +12,7 @@ namespace Asteroids.Editor
 [CustomPropertyDrawer(typeof( TypePickerAttribute))]
 public class TypeSelectorDrawer : PropertyDrawer
 {
-    public override void OnGUI(Rect position, SerializedProperty property,
-        GUIContent label)
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         TypePickerAttribute att = attribute as TypePickerAttribute;
         if (property.propertyType != SerializedPropertyType.ManagedReference)
@@ -72,9 +71,7 @@ public class TypeSelectorDrawer : PropertyDrawer
                     Type newType = inheritedTypes[resultTypeIndex - 1];
                     if (newType.IsSubclassOf(typeof(UnityEngine.Object)))
                     {
-                        TestSO tso = ScriptableObject.CreateInstance<TestSO>();
-                        property.managedReferenceValue = tso;
-                        // TODO: HA EZT NEM SIKERÜL MEGOLDANI!!!!
+                        Debug.LogWarning("SerializedReference don't work with UnityEngine.Object types");
                     }
                     else
                     {
@@ -221,3 +218,4 @@ public class TypeSelectorDrawer : PropertyDrawer
     }
 }
 }
+#endif

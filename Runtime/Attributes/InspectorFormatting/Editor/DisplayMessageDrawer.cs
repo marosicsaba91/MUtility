@@ -7,7 +7,7 @@ using UnityEngine;
 namespace MUtility
 {
 [CustomPropertyDrawer(typeof(DisplayMessage), useForChildren: true)]
-public class InspectorMessageDrawer : PropertyDrawer
+public class DisplayMessageDrawer : PropertyDrawer
 {
 	DisplayMessage _message;
 	string[] _lines;
@@ -17,16 +17,15 @@ public class InspectorMessageDrawer : PropertyDrawer
 	
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-	    
+	    _owner = property.GetObjectWithProperty();
+	    _message = (DisplayMessage)property.GetObjectOfProperty();
 	    if (!_initialised)
 	    {
-		    _message = (DisplayMessage)property.GetObjectOfProperty();
-		    _owner = property.GetObjectWithProperty();
 		    _message?.Initialise(_owner);
 		    _owner = property.GetObjectWithProperty();
 	    }
 
-	    _lines = _message.GetLines();
+	    _lines = _message.GetLines(_owner);
 	    int messageLineCount = _lines.Length;
 	    
 	    if (messageLineCount == 0) return 0;

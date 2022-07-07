@@ -8,7 +8,7 @@ public class InfiniteEasingFunction
 {
     [SerializeField, Range(0, 1)] float linearPart = 0.5f;
     [SerializeField, Min(0)] float maximumValue = 1;
-    [SerializeField] CurvePreview preview;
+    [SerializeField] DisplayField curvePreview = new DisplayField(nameof(Evaluate));
 
     public float LinearPart
     {
@@ -43,16 +43,6 @@ public class InfiniteEasingFunction
         float h = maximumValue - p;
 
         return p + (1f - h / (h + t - p)) * h;
-    }
-    
-    [Serializable] class CurvePreview : InspectorCurve<InfiniteEasingFunction>
-    {
-        protected override float Evaluate(InfiniteEasingFunction function, float time) => function.Evaluate(time);
-        protected override Rect DefaultArea(InfiniteEasingFunction function) => new Rect(
-            0, 
-            0, 
-            function.maximumValue / (0.8f * function.linearPart + 0.2f), 
-            function.maximumValue);
     }
 }
 }

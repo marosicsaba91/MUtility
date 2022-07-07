@@ -1,14 +1,31 @@
 ﻿using System;
-using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MUtility
 {
 public class ConditionalFormattingAttribute : FormattingAttribute
 {
 	public readonly string[] conditionMembers;
-
+	readonly List<Func<object, bool>> _conditionGetters = new List<Func<object, bool>>();
+	bool _initialized;
+	
+	public void Initialize(object owner)
+	{
+		if (_initialized) return;
+		_conditionGetters.Clear();
+		foreach (string conditionMemberName in conditionMembers)
+		{
+			InspectorDrawingUtility.TryGetAGetterFromMember(owner.GetType(), conditionMemberName, out Func<object, bool> condition);
+			if(condition!= null)
+				_conditionGetters.Add(condition);
+		} 
+		_initialized = true;
+	}
 	public ConditionalFormattingAttribute(params string[] conditionMembers) =>
 		this.conditionMembers = conditionMembers;
+
+	public bool CheckConditions(object owner) =>_conditionGetters.All(t => t.Invoke(owner));
 }
 
 public class ShowIfAttribute : ConditionalFormattingAttribute
@@ -30,33 +47,5 @@ public class DisableIfAttribute : ConditionalFormattingAttribute
 }
 
 public class ReadOnlyAttribute : FormattingAttribute { }
-
-
-public static class FormattingAttributeHelper
-{
-	public static bool CheckConditions(this ConditionalFormattingAttribute attribute, object owner) =>
-		CheckConditions(owner, attribute.conditionMembers);
- 
-	public static bool CheckConditions(object owner, string[] memberNames)
-	{
-		if (memberNames.IsNullOrEmpty()) return true;
-
-		Type ownerType = owner.GetType();
-		foreach (string memberName in memberNames)
-		{
-			if (memberName.IsNullOrEmpty())
-				Debug.LogWarning($"No condition name in type {ownerType}");
-			else if (InspectorDrawingUtility.TryGetAGetterFromMember(owner, memberName, out Func<bool> getter))
-			{
-				bool enabled = getter.Invoke();
-				if(!enabled) return false;
-			} 
-			else
-				Debug.LogWarning($"No member named {memberName} in type {ownerType}");
-		}
-
-		return true;
-	}
-}
 
 }

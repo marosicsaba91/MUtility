@@ -62,7 +62,7 @@ public static class SerializedPropertyExtensions
     /// Gets the object the property represents.
     public static object GetObjectOfProperty(this SerializedProperty prop)
     {
-        if (prop == null) return null;
+        if (prop == null) return null; 
 
         string path = prop.propertyPath.Replace(".Array.data[", "[");
         object obj = prop.serializedObject.targetObject;
@@ -123,23 +123,6 @@ public static class SerializedPropertyExtensions
             EditorUtility.SetDirty(target);
     }
 
-    /// Gets the object that the property is a member of
-    public static object GetObjectWithProperty(this SerializedProperty prop)
-    {
-        string path = prop.propertyPath.Replace(".Array.data[", "[");
-        object obj = prop.serializedObject.targetObject;
-        string[] elements = path.Split('.');
-        foreach (string element in elements.Take(elements.Length - 1))
-        {
-            if (TryDecomposeIndexedName(element, out int index, out string elementName))
-                obj = GetValue_(obj, elementName, index);
-            else
-                obj = GetValue_(obj, element);
-        }
-
-        return obj;
-    }
-
     static bool TryDecomposeIndexedName(string indexedName, out int index, out string name)
     {
         if (!indexedName.Contains("["))
@@ -156,9 +139,13 @@ public static class SerializedPropertyExtensions
         index = Convert.ToInt32(insideBrackets);
         return true;
     }
-    
-    public static  object GetValue(this SerializedProperty property) => 
-        GetFieldInfo(property).GetValue(property.serializedObject.targetObject);
+
+    public static object GetValue(this SerializedProperty property)
+    {
+        Object target = property.serializedObject.targetObject;
+        FieldInfo fieldInfo = GetFieldInfo(property);
+        return fieldInfo.GetValue(target);
+    }
 
     static object GetValue_(object source, string name)
     {
@@ -398,37 +385,17 @@ public static class SerializedPropertyExtensions
         return cnt;
     }
 
-    public static FieldInfo GetFieldInfo(this SerializedProperty prop)
+    
+    public static FieldInfo GetFieldInfo(this SerializedProperty property)
     {
-        if (prop == null) return null;
-
-        Type tp = GetTargetType(prop.serializedObject);
-        if (tp == null) return null;
-
-        string path = prop.propertyPath.Replace(".Array.data[", "[");
-        string[] elements = path.Split('.');
-        foreach (string element in elements.Take(elements.Length - 1))
-        {
-            FieldInfo field;
-            if (element.Contains("["))
-            {
-                string elementName = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
-
-                field = tp.GetMember(elementName, MemberTypes.Field,
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault() as FieldInfo;
-                if (field == null) return null;
-                tp = field.FieldType;
-            }
-            else
-            {
-                field = tp.GetMember(element, MemberTypes.Field,
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault() as FieldInfo;
-                if (field == null) return null;
-                tp = field.FieldType;
-            }
-        }
-
-        return null;
+        const BindingFlags bindings =
+            BindingFlags.Instance |
+            BindingFlags.Static |
+            BindingFlags.Public |
+            BindingFlags.NonPublic;
+        Object targetObject = property.serializedObject.targetObject;
+        Type targetType = targetObject.GetType();
+        return targetType.GetField(property.propertyPath, bindings);
     }
 
     public static bool IsExpandable(this SerializedProperty property)
@@ -443,13 +410,9 @@ public static class SerializedPropertyExtensions
             return false;
         return true;
     }
-
-    // Found here http://answers.unity.com/answers/425602/view.html
-    // Update here https://gist.github.com/AdrienVR/1548a145c039d2fddf030ebc22f915de to support inherited private members.
-    /// <summary>
-    /// Get parent object of SerializedProperty
-    /// </summary>
-    public static object GetParent(this SerializedProperty prop)
+ 
+    /// Gets the object that the property is a member of
+    public static object GetObjectWithProperty(this SerializedProperty prop)
     {
         string path = prop.propertyPath.Replace(".Array.data[", "[");
         object obj = prop.serializedObject.targetObject;
@@ -471,6 +434,7 @@ public static class SerializedPropertyExtensions
 
         return obj;
 
+        
 
         object GetValueAt(object source, string name, int index)
         {
@@ -540,6 +504,10 @@ public static class SerializedPropertyExtensions
                 return string.Empty;
         }
     }
+    
+    public static int GetUniquePropertyId(this SerializedProperty property) 
+        => property.serializedObject.targetObject.GetType().GetHashCode() 
+           + property.propertyPath.GetHashCode();
 }
 }
 #endif

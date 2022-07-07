@@ -22,13 +22,13 @@ public class CurveEditorPreview
     }
 
 
-    static Material _mat;
+    static Material mat;
     static Material Mat
     {
         get{
-            if(_mat == null)
-                _mat = new Material(Shader.Find("Hidden/Internal-Colored"));
-            return _mat;
+            if(mat == null)
+                mat = new Material(Shader.Find("Hidden/Internal-Colored"));
+            return mat;
         }
     } 
 
@@ -48,8 +48,8 @@ public class CurveEditorPreview
         if (function == null || function.keys.Length == 0)
             return new Rect(x: -1, y: -1, width: 2, height: 2);
 
-        var min = new Vector2(float.MaxValue, float.MaxValue);
-        var max = new Vector2(float.MinValue, float.MinValue);
+        Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
+        Vector2 max = new Vector2(float.MinValue, float.MinValue);
 
         foreach (Keyframe keyframe in function.keys)
         {
@@ -83,7 +83,7 @@ public class CurveEditorPreview
 
         Rect ranges = GetUndistortedArea(position, mustContainArea);
 
-        var showValuePreview = false;
+        bool showValuePreview = false;
         Vector2 valuePreviewPixel = Vector2.zero;
         float valuePreviewY = 0;
         float valuePreviewX = 0;
@@ -145,7 +145,7 @@ public class CurveEditorPreview
 
         if (showValuePreview)
         {
-            var r = new Rect(
+            Rect r = new Rect(
                 Event.current.mousePosition.x - valueLabelWidth, valuePreviewPixel.y - valueLabelHeight / 2,
                 valueLabelWidth, valueLabelHeight
             );
@@ -199,7 +199,7 @@ public class CurveEditorPreview
     static Rect GetUndistortedArea(Rect position, Rect mustContainArea)
     {
         float ratio = position.width / position.height;
-        var ranges = new Rect
+        Rect ranges = new Rect
         {
             size = ratio < mustContainArea.width / mustContainArea.height
                 ? new Vector2(mustContainArea.width, mustContainArea.width / ratio)
@@ -220,7 +220,7 @@ public class CurveEditorPreview
         const float bigGridAlpha = 0.5f;
         const float smallGridAlpha = 0.25f;
         
-        var axisColor = new Color(color.r, color.g, color.b, axisAlpha);
+        Color axisColor = new Color(color.r, color.g, color.b, axisAlpha);
 
         float minSize = Mathf.Min(ranges.width, ranges.height);
         float log = Mathf.Log(minSize, logBase);
@@ -229,8 +229,8 @@ public class CurveEditorPreview
         float bigStep = Mathf.Pow(logBase, exponentOf10);
         float smallStep = bigStep / smallInBig;
 
-        var bigGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(bigGridAlpha, smallGridAlpha, rate));
-        var smallGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(smallGridAlpha, 0, rate));
+        Color bigGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(bigGridAlpha, smallGridAlpha, rate));
+        Color smallGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(smallGridAlpha, 0, rate));
 
         if(!showMargin) return;
         
@@ -283,7 +283,7 @@ public class CurveEditorPreview
             position.x,
             position.x + position.width, rate);
         int xPixel = Mathf.RoundToInt(x - valueLabelWidth / 2f);
-        var pos = new Rect(xPixel, position.y - valueLabelHeight, valueLabelWidth, valueLabelHeight);
+        Rect pos = new Rect(xPixel, position.y - valueLabelHeight, valueLabelWidth, valueLabelHeight);
         EditorGUI.LabelField(pos, NormalString(value), centerRightAlignedText);
     }
 
@@ -303,7 +303,7 @@ public class CurveEditorPreview
             position.y,
             position.y + position.height, rate);
         int yPixel = Mathf.RoundToInt(y - valueLabelHeight / 2f);
-        var pos = new Rect(position.x - valueLabelWidth, yPixel, valueLabelWidth, valueLabelHeight);
+        Rect pos = new Rect(position.x - valueLabelWidth, yPixel, valueLabelWidth, valueLabelHeight);
         EditorGUI.LabelField(pos, NormalString(value), upperRightAlignedText);
     }
 

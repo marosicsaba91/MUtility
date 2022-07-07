@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace MUtility
+﻿namespace MUtility
 {
     public struct HandlePoint
     {

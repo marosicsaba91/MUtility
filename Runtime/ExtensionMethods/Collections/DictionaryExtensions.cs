@@ -5,6 +5,12 @@ namespace MUtility
 {
 public static class DictionaryExtensions
 {
+    public static bool IsNullOrEmpty<TKey, TValue>(this Dictionary<TKey, TValue> source)
+        => source == null || source.Count == 0;
+
+    public static bool NotNullOrEmpty<TKey, TValue>(this Dictionary<TKey, TValue> source)
+        => !source.IsNullOrEmpty();
+
     public delegate bool Predicate<in TKey, in TValue>(TKey key, TValue value);
 
     public static void CopyTo<TKey, TValue>(this Dictionary<TKey, TValue> source, Dictionary<TKey, TValue> destination)

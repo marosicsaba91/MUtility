@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MUtility
 {
-public static class CustomDrawerUtility
+public static class InspectorDrawingUtility
 {
 	const BindingFlags bindings =
 		BindingFlags.Instance |
@@ -128,7 +128,36 @@ public static class CustomDrawerUtility
 	
 	
 	
-	
+	public static bool TryGetAGetterFromMember<T>(Type ownerType, string memberName, out Func<object, T> getter)
+	{
+		if (memberName.IsNullOrEmpty())
+		{
+			getter = default;
+			return false;
+		}
+ 
+		if (TryGetMethodOfType<T>(ownerType, memberName, out MethodInfo methodInfo))
+		{
+			getter = o=> (T) methodInfo.Invoke(o, Array.Empty<object>());
+			return true;
+		}
+		if (TryGetFieldInfoOfType<T>(ownerType, memberName, out FieldInfo fieldInfo))
+		{
+			getter =o=>(T) fieldInfo.GetValue(o);
+			return true;
+		}
+		if (TryGetPropertyInfoOfType<T>(ownerType, memberName, out PropertyInfo propertyInfo))
+		{
+			getter = o=> (T)propertyInfo.GetValue(o);
+			return true;
+		}
+		Debug.LogWarning(
+			$"No member found in type: {ownerType}   with name:{memberName}   and type: {typeof(T)}");
+
+		getter = default;
+		return false;
+	}
+
 	public static bool TryGetMethodOfType<T>(Type ownerType, string name, out MethodInfo methodInfo)
 	{
 		MethodInfo method = ownerType.GetMethod(name, bindings);

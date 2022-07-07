@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace MUtility
 {
@@ -32,7 +31,7 @@ public enum MessageSize
 	Huge
 }
 
-[Serializable] public class InspectorMessage 
+[Serializable] public class DisplayMessage 
 { 
 	const MessageType defaultMessageType = MessageType.Info;
 	const MessageFormat defaultMessagePosition = MessageFormat.FullLength;	
@@ -45,9 +44,9 @@ public enum MessageSize
 	public readonly string textProviderMember;
 	public readonly string text;
  
-	Func<string> _textGetter; 
+	Func<object, string> _textGetter; 
 	
-	public InspectorMessage(string text, bool useTextAsGetterMemberName = false)
+	public DisplayMessage(string text, bool useTextAsGetterMemberName = false)
 	{
 		if(useTextAsGetterMemberName)
 			textProviderMember = text;
@@ -121,12 +120,12 @@ public enum MessageSize
 	public void Initialise(object owner)
 	{ 
 		if(textProviderMember.NotNullOrEmpty() && _textGetter == null) 
-			InspectorDrawingUtility.TryGetAGetterFromMember(owner, textProviderMember, out _textGetter); 
+			InspectorDrawingUtility.TryGetAGetterFromMember(owner.GetType(), textProviderMember, out _textGetter); 
 	}
 	
-	public string[] GetLines()
+	public string[] GetLines(object owner)
 	{
-		string t = _textGetter != null ? _textGetter.Invoke() : text;
+		string t = _textGetter != null ? _textGetter.Invoke(owner) : text;
 		
 		if(t.IsNullOrEmpty())
 			return Array.Empty<string>();

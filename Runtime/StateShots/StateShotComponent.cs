@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -12,8 +11,11 @@ public class StateShotComponent : MonoBehaviour
 { 
     public StateShot stateFile;
     bool _recordAtFixedUpdate = false;
-    [SerializeField] RecordButton recordState;
-    [SerializeField] ApplyButton apply;
+    
+    [EnableIf(nameof(HasStateFile))]
+    [SerializeField] DisplayField recordState = new DisplayField(nameof(RecordStateAsync));
+    [EnableIf(nameof(HasStateFile))]
+    [SerializeField] DisplayField apply = new DisplayField(nameof(ApplyState));
     
     public bool HasStateFile => stateFile != null;
     
@@ -47,23 +49,5 @@ public class StateShotComponent : MonoBehaviour
     }
 
     void ApplyState() => stateFile.ApplyToObject(gameObject);
-    
-        
-    [Serializable]
-    class RecordButton : InspectorButton<StateShotComponent>
-    {
-        protected override void OnClick(StateShotComponent obj) => obj.RecordStateAsync();
-
-        protected override bool IsEnabled(StateShotComponent obj) => obj.HasStateFile;
-    }
-    
-            
-    [Serializable]
-    class ApplyButton : InspectorButton<StateShotComponent>
-    {
-        protected override void OnClick(StateShotComponent obj) => obj.ApplyState();
-
-        protected override bool IsEnabled(StateShotComponent obj) => obj.HasStateFile;
-    }
 }
 }

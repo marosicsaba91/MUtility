@@ -8,7 +8,6 @@ public class ElasticEasingFunction : EasingFunctionBase
 {
     [Min(0)] public float sinusoidalFrequency = 3;
     [Min(0)] public float sinusoidalAmplitude = 1;
-    [SerializeField] CurvePreview curvePreview;
 
     protected override float EaseIn01Evaluate(float t)
     {

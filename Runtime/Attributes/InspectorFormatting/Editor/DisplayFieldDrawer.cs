@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 namespace MUtility
 {
 [CustomPropertyDrawer(typeof(DisplayField))]
-public class InspectorMemberDrawer : PropertyDrawer
+public class DisplayFieldDrawer : PropertyDrawer
 {
     const BindingFlags bindings =
           BindingFlags.Instance |
@@ -51,8 +51,8 @@ public class InspectorMemberDrawer : PropertyDrawer
             Rect labelRect = EditorHelper.LabelRect(position);
             property.isExpanded = EditorGUI.Foldout(labelRect, isExpanded, label);
 
-            Vector2 size = new Vector2(2, 2);
-            Rect area = new Rect(_displayField.functionOffset - (size / 2f), size);
+            Vector2 size = new Vector2(1, 1);
+            Rect area = new Rect(- (size / 2f), size);
             _curvePreview.zoom = _displayField.functionZoom ;
             _curvePreview.offset = _displayField.functionOffset;
             _curvePreview.Draw(content, _floatFunction, area, EditorHelper.functionColor, isExpanded); 
@@ -85,7 +85,7 @@ public class InspectorMemberDrawer : PropertyDrawer
             return;
         }
 
-        Error(position,  label, $"No valid member named: {_displayField.GetMemberName()}"); 
+        Error(position,  label, $"No valid member named: {_displayField.memberName}"); 
     }
 
     object AnythingField(Rect position, Type t, object value, GUIContent label)
@@ -158,11 +158,11 @@ public class InspectorMemberDrawer : PropertyDrawer
     {
         
         _displayField = (DisplayField)property.GetObjectOfProperty();
-        if (_memberName != _displayField.GetMemberName())
+        if (_memberName != _displayField.memberName)
         {
             _owner = property.GetObjectWithProperty();
             _ownerType = _owner.GetType();
-            _memberName = _displayField.GetMemberName();
+            _memberName = _displayField.memberName;
             if (TryGetMethodInfo(_ownerType, _memberName, out _buttonMethodInfo))
                 _type = _buttonMethodInfo.ReturnType;
             else if(TryGetFunction(_owner, _ownerType, _memberName,  out _floatFunction, out _curvePreview))

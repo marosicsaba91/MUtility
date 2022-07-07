@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using MUtility;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Utility_Examples
 {
-	public partial class Temperature : MonoBehaviour
-	{
-		[Serializable]
-		class Direction2D : InspectorEnum<MUtility.Direction2D> { }
+	public class Temperature : MonoBehaviour
+	{ 
 
 		const float zeroKelvinInCelsius = -273.15f;
 		const float kelvinToFahrenheitMultiplier = 1.8f;
@@ -24,51 +21,39 @@ namespace Utility_Examples
 		[SerializeField] Position3 pos;
 		[SerializeField] List<Position3> positions;
 
-		[SerializeField] bool iAmAmerican = false;
+		[SerializeField] bool iAmAmerican;
 
-		[SerializeField] TemperatureKelvin temperatureInKelvin = 
-			new TemperatureKelvin {Value = -zeroKelvinInCelsius, valueChanged = TemperatureChanged};
+		[SerializeField] DisplayField temperatureInKelvin = new DisplayField(nameof(TemperatureInKelvin));
 		
-		[SerializeField] TemperatureCelsius temperatureInCelsius;
-		[SerializeField] TemperatureFahrenheit temperatureInFahrenheit;
-		[SerializeField] ResetTemperatureButton resetTemperature;
-		[SerializeField] InspectorButton increaseTemperature =
-			new InspectorButton {onClicked = IncreaseTemperatureClicked};
+		[HideIf(nameof(iAmAmerican))]
+		[SerializeField] DisplayField temperatureInCelsius = new DisplayField(nameof(TemperatureInCelsius));
+		[ShowIf(nameof(iAmAmerican))]
+		[SerializeField] DisplayField temperatureInFahrenheit = new DisplayField(nameof(TemperatureInFahrenheit)); 
+		[SerializeField] DisplayField increaseTemperature = new DisplayField(nameof(IncreaseTemperatureClicked));
+		[SerializeField] DisplayMessage legacyInspectorMessage = new DisplayMessage("AAAA");
+		
+		[SerializeField] DisplayField testReference = new DisplayField(nameof(testCollider));
 
-		[FormerlySerializedAs("testEnumProperty")]
+		Collider testCollider;
 		[Space]
-		[SerializeField] Direction2D testEnum = new Direction2D {valueChanged = OnEnumChanged};
+		[SerializeField] Direction2D testEnum ;
 
-		static void OnEnumChanged(object parent, MUtility.Direction2D oldValue, MUtility.Direction2D newValue)
-		{
-			Debug.Log($"Enum Changed:     {oldValue}  =>  {newValue}");
-		}
-
-
-		static void IncreaseTemperatureClicked(object parentObject) =>
-			((Temperature)parentObject).temperatureInCelsius.Value++;
-
-		[SerializeField] InspectorInt someInspectorInt; 
-		[SerializeField] OneDigit oneDigit; 
-		
-		static void TemperatureChanged(Temperature parent, float oldValue, float newValue) =>
-			Debug.Log($"New temperature: {newValue}");
-		
-
+		[SerializeField, HideInInspector] float temperatureInK;
+  
 		public float TemperatureInKelvin
 		{
-			get => temperatureInKelvin.Value;
-			set => temperatureInKelvin.Value = value;
+			get => temperatureInK;
+			set => temperatureInK = Mathf.Max(0, value);
 		}
 		
 		public float TemperatureInCelsius
 		{
 			get
 			{
-				float result = temperatureInKelvin + zeroKelvinInCelsius;
+				float result = temperatureInK + zeroKelvinInCelsius;
 				return Math.Abs(result) < epsilon ? 0 : result;
 			}
-			set => temperatureInKelvin.Value = value - zeroKelvinInCelsius;
+			set => temperatureInK = value - zeroKelvinInCelsius;
 		}
 
 		public float TemperatureInFahrenheit
@@ -78,12 +63,17 @@ namespace Utility_Examples
 				float result = TemperatureInCelsius * kelvinToFahrenheitMultiplier + zeroCelsiusZeroFahrenheitDifference;
 				return Math.Abs(result) < epsilon ? 0 : result;
 			}
-			set => temperatureInKelvin.Value = 
+			set => temperatureInK = 
 				(value - zeroCelsiusZeroFahrenheitDifference) / kelvinToFahrenheitMultiplier - zeroKelvinInCelsius;
 		}
+		
 
-		bool IsDefault => Math.Abs(temperatureInKelvin + zeroKelvinInCelsius) < epsilon;
+		void IncreaseTemperatureClicked() => TemperatureInCelsius++;
+		
+		static void TemperatureChanged(Temperature parent, float oldValue, float newValue) =>
+			Debug.Log($"New temperature: {newValue}");
+		 
 
-		void ResetTemperature() => temperatureInKelvin.Value = -zeroKelvinInCelsius;
+		void ResetTemperature() => TemperatureInKelvin = -zeroKelvinInCelsius;
 	}
 }

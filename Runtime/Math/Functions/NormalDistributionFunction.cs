@@ -9,7 +9,7 @@ public class NormalDistributionFunction
 {
     public float mean = 0;
     [SerializeField, Min(0)] float stdDev = 1;
-    [SerializeField] CurvePreview preview;
+    [SerializeField] DisplayField curvePreview = new DisplayField(nameof(Evaluate));
 
     public float StdDev
     {
@@ -49,20 +49,6 @@ public class NormalDistributionFunction
         float p = -0.5f * n * n;
 
         return Mathf.Pow(e, p) / (stdDev * sqrt2PI);
-    }
-    
-    [Serializable]
-    protected class CurvePreview : InspectorCurve<NormalDistributionFunction>
-    {
-        protected override float Evaluate(NormalDistributionFunction function, float time) => function.Evaluate(time);
-
-        protected override Rect DefaultArea(NormalDistributionFunction function)
-        {
-            float h = function.MaxY;
-            float w = 6 * function.stdDev; 
-            return new Rect(function.mean - w / 2, y:0, w, h);
-        }
-
-    }
+    } 
 }
 }

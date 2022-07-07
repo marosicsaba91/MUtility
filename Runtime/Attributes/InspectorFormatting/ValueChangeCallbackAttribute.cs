@@ -1,14 +1,44 @@
 ﻿using System;
+using System.Reflection;
+using UnityEngine;
 
 namespace MUtility
 {
-[AttributeUsage(AttributeTargets.Field)]
-public class ChangeCallbackAttribute : FormattingAttribute
+public class ValueChangeCallbackAttribute : FormattingAttribute
 {
-	public string callbackMember;
+	readonly string _callbackMember;
+	MethodInfo _methodInfo;
+	int _parameterLength;
+	bool _initialized;
 
-	public ChangeCallbackAttribute(string callbackName)
-		=> callbackMember = callbackName;
- 
+	public ValueChangeCallbackAttribute(string callbackName)
+	{
+		_callbackMember = callbackName;
+		_initialized = false;
+	}
+
+	public void Initialize(object owner)
+	{
+		if (_initialized) return;
+		
+		_methodInfo = owner.GetType().GetMethod(_callbackMember, bindings);
+		if(_methodInfo!= null)
+			_parameterLength = _methodInfo.GetParameters().Length;
+		_initialized = true;
+	}
+
+	public void CallBack(object target, object oldValue, object newValue)
+	{
+			if (_methodInfo == null)
+				Debug.LogWarning("No callback method");
+			else if (_parameterLength == 0)
+				_methodInfo.Invoke(target, Array.Empty<object>());
+			else if (_parameterLength == 1)
+				_methodInfo.Invoke(target, new []{oldValue});
+			else if (_parameterLength == 2)
+				_methodInfo.Invoke(target, new []{oldValue, newValue});
+			else
+				Debug.LogWarning($"Too many parameters  to the callback function: {_methodInfo.Name}");
+	}
 }
 }
