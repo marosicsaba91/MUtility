@@ -55,13 +55,13 @@ public class AttributeTester : MonoBehaviour
     [ShowIf(nameof(showCondition1), nameof(TestConditionalMethod))]
     [EnableIf( nameof(TestConditionalProperty))]
     [Color( nameof(fieldColor))]
-    [SerializeField] DisplayField myButton= new DisplayField(nameof(TestMethod));
-    [SerializeField] DisplayField myField = new DisplayField(nameof(formattedField));
-    [SerializeField] DisplayField myProperty = new DisplayField(nameof(TestConditionalProperty));
+    [SerializeField] DisplayMember myButton= new DisplayMember(nameof(TestMethod));
+    [SerializeField] DisplayMember myMember = new DisplayMember(nameof(formattedField));
+    [SerializeField] DisplayMember myProperty = new DisplayMember(nameof(TestConditionalProperty));
     [Space]
     [Color(nameof(FieldColor))]
-    [SerializeField] DisplayField myProperty2 = new DisplayField(nameof(TestStringProperty));
-    [SerializeField] DisplayField myProperty3 = new DisplayField(nameof(r));
+    [SerializeField] DisplayMember myProperty2 = new DisplayMember(nameof(TestStringProperty));
+    [SerializeField] DisplayMember myProperty3 = new DisplayMember(nameof(r));
     [HideIf(nameof(showCondition2))]
     [SerializeField] int a; 
     [ShowIf(nameof(showCondition2))]
@@ -74,9 +74,9 @@ public class AttributeTester : MonoBehaviour
     [HideIf(nameof(showCondition2))]
     [SerializeField] int f;
     [SerializeField] RectInt rrri;
-    [SerializeField] DisplayField myProperty4 = new DisplayField(nameof(b));
-    [SerializeField] DisplayField myProperty5 = new DisplayField(nameof(v));
-    [SerializeField] DisplayField functionTest = new DisplayField(nameof(ModSin));
+    [SerializeField] DisplayMember myProperty4 = new DisplayMember(nameof(b));
+    [SerializeField] DisplayMember myProperty5 = new DisplayMember(nameof(v));
+    [SerializeField] DisplayMember functionTest = new DisplayMember(nameof(ModSin), true);
 
     [Color(DisplayColor.Red)]
     [SerializeField] DisplayMessage message = new DisplayMessage(nameof(GetString), false)

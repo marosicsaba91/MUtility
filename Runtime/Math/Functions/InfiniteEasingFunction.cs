@@ -8,7 +8,7 @@ public class InfiniteEasingFunction
 {
     [SerializeField, Range(0, 1)] float linearPart = 0.5f;
     [SerializeField, Min(0)] float maximumValue = 1;
-    [SerializeField] DisplayField curvePreview = new DisplayField(nameof(Evaluate));
+    [SerializeField] DisplayMember curvePreview = new DisplayMember(nameof(Evaluate));
 
     public float LinearPart
     {

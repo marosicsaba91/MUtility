@@ -9,7 +9,7 @@ public class NormalDistributionFunction
 {
     public float mean = 0;
     [SerializeField, Min(0)] float stdDev = 1;
-    [SerializeField] DisplayField curvePreview = new DisplayField(nameof(Evaluate));
+    [SerializeField] DisplayMember curvePreview = new DisplayMember(nameof(Evaluate));
 
     public float StdDev
     {

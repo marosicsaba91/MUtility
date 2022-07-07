@@ -22,7 +22,7 @@ public abstract class EasingFunctionBase
 
     public Increasing increasing = Increasing.Up;
     public Smooth smooth = Smooth.FullSmooth; 
-    [SerializeField] DisplayField curvePreview = new DisplayField(nameof(Evaluate));
+    [SerializeField] DisplayMember curvePreview = new DisplayMember(nameof(Evaluate));
 
     public Rect DefaultArea
     {

@@ -13,9 +13,9 @@ public class StateShotComponent : MonoBehaviour
     bool _recordAtFixedUpdate = false;
     
     [EnableIf(nameof(HasStateFile))]
-    [SerializeField] DisplayField recordState = new DisplayField(nameof(RecordStateAsync));
+    [SerializeField] DisplayMember recordState = new DisplayMember(nameof(RecordStateAsync));
     [EnableIf(nameof(HasStateFile))]
-    [SerializeField] DisplayField apply = new DisplayField(nameof(ApplyState));
+    [SerializeField] DisplayMember apply = new DisplayMember(nameof(ApplyState));
     
     public bool HasStateFile => stateFile != null;
     

@@ -23,16 +23,16 @@ namespace Utility_Examples
 
 		[SerializeField] bool iAmAmerican;
 
-		[SerializeField] DisplayField temperatureInKelvin = new DisplayField(nameof(TemperatureInKelvin));
+		[SerializeField] DisplayMember temperatureInKelvin = new DisplayMember(nameof(TemperatureInKelvin));
 		
 		[HideIf(nameof(iAmAmerican))]
-		[SerializeField] DisplayField temperatureInCelsius = new DisplayField(nameof(TemperatureInCelsius));
+		[SerializeField] DisplayMember temperatureInCelsius = new DisplayMember(nameof(TemperatureInCelsius));
 		[ShowIf(nameof(iAmAmerican))]
-		[SerializeField] DisplayField temperatureInFahrenheit = new DisplayField(nameof(TemperatureInFahrenheit)); 
-		[SerializeField] DisplayField increaseTemperature = new DisplayField(nameof(IncreaseTemperatureClicked));
+		[SerializeField] DisplayMember temperatureInFahrenheit = new DisplayMember(nameof(TemperatureInFahrenheit)); 
+		[SerializeField] DisplayMember increaseTemperature = new DisplayMember(nameof(IncreaseTemperatureClicked));
 		[SerializeField] DisplayMessage legacyInspectorMessage = new DisplayMessage("AAAA");
 		
-		[SerializeField] DisplayField testReference = new DisplayField(nameof(testCollider));
+		[SerializeField] DisplayMember testReference = new DisplayMember(nameof(testCollider));
 
 		Collider testCollider;
 		[Space]

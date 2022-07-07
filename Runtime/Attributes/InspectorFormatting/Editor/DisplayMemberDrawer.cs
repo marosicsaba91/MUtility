@@ -8,8 +8,8 @@ using Object = UnityEngine.Object;
 
 namespace MUtility
 {
-[CustomPropertyDrawer(typeof(DisplayField))]
-public class DisplayFieldDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(DisplayMember))]
+public class DisplayMemberDrawer : PropertyDrawer
 {
     const BindingFlags bindings =
           BindingFlags.Instance |
@@ -21,7 +21,7 @@ public class DisplayFieldDrawer : PropertyDrawer
 
     Type _type;
     Type _ownerType;
-    DisplayField _displayField;
+    DisplayMember _displayMember;
     MethodInfo _buttonMethodInfo;
     Func<float, float> _floatFunction;
     CurveEditorPreview _curvePreview = new CurveEditorPreview();
@@ -34,7 +34,11 @@ public class DisplayFieldDrawer : PropertyDrawer
     {
         if(_serializedObject == null)
             return;
-        
+
+        label = _displayMember.useMemberNameAsLabel 
+            ? new GUIContent(ObjectNames.NicifyVariableName(_displayMember.memberName))
+            : label;
+
         if (_buttonMethodInfo != null)
         {
             if (GUI.Button(position, label))
@@ -53,11 +57,11 @@ public class DisplayFieldDrawer : PropertyDrawer
 
             Vector2 size = new Vector2(1, 1);
             Rect area = new Rect(- (size / 2f), size);
-            _curvePreview.zoom = _displayField.functionZoom ;
-            _curvePreview.offset = _displayField.functionOffset;
+            _curvePreview.zoom = _displayMember.functionZoom ;
+            _curvePreview.offset = _displayMember.functionOffset;
             _curvePreview.Draw(content, _floatFunction, area, EditorHelper.functionColor, isExpanded); 
-            _displayField.functionOffset = _curvePreview.offset;
-            _displayField.functionZoom =_curvePreview.zoom;
+            _displayMember.functionOffset = _curvePreview.offset;
+            _displayMember.functionZoom =_curvePreview.zoom;
             
             return;
         }
@@ -85,7 +89,7 @@ public class DisplayFieldDrawer : PropertyDrawer
             return;
         }
 
-        Error(position,  label, $"No valid member named: {_displayField.memberName}"); 
+        Error(position,  label, $"No valid member named: {_displayMember.memberName}"); 
     }
 
     object AnythingField(Rect position, Type t, object value, GUIContent label)
@@ -138,7 +142,7 @@ public class DisplayFieldDrawer : PropertyDrawer
             _memberName = null;
         }
 
-        Error(position,  label, $" Type: {t} is not supported type for DisplayField!");
+        Error(position,  label, $" Type: {t} is not supported type for DisplayMember!");
 
         return null;
     }
@@ -157,12 +161,12 @@ public class DisplayFieldDrawer : PropertyDrawer
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         
-        _displayField = (DisplayField)property.GetObjectOfProperty();
-        if (_memberName != _displayField.memberName)
+        _displayMember = (DisplayMember)property.GetObjectOfProperty();
+        if (_memberName != _displayMember.memberName)
         {
             _owner = property.GetObjectWithProperty();
             _ownerType = _owner.GetType();
-            _memberName = _displayField.memberName;
+            _memberName = _displayMember.memberName;
             if (TryGetMethodInfo(_ownerType, _memberName, out _buttonMethodInfo))
                 _type = _buttonMethodInfo.ReturnType;
             else if(TryGetFunction(_owner, _ownerType, _memberName,  out _floatFunction, out _curvePreview))
