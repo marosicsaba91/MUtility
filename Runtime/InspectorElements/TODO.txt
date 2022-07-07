@@ -1,7 +1,0 @@
-Add Popup Functionality to all InspectorProperty
-InspectorEnumPopup => EnumProperty
-
-SettersFuntionsTo (Color, Text, IsEnabled ...) 
-
-
-InspectorCurve => CurveProperty
