@@ -392,7 +392,8 @@ public static class SerializedPropertyExtensions
             BindingFlags.Instance |
             BindingFlags.Static |
             BindingFlags.Public |
-            BindingFlags.NonPublic;
+            BindingFlags.NonPublic |
+            BindingFlags.FlattenHierarchy;
         Object targetObject = property.serializedObject.targetObject;
         Type targetType = targetObject.GetType();
         return targetType.GetField(property.propertyPath, bindings);

@@ -11,12 +11,6 @@ namespace MUtility
 [CustomPropertyDrawer(typeof(DisplayMember))]
 public class DisplayMemberDrawer : PropertyDrawer
 {
-    const BindingFlags bindings =
-          BindingFlags.Instance |
-          BindingFlags.Static | 
-          BindingFlags.Public |
-          BindingFlags.NonPublic;
-    
     string _memberName;
 
     Type _type;
@@ -200,9 +194,11 @@ public class DisplayMemberDrawer : PropertyDrawer
         return EditorGUIUtility.singleLineHeight;
     }
 
+    static BindingFlags Binding => InspectorDrawingUtility.bindings;
+
     public static bool TryGetMethodInfo(Type ownerType, string name, out MethodInfo methodInfo)
     {
-        MethodInfo method = ownerType.GetMethod(name, bindings);
+        MethodInfo method = ownerType.GetMethod(name, Binding);
 
         if (method != null && method.GetParameters().IsNullOrEmpty())
         {
@@ -219,7 +215,7 @@ public class DisplayMemberDrawer : PropertyDrawer
         out Func<float, float> function, out CurveEditorPreview curve)
     {
         MethodInfo func = ownerType
-            .GetMethods(bindings)
+            .GetMethods(Binding)
             .FirstOrDefault(m => 
                 m.Name == name &&
                 (m.ReturnType == typeof(float) || m.ReturnType == typeof(int)) &&
@@ -249,13 +245,13 @@ public class DisplayMemberDrawer : PropertyDrawer
     
     public static bool TryGetFieldInfo(Type ownerType, string name, out FieldInfo fieldInfo)
     {
-        fieldInfo = ownerType.GetField(name, bindings);
+        fieldInfo = ownerType.GetField(name, Binding);
         return fieldInfo != null; 
     }
     
     public static bool TryGetPropertyInfo(Type ownerType, string name, out PropertyInfo propertyInfo)
     {
-        PropertyInfo property = ownerType.GetProperty(name, bindings);
+        PropertyInfo property = ownerType.GetProperty(name, Binding);
 
         if (property != null && property.GetMethod != null)
         {

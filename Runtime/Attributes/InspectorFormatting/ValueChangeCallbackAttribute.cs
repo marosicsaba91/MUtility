@@ -17,11 +17,13 @@ public class ValueChangeCallbackAttribute : FormattingAttribute
 		_initialized = false;
 	}
 
+	static BindingFlags Binding => InspectorDrawingUtility.bindings;
+
 	public void Initialize(object owner)
 	{
 		if (_initialized) return;
 		
-		_methodInfo = owner.GetType().GetMethod(_callbackMember, bindings);
+		_methodInfo = owner.GetType().GetMethod(_callbackMember, Binding);
 		if(_methodInfo!= null)
 			_parameterLength = _methodInfo.GetParameters().Length;
 		_initialized = true;

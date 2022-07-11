@@ -9,11 +9,12 @@ namespace MUtility
 {
 public static class InspectorDrawingUtility
 {
-	const BindingFlags bindings =
+	public const BindingFlags bindings =
 		BindingFlags.Instance |
 		BindingFlags.Static |
 		BindingFlags.Public |
-		BindingFlags.NonPublic;
+		BindingFlags.NonPublic | 
+		BindingFlags.FlattenHierarchy;
 	
 	/// <summary>
 	/// Key is Associated with drawer type (the T in [CustomPropertyDrawer(typeof(T))])
