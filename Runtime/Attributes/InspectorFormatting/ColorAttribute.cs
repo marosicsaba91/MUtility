@@ -73,10 +73,12 @@ public class ColorAttribute : FormattingAttribute
     
     public void Initialize(object owner)
     {
+#if UNITY_EDITOR
         if (_initialized) return;
 
         InspectorDrawingUtility.TryGetAGetterFromMember(owner.GetType(), _colorMember, out _colorGetter); 
         _initialized = true;
+#endif
     }
 
     public bool TryGetColor(object owner, out Color color)

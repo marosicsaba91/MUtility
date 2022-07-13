@@ -119,8 +119,10 @@ public enum MessageSize
 
 	public void Initialise(object owner)
 	{ 
+#if UNITY_EDITOR
 		if(textProviderMember.NotNullOrEmpty() && _textGetter == null) 
 			InspectorDrawingUtility.TryGetAGetterFromMember(owner.GetType(), textProviderMember, out _textGetter); 
+#endif
 	}
 	
 	public string[] GetLines(object owner)

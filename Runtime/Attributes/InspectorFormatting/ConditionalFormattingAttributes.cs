@@ -12,6 +12,7 @@ public class ConditionalFormattingAttribute : FormattingAttribute
 	
 	public void Initialize(object owner)
 	{
+#if UNITY_EDITOR
 		if (_initialized) return;
 		_conditionGetters.Clear();
 		foreach (string conditionMemberName in conditionMembers)
@@ -21,6 +22,7 @@ public class ConditionalFormattingAttribute : FormattingAttribute
 				_conditionGetters.Add(condition);
 		} 
 		_initialized = true;
+#endif
 	}
 	public ConditionalFormattingAttribute(params string[] conditionMembers) =>
 		this.conditionMembers = conditionMembers;
