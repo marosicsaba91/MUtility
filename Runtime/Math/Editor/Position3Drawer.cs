@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+
+using UnityEditor;
 using UnityEngine;
 
 namespace MUtility.Editor
@@ -18,11 +20,11 @@ public class Position3Drawer : PropertyDrawer
         contentRect.Split(rate: 0.25f, out Rect typeRect, out Rect valueRect);
         int indent = EditorGUI.indentLevel;
         EditorGUI.indentLevel = 0;
-        
+
         EditorGUI.PropertyField(typeRect, sourceTypeProperty, GUIContent.none);
 
         Position3.SourceType t = (Position3.SourceType) sourceTypeProperty.enumValueIndex;
-        
+
         if(t == Position3.SourceType.Transform)
             EditorGUI.PropertyField(valueRect, transformSourceProperty, GUIContent.none);
         else if (t == Position3.SourceType.Vector)
@@ -31,3 +33,4 @@ public class Position3Drawer : PropertyDrawer
     }
 }
 }
+#endif
