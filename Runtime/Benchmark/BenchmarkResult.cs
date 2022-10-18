@@ -4,19 +4,28 @@ using System.Text;
 using MUtility;
 using UnityEngine;
 
-public readonly struct BenchmarkResult
+public struct BenchmarkResult
 {
     readonly Dictionary<string, SingleBenchmarkResult> _results;
     readonly int _runCount;
-    
+    string _text;
+
+    public IReadOnlyDictionary<string, SingleBenchmarkResult> Results => _results;
+
     public BenchmarkResult( Dictionary<string, SingleBenchmarkResult> results, int runCount)
     {
         _results = results;
         _runCount = runCount;
+        _text = null;
     }
-
-    public override string ToString()
+    
+    public override string ToString() => GetTextVersion();
+ 
+    public string GetTextVersion()
     {
+        if (_text != null)
+            return _text;
+        
         if (_results == null) return "No results yet";
 
         var columns = new List<List<string>>();
@@ -42,9 +51,7 @@ public readonly struct BenchmarkResult
         {
             font = GUI.skin.font;
         }
-        catch (ArgumentException _)
-        {
-        }
+        catch (ArgumentException) { }
 
         FixLength(nameColumn, font);
         FixLength(timeColumn, font);
@@ -62,8 +69,8 @@ public readonly struct BenchmarkResult
             for (int x = 0; x < w; x++)
                 messageBuilder.Append(columns[x][y]);
         }
-
-        return messageBuilder.ToString();
+        _text = messageBuilder.ToString();
+        return _text;
     }
 
     void FixLength(List<string> strings, Font font, int minimumMargin = 10)

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace MUtility.Editor
@@ -31,3 +32,4 @@ public class Position3Drawer : PropertyDrawer
     }
 }
 }
+#endif
