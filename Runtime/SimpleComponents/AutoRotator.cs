@@ -130,16 +130,26 @@ public class AutoRotator : MonoBehaviour
         Vector3 axis = RotationAxisWorld;
         Vector3 endA = center + axis;
         Vector3 endB = center - axis;
-
-        Gizmos.color = GizmoColor; 
-        Gizmos.DrawLine(endA, endB);
+ 
+        Arrow arrow = new Arrow(endB, endA-endB,  axis.magnitude*2);
+        arrow.DrawGizmo(GizmoColor);
 
         // Spiral
 
-        float height = angularSpeed < 360 ? 0 
-            :  Mathf.Min(Mathf.Abs(angularSpeed) * gizmoRadius / 360, rotationAxis.magnitude * 2);
+        float height;
+        if(Mathf.Abs(angularSpeed) < 270)
+            height = 0;
+        else if (Mathf.Abs(angularSpeed) < 360)
+        {
+            height = (Mathf.Abs(angularSpeed) -270) / 90;
+            height = Mathf.Pow(height, 2);
+        }
+        else
+            height = Mathf.Abs(angularSpeed) * gizmoRadius / 360;
+            
+        height = Mathf.Clamp(height, 0.001f, rotationAxis.magnitude * 2);
         axis.Normalize();
-        Vector3 start = center + center - axis * height / 2;
+        Vector3 start = center - axis * height / 2;
         Vector3 end = start + axis * height;
         
         DrawSpiral(angularSpeed, start, end, gizmoRadius, true);
