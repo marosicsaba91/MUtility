@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class AutoRotator : MonoBehaviour
 {
+    // TODO: Rigidbody Support
     public enum HandleType
     {   
         None,

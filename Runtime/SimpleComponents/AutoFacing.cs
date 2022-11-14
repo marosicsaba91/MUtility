@@ -4,6 +4,8 @@ using UnityEngine;
 [ExecuteAlways]
 public class AutoFacing : MonoBehaviour
 {
+    // TODO: Rigidbody Support
+    
     public enum TargetType
     {
         FaceTarget,
