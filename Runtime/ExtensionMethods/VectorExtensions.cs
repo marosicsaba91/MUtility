@@ -46,11 +46,11 @@ public static class VectorExtensions
 
     
     public static Vector3 DivideAllAxis(this Vector3 vector, Vector3 divider) =>
-        new Vector3(vector.x / multiplier.x, vector.y / multiplier.y, vector.z / multiplier.z);
+        new Vector3(vector.x / divider.x, vector.y / divider.y, vector.z / divider.z);
     
     
     public static Vector2 DivideAllAxis(this Vector2 vector, Vector2 divider) =>
-        new Vector2(vector.x / multiplier.x, vector.y / multiplier.y);
+        new Vector2(vector.x / divider.x, vector.y / divider.y);
     
 
     public static float GetAngle(this Vector2 original)
