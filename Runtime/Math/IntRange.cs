@@ -16,6 +16,6 @@ public struct IntRange
     public int Clamp(int value) => Mathf.Clamp(value, min, max);
     public float Clamp(float value) => Mathf.Clamp(value, min, max);
 
-    public override string ToString() => "(" + this.min.ToString() + "/" + this.max.ToString() + ")";
+    public override string ToString() => "(" + min.ToString() + "/" + max.ToString() + ")";
 }
 }

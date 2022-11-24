@@ -170,7 +170,7 @@ public class AutoRotator : MonoBehaviour
         int pointCount = Mathf.Max(5, (int)(absFullAngle / baseAngleStep + 1f));
         float angleStep = Mathf.Deg2Rad * fullAngle / pointCount; 
         
-        axisDir.LeftHand(out Vector3 d1, out Vector3 d2 );
+        VectorExtensions.LeftHand(axisDir, out Vector3 d1, out Vector3 d2 );
         
         Vector3 axisStep = axis / pointCount;
         Vector3 startPoint = start;

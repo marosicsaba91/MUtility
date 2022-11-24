@@ -11,9 +11,9 @@ namespace MUtility
             return new Vector2(rotatedX, rotatedY);
         }
 
-        public static UnityEngine.Vector3 RotatePointAroundPivot_Rad(UnityEngine.Vector3 point, UnityEngine.Vector3 pivot, UnityEngine.Vector3 angle)
+        public static Vector3 RotatePointAroundPivot_Rad(Vector3 point, Vector3 pivot, Vector3 angle)
         {
-            UnityEngine.Vector3 direction = point - pivot;
+            Vector3 direction = point - pivot;
             direction = Quaternion.Euler(angle) * direction;
             return direction + pivot;
         }
@@ -43,27 +43,27 @@ namespace MUtility
         public static float SignedAngleBetween_Deg(Vector2 vectorA, Vector2 vectorB)
         {
             float angle = Vector2.Angle(vectorA, vectorB);
-            UnityEngine.Vector3 cross = UnityEngine.Vector3.Cross(vectorA, vectorB);
+            Vector3 cross = Vector3.Cross(vectorA, vectorB);
 
             return cross.z > 0 ? 360 - angle : angle;
         }
 
-        public static float DistanceBetweenPointAndLine(UnityEngine.Vector3 point, Line line) =>
-            UnityEngine.Vector3.Magnitude(ProjectPointOnLine(point, line) - point);
+        public static float DistanceBetweenPointAndLine(Vector3 point, Line line) =>
+            Vector3.Magnitude(ProjectPointOnLine(point, line) - point);
 
 
 
-        public static UnityEngine.Vector3 ProjectPointOnLine(UnityEngine.Vector3 point, Line line)
+        public static Vector3 ProjectPointOnLine(Vector3 point, Line line)
         {
-            UnityEngine.Vector3 rhs = point - line.a;
-            UnityEngine.Vector3 vector2 = line.b - line.a;
+            Vector3 rhs = point - line.a;
+            Vector3 vector2 = line.b - line.a;
             float magnitude = vector2.magnitude;
-            UnityEngine.Vector3 lhs = vector2;
+            Vector3 lhs = vector2;
             if (magnitude > 1E-06f)
             {
                 lhs = lhs / magnitude;
             }
-            float num2 = Mathf.Clamp(UnityEngine.Vector3.Dot(lhs, rhs), 0f, magnitude);
+            float num2 = Mathf.Clamp(Vector3.Dot(lhs, rhs), 0f, magnitude);
             return line.a + lhs * num2;
         }
 

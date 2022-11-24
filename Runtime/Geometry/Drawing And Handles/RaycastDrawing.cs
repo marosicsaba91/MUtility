@@ -14,7 +14,7 @@ namespace MUtility
         }
 
         public static RaycastHit? RaycastAndDraw3D(
-            UnityEngine.Vector3 rayOriginPoint, UnityEngine.Vector3 rayDirection, float rayDistance, LayerMask mask,
+            Vector3 rayOriginPoint, Vector3 rayDirection, float rayDistance, LayerMask mask,
             Color color)
         {
             Debug.DrawRay(rayOriginPoint, rayDirection * rayDistance);

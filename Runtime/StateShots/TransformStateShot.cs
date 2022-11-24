@@ -35,9 +35,9 @@ public class TransformStateShot : StateShot
 [Serializable]
 public struct SingleTransformState
 {
-    public UnityEngine.Vector3 localPosition;
+    public Vector3 localPosition;
     public Quaternion localRotation;
-    public UnityEngine.Vector3 localScale;
+    public Vector3 localScale;
 
     public SingleTransformState(Transform t)
     {

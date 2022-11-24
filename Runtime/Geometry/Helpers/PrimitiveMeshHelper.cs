@@ -14,8 +14,8 @@ public static class PrimitiveMeshHelper
             return GameObject.CreatePrimitive(type);
         }
 
-        var gameObject = new GameObject(type.ToString());
-        var meshFilter = gameObject.AddComponent<MeshFilter>();
+        GameObject gameObject = new GameObject(type.ToString());
+        MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
         meshFilter.sharedMesh = GetPrimitiveMesh(type);
         gameObject.AddComponent<MeshRenderer>();
 
@@ -32,7 +32,7 @@ public static class PrimitiveMeshHelper
 
     static void CreatePrimitiveMesh(PrimitiveType type)
     {
-        var gameObject = GameObject.CreatePrimitive(type);
+        GameObject gameObject = GameObject.CreatePrimitive(type);
         Mesh mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
         Object.DestroyImmediate(gameObject); 
         primitiveMeshes[type] = mesh; 

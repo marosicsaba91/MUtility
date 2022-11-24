@@ -5,13 +5,13 @@ namespace MUtility
 {
     public static class AxisExpansionMethods
     {
-        public static UnityEngine.Vector3 ToPositiveVector(this Axis3D axis)
+        public static Vector3 ToPositiveVector(this Axis3D axis)
         {
             switch (axis)
             {
-                case Axis3D.X: return UnityEngine.Vector3.right;
-                case Axis3D.Y: return UnityEngine.Vector3.up;
-                case Axis3D.Z: return UnityEngine.Vector3.forward;
+                case Axis3D.X: return Vector3.right;
+                case Axis3D.Y: return Vector3.up;
+                case Axis3D.Z: return Vector3.forward;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
             }
@@ -29,13 +29,13 @@ namespace MUtility
             }
         }
 
-        public static UnityEngine.Vector3 ToNegativeVector(this Axis3D axis)
+        public static Vector3 ToNegativeVector(this Axis3D axis)
         {
             switch (axis)
             {
-                case Axis3D.X: return UnityEngine.Vector3.left;
-                case Axis3D.Y: return UnityEngine.Vector3.down;
-                case Axis3D.Z: return UnityEngine.Vector3.back;
+                case Axis3D.X: return Vector3.left;
+                case Axis3D.Y: return Vector3.down;
+                case Axis3D.Z: return Vector3.back;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
             }

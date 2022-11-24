@@ -75,6 +75,7 @@ public class DisplayMemberDrawer : PropertyDrawer
             bool savedEnabled = GUI.enabled;
             if (_propertyInfo.SetMethod == null)
                 GUI.enabled = false;
+            
             object newValue = AnythingField(position, _type, oldValue, label);
             GUI.enabled = savedEnabled;
             if (!Equals(oldValue, newValue))

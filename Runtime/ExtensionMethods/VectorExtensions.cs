@@ -103,12 +103,12 @@ public static class VectorExtensions
 
     public static Vector3 Clamp01(this Vector3 areaPos) => areaPos.Clamp(0, 1);
     
-    public static void LeftHand(this Vector3 thumb, Vector3 index, out Vector3 middle)
+    public static void LeftHand(Vector3 thumb, Vector3 index, out Vector3 middle)
     {
         middle = Vector3.Cross(thumb, index).normalized; 
     }
     
-    public static void LeftHand(this Vector3 thumb, out Vector3 index, Vector3 middle)
+    public static void LeftHand(Vector3 thumb, out Vector3 index, Vector3 middle)
     {
         index = Vector3.Cross(middle, thumb).normalized; 
     }
@@ -118,7 +118,7 @@ public static class VectorExtensions
         thumb = Vector3.Cross(index, middle).normalized; 
     }
     
-    public static void LeftHand(this Vector3 thumb, out Vector3 index, out Vector3 middle)
+    public static void LeftHand(Vector3 thumb, out Vector3 index, out Vector3 middle)
     {
         thumb.Normalize();
         index = thumb != Vector3.forward && thumb != Vector3.back

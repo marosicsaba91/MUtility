@@ -26,9 +26,9 @@ public static class GameObjectExtensions
         string name = string.IsNullOrEmpty(newObjectName) ? typeof(T).Name : newObjectName;
         var child = new GameObject(name);
         child.transform.SetParent(gameObject.transform);
-        child.transform.localPosition = UnityEngine.Vector3.zero;
+        child.transform.localPosition = Vector3.zero;
         child.transform.localRotation = Quaternion.identity;
-        child.transform.localScale = UnityEngine.Vector3.one;
+        child.transform.localScale = Vector3.one;
         component = child.AddComponent<T>();
     }
 }

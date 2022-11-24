@@ -16,6 +16,6 @@ public struct FloatRange
 	public float LerpUnclamped(float t) => Mathf.LerpUnclamped(min, max, t);
 	public float Clamp(float value) => Mathf.Clamp(value, min, max);
     
-    public override string ToString() => "(" + this.min.ToString() + "/" + this.max.ToString() + ")";
+    public override string ToString() => "(" + min.ToString() + "/" + max.ToString() + ")";
 }
 }

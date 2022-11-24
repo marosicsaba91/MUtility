@@ -14,7 +14,7 @@ public class Range2AttributeDrawer : PropertyDrawer
     {
         get
         {
-            var range = attribute as Range2Attribute;
+            Range2Attribute range = attribute as Range2Attribute;
             if (range?.height == null)
                 return drawingHeight;
             return Mathf.Max(minimumDrawingHeight, range.height.Value);
@@ -27,7 +27,7 @@ public class Range2AttributeDrawer : PropertyDrawer
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         position.height = base.GetPropertyHeight(property, label);
-        var range = attribute as Range2Attribute;
+        Range2Attribute range = attribute as Range2Attribute;
         bool v2I = property.propertyType == SerializedPropertyType.Vector2Int;
         if (property.propertyType != SerializedPropertyType.Vector2 && !v2I)
         {
@@ -45,7 +45,7 @@ public class Range2AttributeDrawer : PropertyDrawer
 
         if (!property.isExpanded) return;
 
-        var drawingRect = new Rect
+        Rect drawingRect = new Rect
         {
             x = position.x,
             width =  position.width,
@@ -54,7 +54,7 @@ public class Range2AttributeDrawer : PropertyDrawer
         };
         EditorHelper.DrawBox(drawingRect);
 
-        var verticalSliderRect = new Rect()
+        Rect verticalSliderRect = new Rect()
         {
             x = MathHelper.Lerp(oldValue.x, drawingRect.xMin + 2, drawingRect.xMax - 12, range.xMin,
                 range.xMax),
@@ -63,7 +63,7 @@ public class Range2AttributeDrawer : PropertyDrawer
             width = 0
         };
 
-        var horizontalSliderRect = new Rect()
+        Rect horizontalSliderRect = new Rect()
         {
             x = drawingRect.x + 2,
             y = MathHelper.Lerp(oldValue.y, drawingRect.yMin - 2, drawingRect.yMax - 16, range.yMin,
@@ -85,7 +85,7 @@ public class Range2AttributeDrawer : PropertyDrawer
         if ((Event.current.type == EventType.MouseDrag || Event.current.type == EventType.MouseDown) && _clicked)
         {
             Vector2 p = Event.current.mousePosition;
-            var newPos = new Vector2(
+            Vector2 newPos = new Vector2(
                 MathHelper.Lerp(p.x, range.xMin,
                     range.xMax, drawingRect.xMin + 7, drawingRect.xMax - 8),
                 MathHelper.Lerp(p.y, range.yMin,

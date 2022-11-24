@@ -74,18 +74,18 @@ namespace MUtility
             }
         }
 
-        public static UnityEngine.Vector3 Rotate(this Equator dir, UnityEngine.Vector3 inputVector)
+        public static Vector3 Rotate(this Equator dir, Vector3 inputVector)
         {
             switch (dir)
             {
                 case Equator.North:
                     return inputVector;
                 case Equator.West:
-                    return new UnityEngine.Vector3(inputVector.z, 0, -inputVector.x);
+                    return new Vector3(inputVector.z, 0, -inputVector.x);
                 case Equator.South:
                     return -inputVector;
                 case Equator.East:
-                    return new UnityEngine.Vector3(-inputVector.z, 0, inputVector.x);
+                    return new Vector3(-inputVector.z, 0, inputVector.x);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
             }
