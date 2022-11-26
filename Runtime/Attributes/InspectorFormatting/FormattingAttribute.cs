@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MUtility
 {
 [AttributeUsage(AttributeTargets.Field)]
-public class FormattingAttribute : PropertyAttribute
+public abstract class FormattingAttribute : PropertyAttribute
 {
 }
 }

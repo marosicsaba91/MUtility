@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MUtility
 {
 [Serializable]
-public struct Torus : IShape3D, IMesh
+public struct Torus : IMesh, IArea
 {
-	const int defaultComplexity1 = 20;
-	const int defaultComplexity2 = 10;
+	const int defaultComplexityBigCircle = 20;
+	const int defaultComplexitySmallCircle = 10;
 
 	public float radius;
 	public float thickness;
@@ -18,11 +19,11 @@ public struct Torus : IShape3D, IMesh
 		this.thickness = thickness;
 	}
 
-	public float Surface => 4 * Mathf.PI * Mathf.PI * radius * thickness;
+	public float Area => 4 * Mathf.PI * Mathf.PI * radius * thickness;
 
 	public float Volume => 2 * Mathf.PI * Mathf.PI * radius * thickness * thickness;
 
-	public void ToMesh(Mesh resultMesh) => ToMesh(resultMesh, defaultComplexity1, defaultComplexity2);
+	public void ToMesh(Mesh resultMesh) => ToMesh(resultMesh, defaultComplexityBigCircle, defaultComplexitySmallCircle);
 
 	public void ToMesh(Mesh resultMesh, int nbRadSeg, int nbSides)
 	{
@@ -119,5 +120,5 @@ public struct Torus : IShape3D, IMesh
 	}
 }
 [Serializable]
-public class SpacialTorus : SpacialShape3D<Torus> { }
+public class SpacialTorus : SpacialMesh<Torus> { }
 }

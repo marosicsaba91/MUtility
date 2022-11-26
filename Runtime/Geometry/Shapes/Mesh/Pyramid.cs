@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct Pyramid : IShape3D, IDrawable
+public struct Pyramid : IDrawable
 {
     public Vector3 basePos;
     public Quaternion rotation;
@@ -83,6 +83,5 @@ public struct Pyramid : IShape3D, IDrawable
     public float Volume => 0; // TODO
 }
 
-[Serializable]
-public class SpacialPyramid : SpacialShape3D<Pyramid> { }
+// [Serializable] public class SpacialPyramid : SpacialMesh<Pyramid> { }
 }

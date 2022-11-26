@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace MUtility
 {
 [Serializable]
-public struct Cuboid : IShape3D, IDrawable, /*IHandleable,*/ IMesh
+public struct Cuboid : IMesh, /*IEasyHandleable,*/ IVolume, IArea
 {
     public Vector3 size;
 
@@ -35,7 +34,7 @@ public struct Cuboid : IShape3D, IDrawable, /*IHandleable,*/ IMesh
 
     public float Volume => size.x * size.y * size.z;
 
-    public float Surface => 2f * (size.x * size.y + size.y * size.z + size.z * size.x);
+    public float Area => 2f * (size.x * size.y + size.y * size.z + size.z * size.x);
 
     public float Width => size.x;
     public float Height => size.y;
@@ -68,46 +67,44 @@ public struct Cuboid : IShape3D, IDrawable, /*IHandleable,*/ IMesh
         RightTopBackCorner, LeftTopBackCorner, RightBottomBackCorner, LeftBottomBackCorner
     };
 
-
-
     public SpacialRectangle RightSide => new SpacialRectangle()
     {
-        shape = new Rectangle(size.z, size.y),
+        polygon = new Rectangle(size.z, size.y),
         position = RightCenter,
         rotation = Quaternion.LookRotation(Vector3.right, Vector3.up)
     };
 
     public SpacialRectangle LeftSide => new SpacialRectangle()
     {
-        shape = new Rectangle(size.z, size.y),
+        polygon = new Rectangle(size.z, size.y),
         position = LeftCenter,
         rotation = Quaternion.LookRotation(Vector3.left, Vector3.up)
     };
 
     public SpacialRectangle TopSide => new SpacialRectangle()
     {
-        shape = new Rectangle(size.x, size.z),
+        polygon = new Rectangle(size.x, size.z),
         position = TopCenter,
         rotation = Quaternion.LookRotation(Vector3.up, Vector3.forward)
     };
 
     public SpacialRectangle BottomSide => new SpacialRectangle()
     {
-        shape = new Rectangle(size.x, size.z),
+        polygon = new Rectangle(size.x, size.z),
         position = BottomCenter,
         rotation = Quaternion.LookRotation(Vector3.down, Vector3.forward)
     };
 
     public SpacialRectangle FrontSide => new SpacialRectangle()
     {
-        shape = new Rectangle(size.x, size.y),
+        polygon = new Rectangle(size.x, size.y),
         position = FrontCenter,
         rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up)
     };
 
     public SpacialRectangle BackSide => new SpacialRectangle()
     {
-        shape = new Rectangle(size.x, size.y),
+        polygon = new Rectangle(size.x, size.y),
         position = BackCenter,
         rotation = Quaternion.LookRotation(Vector3.back, Vector3.up)
     };
@@ -281,5 +278,5 @@ public struct Cuboid : IShape3D, IDrawable, /*IHandleable,*/ IMesh
 }
 
 [Serializable]
-public class SpacialCuboid : SpacialShape3D<Cuboid> { }
+public class SpacialCuboid : SpacialMesh<Cuboid> { }
 }

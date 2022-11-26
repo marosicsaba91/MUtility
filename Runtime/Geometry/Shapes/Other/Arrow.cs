@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-    public struct Arrow : IDrawable/*, IHandleable*/
+    public struct Arrow : IDrawable, IEasyHandleable
     {
         public Vector3 origin;
         public Vector3 direction;
@@ -146,21 +146,13 @@ namespace MUtility
             return new Drawable(polygons);
         }
 
-        /*
-        public IEnumerable<EasyHandle> GetHandles()
+        
+        public void OnDrawHandles()
         {
-            yield return new EasyHandle(origin);
-            yield return new EasyHandle(Head);
+            EasyHandles.PositionHandle(origin);
+            EasyHandles.PositionHandle(Head);
         }
-
-        public void SetHandle(int index, HandleResult result)
-        {
-            if (index == 0)
-                origin = result.startPosition;
-            else
-                Head = result.startPosition;
-        } 
-        */
+        
 
         [Serializable]
         public struct DrawingSettings

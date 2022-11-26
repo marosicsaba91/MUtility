@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct Ellipse : IShape2D, IRuntimeHandleable
+public struct Ellipse : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
 {
     const int defaultFragmentCount = 30;
 
@@ -87,11 +87,13 @@ public struct Ellipse : IShape2D, IRuntimeHandleable
 
         return new Vector2(x, y);
     }
+
+    public Drawable ToDrawable() => Points.ToDrawable();
 }
 
 
 [Serializable]
-public class SpacialEllipse : SpacialShape2D<Ellipse>
+public class SpacialEllipse : SpacialPolygon<Ellipse>
 {
 }
 }

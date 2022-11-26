@@ -43,6 +43,11 @@ public static partial class EasyHandles
     public static Vector3 PositionHandle(Vector3 position, Shape shape = Shape.Dot) =>
         PositionHandle(position, Quaternion.identity, shape);
     
+    public static Vector3 PositionHandle(Vector3 position, Vector3 axis, Shape shape)
+    {
+        return PositionHandle(position, Quaternion.LookRotation(axis), ForcedAxisMode.Line, shape);
+    }
+    
     public static Vector3 PositionHandle(Vector3 position, Vector3 axis, ForcedAxisMode mode = ForcedAxisMode.Line, Shape shape = Shape.Cone)
     {
         if (mode == ForcedAxisMode.Plane)

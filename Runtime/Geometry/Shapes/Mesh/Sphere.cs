@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace MUtility
 {
 [Serializable]
-public struct Sphere : IShape3D, IMesh, IDrawable/*, IHandleable*/
+public struct Sphere : IMesh/*, IEasyHandleable*/
 {
     public float radius;
 
@@ -195,5 +194,5 @@ public struct Sphere : IShape3D, IMesh, IDrawable/*, IHandleable*/
 
 
 [Serializable]
-public class SpacialSphere : SpacialShape3D<Sphere> { }
+public class SpacialSphere : SpacialMesh<Sphere> { }
 }

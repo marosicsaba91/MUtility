@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct Rectangle : IShape2D, IRuntimeHandleable
+public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
 {
     public Vector2 size;
 
@@ -79,10 +79,12 @@ public struct Rectangle : IShape2D, IRuntimeHandleable
         }
     }
 
-    static readonly Vector2Int defaultMeshGridSize = new Vector2Int(10, 10);
+    static readonly Vector2Int _defaultMeshGridSize = new Vector2Int(10, 10);
+
+    public Drawable ToDrawable() => Points.ToDrawable();
 }
 
 [Serializable]
-public class SpacialRectangle : SpacialShape2D<Rectangle> { }
+public class SpacialRectangle : SpacialPolygon<Rectangle> { }
 
 }

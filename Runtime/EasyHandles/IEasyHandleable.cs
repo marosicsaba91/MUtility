@@ -1,6 +1,6 @@
 namespace MUtility
 {
-public interface IRuntimeHandleable
+public interface IEasyHandleable
 {
     void OnDrawHandles();
 }

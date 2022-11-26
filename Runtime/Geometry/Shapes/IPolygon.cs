@@ -11,7 +11,7 @@ public interface IPolygon
 
 public static class PolygonExtensions
 {
-    public static Drawable GetDrawable(this IEnumerable<Vector3> polygon)
+    public static Drawable ToDrawable(this IEnumerable<Vector3> polygon)
     {
         Vector3[] points = polygon.ToArray();
         return new Drawable(points);

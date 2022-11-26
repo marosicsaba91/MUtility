@@ -25,66 +25,105 @@ public class TypeSelectorDrawer : PropertyDrawer
         }
         else
         {
-            position.height = EditorGUIUtility.singleLineHeight;
             
             Type managedReferenceFieldType = GetManagedReferenceFieldType(property);
             if (managedReferenceFieldType == null)
                 return;
 
-            List<Type> inheritedTypes = GetInheritedNonAbstractTypes(managedReferenceFieldType);
+            DrawTypePicker(position, property, managedReferenceFieldType, att);
+        }
 
-            int currentTypeIndex;
-            Rect popupPosition = EditorHelper.ContentRect(position);
+        // Draw the property of the selected type
+        EditorGUI.PropertyField(position, property, label, includeChildren: true);
+    }
 
-            Type currentType = GetRealTypeFromTypename(property.managedReferenceFullTypename);
-            if (currentType == null)
-                currentTypeIndex = 0;
-            else
+    static void DrawTypePicker(Rect position, SerializedProperty property, Type managedReferenceFieldType, TypePickerAttribute att)
+    {
+        position.height = EditorGUIUtility.singleLineHeight;
+        List<Type> inheritedTypes = GetInheritedNonAbstractTypes(managedReferenceFieldType);
+
+        int currentTypeIndex;
+        Rect popupPosition = EditorHelper.ContentRect(position);
+
+        Type currentType = GetRealTypeFromTypename(property.managedReferenceFullTypename);
+        inheritedTypes = ApplyTypeFilter(property, att, inheritedTypes);
+        
+        if (currentType == null)
+            currentTypeIndex = 0;
+        else
+        {
+            currentTypeIndex = inheritedTypes.IndexOf(currentType) + 1;
+
+            if (!property.IsExpandable() || att.forceSmall)
             {
-                currentTypeIndex = inheritedTypes.IndexOf(currentType) + 1;
-
-                if (!property.IsExpandable() || att.forceSmall)
-                {
-                    popupPosition.width = 20;
-                    popupPosition.x -= 20;
-                }
-            }
-
-            IEnumerable<string> typesNames =
-                inheritedTypes.Select(t => t == null ? "- Select Type -" : t.ToString());
-            string[] options = new[] { "- Select Type -" }.Concat(typesNames).ToArray();
-
-            int tempIndent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-            int resultTypeIndex = EditorGUI.Popup(popupPosition, currentTypeIndex, options);
-            EditorGUI.indentLevel = tempIndent;
-
-            if (resultTypeIndex != currentTypeIndex)
-            {
-                Undo.RecordObject(property.serializedObject.targetObject, "Reference Type Changed");
-                if (resultTypeIndex == 0)
-                {
-                    property.managedReferenceValue = null;
-                }
-                else
-                {
-                    Type newType = inheritedTypes[resultTypeIndex - 1];
-                    if (newType.IsSubclassOf(typeof(UnityEngine.Object)))
-                    {
-                        Debug.LogWarning("SerializedReference don't work with UnityEngine.Object types");
-                    }
-                    else
-                    {
-                        object newInstance = Activator.CreateInstance(newType);
-                        TrySetupProperties(property, newInstance, newType);
-                        property.managedReferenceValue = newInstance;
-                    }
-                }
-                property.serializedObject.ApplyModifiedProperties();
+                popupPosition.width = 20;
+                popupPosition.x -= 20;
             }
         }
 
-        EditorGUI.PropertyField(position, property, label, includeChildren: true);
+        
+        IEnumerable<string> typeNames = inheritedTypes.Select(t => TypeToString(t, att.typeToStringConversion));
+        string[] options = new[] { "- Select Type -" }.Concat(typeNames).ToArray();
+
+        int tempIndent = EditorGUI.indentLevel;
+        EditorGUI.indentLevel = 0;
+        int resultTypeIndex = EditorGUI.Popup(popupPosition, currentTypeIndex, options);
+        EditorGUI.indentLevel = tempIndent;
+
+        if (resultTypeIndex != currentTypeIndex)
+        {
+            Undo.RecordObject(property.serializedObject.targetObject, "Reference Type Changed");
+            if (resultTypeIndex == 0)
+            {
+                property.managedReferenceValue = null;
+            }
+            else
+            {
+                Type newType = inheritedTypes[resultTypeIndex - 1];
+                if (newType.IsSubclassOf(typeof(UnityEngine.Object)))
+                {
+                    Debug.LogWarning("SerializedReference don't work with UnityEngine.Object types");
+                }
+                else
+                {
+                    object newInstance = Activator.CreateInstance(newType);
+                    TrySetupProperties(property, newInstance, newType);
+                    property.managedReferenceValue = newInstance;
+                }
+            }
+
+            property.serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    static string TypeToString(Type t, TypePickerAttribute.TypeToStringConversion conversation)
+    {
+        if(t == null)
+            return "- Select Type -";
+        
+        if(conversation == TypePickerAttribute.TypeToStringConversion.ShortName)
+            return t.Name;
+        return t.ToString();
+    }
+
+    static List<Type> ApplyTypeFilter(SerializedProperty property, TypePickerAttribute att, List<Type> inheritedTypes)
+    {
+        if (!att.filterMethod.IsNullOrEmpty())
+        {
+            object containingObject = property.GetObjectWithProperty();
+            Type t = property.GetObjectWithProperty().GetType();
+            MethodInfo methodInfo = t.GetMethod(att.filterMethod,
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            if (methodInfo == null)
+                Debug.LogError($"Method {att.filterMethod} not found in {t}");
+            else
+            {
+                bool Filter(Type type) => (bool)methodInfo.Invoke(containingObject, new object[] { type });
+                inheritedTypes = inheritedTypes.Where(Filter).ToList();
+            }
+        }
+
+        return inheritedTypes;
     }
 
     static void TrySetupProperties(SerializedProperty oldValue, object newInstance, Type newType)
@@ -118,19 +157,19 @@ public class TypeSelectorDrawer : PropertyDrawer
         return self.Concat(AllFields(type.BaseType));
     }
 
-    static readonly Dictionary<Type, List<Type>> inheritedNonAbstractTypes = new Dictionary<Type, List<Type>>();
+    static readonly Dictionary<Type, List<Type>> _inheritedNonAbstractTypes = new Dictionary<Type, List<Type>>();
     static List<Type> GetInheritedNonAbstractTypes(Type baseType)
     {
-        if (inheritedNonAbstractTypes.TryGetValue(baseType, out List<Type> inherited))
+        if (_inheritedNonAbstractTypes.TryGetValue(baseType, out List<Type> inherited))
             return inherited;
 
         List<Type> inheritedTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
-            .Where(type => baseType.IsAssignableFrom(type))
+            .Where(baseType.IsAssignableFrom)
             .Where(type => !type.IsAbstract)
             .ToList();
 
-        inheritedNonAbstractTypes.Add(baseType, inheritedTypes);
+        _inheritedNonAbstractTypes.Add(baseType, inheritedTypes);
         
         return inheritedTypes;
     } 

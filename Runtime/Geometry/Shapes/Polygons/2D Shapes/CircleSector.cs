@@ -5,88 +5,87 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct CircleSector : IShape2D //, IHandleable
+public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
 {
     const int defaultFragmentCount = 75;
 
-    public float radius;
-    public float startAngleDeg;
-    [SerializeField, Range(0, 1)] float fullRate;
-    public Winding winding;
-    public float innerRadius;
-
-    public CircleSector(float radius, float startAngleDeg, float fullRate, Winding winding, float innerRadius = 0)
+    [SerializeField, Min(0)] float radius;
+    [SerializeField, Range(0, 1)] float innerRadiusRate;
+    [SerializeField, Range(0, 360)] float startAngleDeg;
+    [SerializeField, Range(0, 360)] float endAngleDeg;
+    [SerializeField] Winding winding;
+    
+    float WindingSign => winding == Winding.Clockwise ? -1 : 1;
+    
+    public CircleSector(float radius, float startAngleDeg, float endAngleDeg, float innerRadiusRate = 0.5f, Winding winding = Winding.Clockwise)
     {
         this.radius = radius;
+        this.innerRadiusRate = Mathf.Clamp01(innerRadiusRate);
+        
         this.startAngleDeg = startAngleDeg;
-        this.fullRate = Mathf.Clamp01(fullRate);
+        this.endAngleDeg = endAngleDeg;
         this.winding = winding;
-        this.innerRadius = innerRadius;
     }
-
-    public CircleSector(float radius, float startAngleDeg, float endAngleDeg, float innerRadius = 0)
+    
+    public float Radius
     {
-        this.radius = radius;
-        this.startAngleDeg = startAngleDeg;
-        fullRate = (endAngleDeg - startAngleDeg) / 360;
-
-        winding = fullRate < 0 ? Winding.Clockwise : Winding.CounterClockwise;
-        fullRate = Mathf.Clamp01(Mathf.Abs((endAngleDeg - startAngleDeg) / 360));
-        this.innerRadius = innerRadius;
+        get => radius;
+        set => radius = Mathf.Max(0, value);
     }
-
-    public float FullRate
+    
+    public float StartAngleDeg
     {
-        get => fullRate;
-        set => fullRate = Mathf.Clamp01(value);
+        get => startAngleDeg;
+        set => startAngleDeg = MathHelper.Mod(value, 360);
+    }
+    public float EndAngleDeg
+    {
+        get => endAngleDeg;
+        set => endAngleDeg = MathHelper.Mod(value, 360);
+    }
+    
+    public float DeltaAngleRate
+    {
+        get => DeltaAngleDeg / 360;
+        set => DeltaAngleDeg = value * 360;
     }
 
     public float DeltaAngleDeg
     {
-        get => (winding == Winding.Clockwise ? -1 : 1) * FullRate * 360f;
-        set => FullRate = (winding == Winding.Clockwise ? -1 : 1) * value / 360f;
-    }
-
-    public float Circumference => 2 * ((radius + innerRadius) * Mathf.PI * FullRate + (radius - innerRadius));
-
-    public float Area => (radius * radius * Mathf.PI) - (innerRadius * innerRadius * Mathf.PI) * FullRate;
-
-    public float EndAngleDeg
+        get => WindingSign * MathHelper.Mod(WindingSign * (endAngleDeg - startAngleDeg), 360);
+        set => endAngleDeg = startAngleDeg + (Mathf.Clamp01( WindingSign * value) * WindingSign);
+    }  
+    
+    public float InnerRadiusRate
     {
-        get
-        {
-            float angle = startAngleDeg;
-            angle += winding == Winding.Clockwise ? -DeltaAngleDeg : DeltaAngleDeg;
-            return GeometryHelper.SimplifyAngle(angle);
-        }
+        get => innerRadiusRate;
+        set => innerRadiusRate = Mathf.Clamp01(value);
     }
+    
+    public float InnerRadius
+    {
+        get => radius * innerRadiusRate;
+        set => InnerRadiusRate = value / radius;
+    }
+    
+    public float Circumference => 2 * ((radius + InnerRadius) * Mathf.PI * DeltaAngleRate + (radius - InnerRadius));
+
+    public float Area => (radius * radius * Mathf.PI) - (InnerRadius * InnerRadius * Mathf.PI) * DeltaAngleRate;
 
     public IEnumerable<Vector3> Points => ToPolygon();
 
     public IEnumerable<Vector3> ToPolygon(int fullCircleFragmentCount = defaultFragmentCount)
     {
-        if (fullRate >= 1)
-            return new Circle(radius).ToPolygon(fullCircleFragmentCount);
-
-        if (fullRate <= 0)
-        {
-            Vector2 b = GeometryHelper.RadianToVector2D(startAngleDeg * Mathf.Deg2Rad) * radius;
-            return new LineSegment(Vector3.zero, b).ToDrawable().polygons[0];
-        }
-
-
+        Winding wind = winding;
         float segmentLength = DeltaAngleDeg;
 
         float startAngleInRad = (-startAngleDeg + 90) * Mathf.Deg2Rad;
-        int circleFragmentCount = Mathf.Max(2,
+        int segmentCount = Mathf.Max(2,
             Mathf.CeilToInt((fullCircleFragmentCount + 1) * (Mathf.Abs(segmentLength) / 360)));
 
         segmentLength *= Mathf.Deg2Rad;
-
-        var points = new Vector3[
-            innerRadius >= radius ? circleFragmentCount + 2 :
-            innerRadius > 0 ? circleFragmentCount * 2 + 1 :
-            circleFragmentCount];
+        
+        var points = new Vector3[segmentCount * 2 + 1];
 
         Vector3 right = new Vector2(radius, 0);
         Vector3 up = new Vector2(0, radius);
@@ -94,49 +93,59 @@ public struct CircleSector : IShape2D //, IHandleable
         int pointIndex = 0;
         AddSegmentPoints(true);
 
-        if (innerRadius >= radius)
-        {
-            points[pointIndex++] = Vector3.zero;
-            points[pointIndex] = points[0];
-        }
-        else if (innerRadius > 0)
-        {
-            right = new Vector2(innerRadius, 0);
-            up = new Vector2(0, innerRadius);
-
-            AddSegmentPoints(false);
-            points[pointIndex] = points[0];
-        }
+        right = new Vector2(InnerRadius, 0);
+        up = new Vector2(0, InnerRadius);
+ 
+        AddSegmentPoints(false);
+        points[pointIndex] = points[0];
 
         return points;
-
-        void AddSegmentPoints(bool dir)
-        {
-            for (int i = 0; i < circleFragmentCount; i++)
+       
+        void AddSegmentPoints(bool bigRound)
+        {  
+            for (int i = 0; i < segmentCount; i++)
             {
-                float rate = (float)i / (circleFragmentCount - 1);
-                if (!dir) rate = 1 - rate;
+                float rate = (float)i / (segmentCount - 1);
+                
+                if (!bigRound) 
+                    rate = 1 - rate;
+                
                 float phase = startAngleInRad - rate * segmentLength;
                 points[pointIndex] = Mathf.Sin(phase) * right + Mathf.Cos(phase) * up;
                 pointIndex++;
             }
         }
     }
-
-/*
-    public IEnumerable<EasyHandle> GetHandles()
+ 
+    public void OnDrawHandles()
     {
-        Vector3 p = GeometryHelper.RadianToVector2D(startAngleDeg * Mathf.Deg2Rad) * radius;
-        yield return new EasyHandle() { position = p};
+        Normalize ();
+        
+        float middleAngle = startAngleDeg + (DeltaAngleDeg / 2);
+        Vector3 middleDirection = GeometryHelper.RadianToVector2D(middleAngle * Mathf.Deg2Rad);
+        radius = EasyHandles.PositionHandle(middleDirection * radius, middleDirection, EasyHandles.Shape.Dot).magnitude;
+        
+        InnerRadius = EasyHandles.PositionHandle(middleDirection * InnerRadius, middleDirection, ForcedAxisMode.Line, EasyHandles.Shape.Dot).magnitude;
+        
+        float middleRadius = (radius + InnerRadius) / 2;
+        Vector3 angle1 = GeometryHelper.RadianToVector2D(startAngleDeg * Mathf.Deg2Rad);
+        startAngleDeg = EasyHandles.PositionHandle(angle1 * middleRadius).GetAngle(); 
+        
+        Vector3 angle2 = GeometryHelper.RadianToVector2D(endAngleDeg * Mathf.Deg2Rad);
+        endAngleDeg = EasyHandles.PositionHandle(angle2 * middleRadius).GetAngle();
     }
 
-    public void SetHandle(int i, HandleResult result)
+    void Normalize()
     {
-        Vector2 dir = result.startPosition;
-        radius = dir.magnitude;
-        startAngleDeg = GeometryHelper.Vector2DToRadian(dir) * Mathf.Rad2Deg;
+        if (float.IsNaN(startAngleDeg) || float.IsNaN(endAngleDeg) || float.IsNaN(radius) || float.IsNaN(InnerRadiusRate))
+        {
+            startAngleDeg = 0;
+            endAngleDeg = 180;
+            radius = 1;
+            InnerRadiusRate = 0.5f;
+            winding = Winding.CounterClockwise;
+        } 
     }
-*/
 
     public Vector2 GetRandomPointInArea()
     {
@@ -148,10 +157,11 @@ public struct CircleSector : IShape2D //, IHandleable
 
         return new Vector2(x, y);
     }
+
+    public Drawable ToDrawable() => Points.ToDrawable();
 }
 
 [Serializable]
-public class SpacialCircleSector : SpacialShape2D<CircleSector>
-{
-}
+public class SpacialCircleSector : SpacialPolygon<CircleSector> { }
+
 }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MUtility
 {
-public class ConditionalFormattingAttribute : FormattingAttribute
+public abstract class ConditionalFormattingAttribute : FormattingAttribute
 {
 	public readonly string[] conditionMembers;
 	readonly List<Func<object, bool>> _conditionGetters = new List<Func<object, bool>>();

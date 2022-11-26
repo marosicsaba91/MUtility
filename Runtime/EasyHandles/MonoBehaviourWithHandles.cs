@@ -9,6 +9,7 @@ namespace MUtility
 public abstract class MonoBehaviourWithHandles: MonoBehaviour
 {
     public abstract void OnDrawHandles();
+    public virtual bool InSelfSpace => true;
 }
  
 
@@ -24,11 +25,12 @@ public class HandleDrawerMonoBehaviourEditor : UnityEditor.Editor
             
             if(target is MonoBehaviourWithHandles handleable)
             {
-                EasyHandles.PushMatrix(monoBehaviour.transform.localToWorldMatrix);
+                if(handleable.InSelfSpace)
+                    EasyHandles.PushMatrix(monoBehaviour.transform.localToWorldMatrix);
                 
-                handleable.OnDrawHandles(); 
+                handleable.OnDrawHandles();
+                
                 EasyHandles.ClearSettings();
-                
             }
         }
     }

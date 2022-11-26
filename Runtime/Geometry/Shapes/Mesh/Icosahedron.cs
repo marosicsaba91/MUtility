@@ -1,9 +1,13 @@
-﻿using System;
+﻿/*
+
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace MUtility
 {
 [Serializable]
-public struct Icosahedron : IShape3D
+public struct Icosahedron : IDrawable
 {
     public float side;
 
@@ -19,7 +23,6 @@ public struct Icosahedron : IShape3D
 
     public float Volume => 2.18169499f * (side * side * side);
 
-    /*
     public Drawable ToDrawable()
     {
         List<Vector3> vertList = new List<Vector3>();
@@ -72,11 +75,13 @@ public struct Icosahedron : IShape3D
         faces.Add(new Vector3Int(6, 2, 10));
         faces.Add(new Vector3Int(8, 6, 7));
         faces.Add(new Vector3Int(9, 8, 1));
+        
+        return faces.ToDrawable(vertList);
     }
-    */
 }
 
 
-[Serializable] public class SpacialIcosahedron : SpacialShape3D<Icosahedron> { }
+// [Serializable] public class SpacialIcosahedron : SpacialMesh<Icosahedron> { }
 
 }
+*/

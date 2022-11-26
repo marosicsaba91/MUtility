@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct LineSegment : IDrawable/*, IHandleable*/
+public struct LineSegment : IDrawable/*, IEasyHandleable*/
 {
     public Vector3 a;
     public Vector3 b;

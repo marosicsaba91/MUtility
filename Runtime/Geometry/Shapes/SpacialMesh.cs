@@ -2,7 +2,7 @@
 
 namespace MUtility
 {
-public abstract class SpacialShape3D<TShape> where TShape : IShape3D
+public abstract class SpacialMesh<TShape> where TShape : IMesh
 {
     public TShape shape;
     public Vector3 position;

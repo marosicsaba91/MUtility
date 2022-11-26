@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MUtility
 {
     [Serializable]
-    public struct Circle : IShape2D, IRuntimeHandleable
+    public struct Circle : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
     {
         public const int defaultSegmentCount = 20;
 
@@ -113,6 +113,6 @@ namespace MUtility
         }
     }
 
-public class SpacialCircle : SpacialShape2D<Circle> { }
+public class SpacialCircle : SpacialPolygon<Circle> { }
 
 }
