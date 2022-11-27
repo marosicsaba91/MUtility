@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using UnityEngine;
+
 
 namespace MUtility
 {
     [Serializable]
-    public class CatmullRomSpine3D : PathCurve<Vector3>
+    public class CatmullRomSpline : PathPolygon<Vector3>
     {
-        protected override int DefaultDrawingPointsOnSegment => 20;
-
-        public CatmullRomSpine3D(bool isClosed, params Vector3[] points) : base(isClosed, points) { }
-        public CatmullRomSpine3D(params Vector3[] points ) : base(points) { }
+        protected override int DefaultDrawingPointCountOnSegment => 20;
+        
+        public CatmullRomSpline(bool isClosed, params Vector3[] points) : base(isClosed, points) { }
+        public CatmullRomSpline(params Vector3[] points ) : base(points) { }
+        public CatmullRomSpline() : base(Array.Empty<Vector3>()) { }
 
         protected override Vector3 GetControlPointPosition(Vector3 controlPoint) => controlPoint;
 

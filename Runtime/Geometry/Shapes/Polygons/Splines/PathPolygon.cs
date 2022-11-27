@@ -6,35 +6,73 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public abstract class PathCurve
+public abstract class PathPolygon : IPolygon, IEasyHandleable
 {
-    public abstract bool IsLoop { get; }
-    protected abstract int DefaultDrawingPointsOnSegment { get; }
-    public abstract IEnumerable<PathInterpolatedPoint> EvaluateFull(int drawingPointsOnSegment); 
+    [SerializeField] protected bool isLoop = false;
+    public bool IsLoop => isLoop;
+    protected abstract int DefaultDrawingPointCountOnSegment { get; }
+    public abstract IEnumerable<PathInterpolatedPoint> GetPoints(int drawingPointsOnSegment); 
     
-    public IEnumerable<PathInterpolatedPoint> GetInterpolatedPoints()
-        => EvaluateFull(DefaultDrawingPointsOnSegment);
+    public IEnumerable<PathInterpolatedPoint> GetPoints()
+        => GetPoints(DefaultDrawingPointCountOnSegment);
+
+    public IEnumerable<Vector3> Points => GetPoints(DefaultDrawingPointCountOnSegment).
+        Select(p => p.position);
+    
+    public abstract bool IsValid {get;}
+    
+    
+    // -------------------------- IDrawable --------------------------
+
+    public Drawable ToDrawable() => ToDrawable(DefaultDrawingPointCountOnSegment, 0);
+    
+    public Drawable ToDrawable(int drawingPointsOnSegment) => ToDrawable(drawingPointsOnSegment, 0);
+
+    public Drawable ToDrawable(int drawingPointsOnSegment, float forwardSizeMultiplier)
+    {
+        if (!IsValid)
+            return new Drawable(Array.Empty<Vector3>());
+
+        var forwards = new List<Vector3[]>();
+        var spline = new List<Vector3>(); 
+
+        foreach (PathInterpolatedPoint point in GetPoints(drawingPointsOnSegment))
+        {
+            Vector3 position = point.position;
+            spline.Add(position);
+            if (forwardSizeMultiplier > 0)
+            {
+                Vector3 forward = point.forward * forwardSizeMultiplier;
+                forwards.Add(new[] { position, position + forward * forwardSizeMultiplier });
+            }
+        }
+
+        forwards.Add(spline.ToArray());
+        return new Drawable(forwards.ToArray());
+    }
+
+    public abstract void OnDrawHandles();
 }
 
 [Serializable]
-public abstract class PathCurve<TControlPoint> : PathCurve, IDrawable
+public abstract class PathPolygon<TControlPoint> : PathPolygon, IDrawable
 {
-    [SerializeField] protected bool isLoop = false;
-    [SerializeField] protected readonly List<TControlPoint> controlPoints = new List<TControlPoint>();
+    [SerializeField] protected List<TControlPoint> controlPoints = new List<TControlPoint>();
 
     // ------------------- Constructors -------------------
 
-    protected PathCurve(bool isLoop, params TControlPoint[] controlPoint)
+    protected PathPolygon(bool isLoop, params TControlPoint[] controlPoint)
     {
         controlPoints = new List<TControlPoint>(controlPoint);
         this.isLoop = isLoop;
     }
 
-    protected PathCurve(params TControlPoint[] nodes) : this(false, nodes) { }
+    public override bool IsValid => controlPoints != null && controlPoints.Count > 1;
+
+    protected PathPolygon(params TControlPoint[] nodes) : this(false, nodes) { }
     
     // ------------------- Methods -------------------
     
-    public override bool IsLoop => isLoop;
     public void Clear() => controlPoints.Clear();
     public int SegmentCount => isLoop ? controlPoints.Count : controlPoints.Count - 1;
     
@@ -86,69 +124,46 @@ public abstract class PathCurve<TControlPoint> : PathCurve, IDrawable
             previous = segmentIndex > 0 ? controlPoints[segmentIndex - 1] : VirtualControlPointBeforeFirst;
             a = controlPoints[segmentIndex];
             b = controlPoints[segmentIndex + 1];
-            next = segmentIndex + 1 <= controlPoints.Count ? controlPoints[segmentIndex + 2] : VirtualControlPointAfterLast;
+            next = segmentIndex + 2 < controlPoints.Count ? controlPoints[segmentIndex + 2] : VirtualControlPointAfterLast;
         }
     }
 
-    public override IEnumerable<PathInterpolatedPoint> EvaluateFull(int drawingPointsOnSegment)
+    public override IEnumerable<PathInterpolatedPoint> GetPoints(int drawingPointsOnSegment)
     {
         if (controlPoints == null || controlPoints.Count <= 1)
             yield break;
 
         int segmentCount = SegmentCount;
-
+        TControlPoint previous, a, b, next;
         for (int i = 0; i < segmentCount; i++)
         {
-            GetControlPoints(i, out TControlPoint previous, out TControlPoint a, out TControlPoint b,
-                out TControlPoint next);
+            GetControlPoints(i, out previous, out a, out b, out next);
 
             for (int j = 0; j < drawingPointsOnSegment; j++)
             {
-                float rate = (float)j / drawingPointsOnSegment - 1;
+                float rate = (float)j / drawingPointsOnSegment;
                 yield return InterpolateOnASegment(previous, a, b, next, rate);
             }
-        }
-    }
+        }   
+        
+        GetControlPoints(segmentCount-1, out previous, out a, out b, out next);
+        yield return InterpolateOnASegment(previous, a, b, next, 1);
 
-
-    // -------------------------- IDrawable --------------------------
-
-    public Drawable ToDrawable() => ToDrawable(DefaultDrawingPointsOnSegment, 0);
-    
-    public Drawable ToDrawable(int drawingPointsOnSegment) => ToDrawable(drawingPointsOnSegment, 0);
-
-    public Drawable ToDrawable(int drawingPointsOnSegment, float forwardSizeMultiplier)
-    {
-        if (controlPoints == null || controlPoints.Count <= 1)
-            return new Drawable(Array.Empty<Vector3>());
-
-        var forwards = new List<Vector3[]>();
-        var spline = new List<Vector3>(); 
-
-        foreach (PathInterpolatedPoint point in EvaluateFull(drawingPointsOnSegment))
-        {
-            Vector3 position = point.position;
-            spline.Add(position);
-            if (forwardSizeMultiplier > 0)
-            {
-                Vector3 forward = point.forward * forwardSizeMultiplier;
-                forwards.Add(new[] { position, position + forward * forwardSizeMultiplier });
-            }
-        }
-
-        forwards.Add(spline.ToArray());
-        return new Drawable(forwards.ToArray());
-    } 
-    
-    // -------------------------- Handles --------------------------
-    
-    IEnumerable<Pose> GetHandles() => controlPoints.Select(ControlPointToPose);
-
-    void SetHandle(int index, Vector3 position)
-    {
-        controlPoints[index] = PoseToControlPoint(new Pose(position, Quaternion.identity));
     }
     
+    public override void OnDrawHandles()
+    {
+        for (int index = 0; index < controlPoints.Count; index++)
+            controlPoints[index] = DrawControlPointHandle(controlPoints[index]);
+    }
+    
+    protected virtual TControlPoint DrawControlPointHandle(TControlPoint controlPoint)
+    {
+        Pose pose = ControlPointToPose(controlPoint);
+        pose.position = EasyHandles.PositionHandle(pose.position);
+        return PoseToControlPoint(pose);
+    }
+
     public abstract Pose ControlPointToPose(TControlPoint point);
     public abstract TControlPoint PoseToControlPoint(Pose pose);
 }

@@ -85,7 +85,6 @@ public class PolygonComponent : MonoBehaviourWithHandles
     {
         if(!drawGizmos) return;
         if (_polygon == null) return;
-        
         Gizmos.color = gizmoColor;
         
         Points.DrawGizmo();

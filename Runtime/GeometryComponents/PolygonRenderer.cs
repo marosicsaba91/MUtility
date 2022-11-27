@@ -20,21 +20,14 @@ public class PolygonRenderer : MonoBehaviour
             lineRenderer = GetComponent<LineRenderer>();
     }
     
-    IPolygon _lastPolygon;
-
     void Update()
     {
         if(polygonComponent == null || lineRenderer == null)
             return;
-
-        if (polygonComponent.Polygon != _lastPolygon)
-        {
+        
+        // TODO: Optimize
+        if(!Application.isPlaying)
             UpdateLine();
-            _lastPolygon = polygonComponent.Polygon;
-        }
-        
-        
-        UpdateLine();
     }
 
     public void UpdateLine()

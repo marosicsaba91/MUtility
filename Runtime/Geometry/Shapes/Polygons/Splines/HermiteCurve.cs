@@ -21,10 +21,13 @@ public struct HermiteNode
     public EditingStyle editingStyle;
 }
 
-public class HermiteCurve : PathCurve<HermiteNode>
+[Serializable]
+public class HermiteCurve : PathPolygon<HermiteNode>
 {
-    protected override int DefaultDrawingPointsOnSegment => 25;
+    
+    protected override int DefaultDrawingPointCountOnSegment => 25;
 
+    public HermiteCurve() : base(Array.Empty<HermiteNode>()) { }
     public HermiteCurve(bool isClosed, params HermiteNode[] nodes) : base(isClosed, nodes) { }
     public HermiteCurve(params HermiteNode[] nodes) : base(nodes) { }
     
@@ -58,33 +61,10 @@ public class HermiteCurve : PathCurve<HermiteNode>
 
     public override HermiteNode PoseToControlPoint(Pose pose) => new HermiteNode(){position = pose.position};
 
-
-    /*
-    public Drawable ToDrawable() => ToDrawable(DefaultDrawingPointsOnSegment);
-
-    public Drawable ToDrawable(int drawingPointsOnSegment) => new Drawable(new List<Vector3[]>
-    {
-        ToVectorArray(drawingPointsOnSegment)
-    });
-
-    public Vector3[] ToVectorArray() => ToVectorArray(DefaultDrawingPointsOnSegment);
-
-    public Vector3[] ToVectorArray(int drawingPointsOnSegment)
-    {
-        if (controlPoints == null) return default;
-        int nodeCount = controlPoints.Count;
-        if (nodeCount == 0) return default;
-
-        int curvePointCount = drawingPointsOnSegment * SegmentCount + 1;
-        var points = new Vector3[curvePointCount];
-        for (int i = 0; i < curvePointCount; i++)
-        {
-            float t = (float) i / drawingPointsOnSegment;
-            points[i] = Evaluate(t);
-        }
-
-        return points;
+    protected override HermiteNode DrawControlPointHandle(HermiteNode controlPoint)
+    { 
+        controlPoint.position = EasyHandles.PositionHandle(controlPoint.position);
+        return controlPoint;
     }
-    */
 }
 }

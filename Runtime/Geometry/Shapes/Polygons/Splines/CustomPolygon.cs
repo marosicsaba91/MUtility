@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MUtility
 {
     [Serializable]
-    public class Polygon : PathCurve<Vector3>
+    public class CustomPolygon : PathPolygon<Vector3>
     {
-        protected override int DefaultDrawingPointsOnSegment => 1;
+        public CustomPolygon() : base(Array.Empty<Vector3>()) { }
+        protected override int DefaultDrawingPointCountOnSegment => 1;
 
         public float Area => Mathf.Abs(SignedDoubleArea() * 0.5f);
 

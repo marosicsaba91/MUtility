@@ -35,8 +35,8 @@ public class PolygonMover : MonoBehaviour
     
     [SerializeField] MovementType movementType = MovementType.Transform;
     
-    [SerializeField, ShowIf(nameof(ShowRigidbody))] new Rigidbody rigidbody;
-    [SerializeField, ShowIf(nameof(ShowRigidbody2D))] new Rigidbody2D rigidbody2D;
+    [SerializeField, ShowIf(nameof(ShowRigidbody))] Rigidbody rigidBody;
+    [SerializeField, ShowIf(nameof(ShowRigidbody2D))] Rigidbody2D rigidBody2D;
     [SerializeField, ShowIf(nameof(ShowRigidbodySettings))] RigidBodyMovementType rigidBodyMovementType;
     
     bool ShowRigidbody => polygon!=null && movementType == MovementType.Rigidbody;
