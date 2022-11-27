@@ -1,4 +1,5 @@
-﻿using MUtility;
+﻿/*
+using MUtility;
 using UnityEngine;
 
 [RequireComponent(typeof(PolygonComponent))]
@@ -70,3 +71,4 @@ public class PolygonMover : MonoBehaviour
     //[SerializeField] bool faceDirection;
     //[SerializeField] MovementType rotation = MovementType.Transform;
 }
+*/
