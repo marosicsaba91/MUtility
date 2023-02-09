@@ -18,29 +18,29 @@ namespace MUtility
 
 #if UNITY_EDITOR  
 	
-	[CustomPropertyDrawer(typeof(LayerAttribute))]
-	public class LayerAttributeDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(LayerAttribute))]
+public class LayerAttributeDrawer : PropertyDrawer
+{
+	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 	{
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+		if (property.propertyType != SerializedPropertyType.Integer)
 		{
-			if (property.propertyType != SerializedPropertyType.Integer)
-			{
-				if (!_checked) Warning(property);
-				EditorGUI.PropertyField(position, property, label);
-				return;
-			}
-			
-			property.intValue = EditorGUI.LayerField(position, label, property.intValue);
+			if (!_checked) Warning(property);
+			EditorGUI.PropertyField(position, property, label);
+			return;
 		}
-
-		bool _checked;
-
-		void Warning(SerializedProperty property)
-		{
-			Debug.LogWarning(string.Format("Property <color=brown>{0}</color> in object <color=brown>{1}</color> is of wrong type. Expected: Int",
-				property.name, property.serializedObject.targetObject));
-			_checked = true;
-		}
+		
+		property.intValue = EditorGUI.LayerField(position, label, property.intValue);
 	}
+
+	bool _checked;
+
+	void Warning(SerializedProperty property)
+	{
+		Debug.LogWarning(string.Format("Property <color=brown>{0}</color> in object <color=brown>{1}</color> is of wrong type. Expected: Int",
+			property.name, property.serializedObject.targetObject));
+		_checked = true;
+	}
+}
 #endif
 }
