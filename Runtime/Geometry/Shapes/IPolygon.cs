@@ -6,7 +6,7 @@ namespace MUtility
 {
 public interface IPolygon
 {
-    IEnumerable<Vector3> Points { get; } 
+    IEnumerable<Vector3> Points { get; }
 }
 
 public static class PolygonExtensions
@@ -35,7 +35,7 @@ public static class PolygonExtensions
         scale.y * p.y,
         scale.z * p.z));
 
-    public static IEnumerable<Vector3> Transform(this IEnumerable<Vector3> polygon, Vector3 offset, Quaternion rotate, float scale)
+    public static IEnumerable<Vector3> Transform(this IEnumerable<Vector3> polygon, Vector3 offset, Quaternion rotate, float scale = 1)
     {
         foreach (Vector3 point in polygon)
         {
@@ -58,7 +58,7 @@ public static class PolygonExtensions
                 scale.z * p.z + offset.z);
         }
     }
-
+    
     public static void DrawGizmo(this IEnumerable<Vector3> polygon, Color color) =>
         DrawPolygonDebug(polygon, color, Drawable.DrawingType.Gizmo);
 

@@ -12,7 +12,7 @@ public static class SpacialShapeHelper
             Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
 
             EasyHandles.PushMatrix(matrix);
-            handleable.OnDrawHandles();
+            handleable.DrawHandles();
             shape = (T)handleable;
             EasyHandles.PopMatrix(matrix);
         }

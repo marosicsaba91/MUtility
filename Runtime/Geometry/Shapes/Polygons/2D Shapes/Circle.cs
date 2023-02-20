@@ -16,6 +16,13 @@ namespace MUtility
         {
             this.radius = radius; 
         }
+        
+        public Circle(CircleCollider2D collider) 
+        {
+            Vector2 scale = collider.transform.lossyScale;
+            float s = Mathf.Max(scale.x, scale.y);
+            radius = collider.radius * s;
+        }
 
         public Vector2 GetRandomPoint()
         {
@@ -89,17 +96,17 @@ namespace MUtility
                 float phase = angle * i;
                 points[i] = Mathf.Sin(phase) * right + Mathf.Cos(phase) * up;
             }
-            points[points.Length - 1] = points[0];
+            points[^1] = points[0];
 
             return points;
         }
         
 
-        public void OnDrawHandles()
+        public void DrawHandles()
         {
             if (radius == 0) return; 
             EasyHandles.fullObjectSize = 2 * radius; 
-            radius = EasyHandles.PositionHandle(new Vector2(radius, 0), Vector3.right).x;
+            radius = EasyHandles.PositionHandle(new Vector2(radius, 0), Vector3.right, EasyHandles.Shape.Dot).x;
         }
 
         public Vector2 GetRandomPointInArea()
@@ -109,10 +116,13 @@ namespace MUtility
 
             float x = r * Mathf.Sin(a);
             float y = r * Mathf.Cos(a);
-            return new Vector2(x, y);
+            return new(x, y);
         }
     }
 
-public class SpacialCircle : SpacialPolygon<Circle> { }
+public class SpacialCircle : SpacialPolygon<Circle>
+{
+    public SpacialCircle(CircleCollider2D collider) : base(collider.transform) => polygon = new(collider);
+}
 
 }

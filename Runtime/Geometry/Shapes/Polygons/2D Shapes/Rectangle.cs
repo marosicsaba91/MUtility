@@ -18,6 +18,16 @@ public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
     {
         size = new Vector2(width, height);
     }
+    
+    public Rectangle(BoxCollider2D boxCollider)
+    {
+        Transform transform = boxCollider.transform;
+        Vector3 lossyScale = transform.lossyScale;
+        Vector2 colliderSize = boxCollider.size;
+        float width = colliderSize.x * lossyScale.x;
+        float height = colliderSize.y * lossyScale.y;
+        size = new(width, height);
+    }
 
 
     public float Area => size.x * size.y;
@@ -42,7 +52,7 @@ public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
     public Vector2 BottomRight => new Vector2(XMax, YMin);
     public Vector2 BottomLeft => new Vector2(XMin, YMin);
 
-    public void OnDrawHandles()
+    public void DrawHandles()
     {
         if (size.x == 0 || size.y == 0) return; 
         
@@ -85,6 +95,11 @@ public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
 }
 
 [Serializable]
-public class SpacialRectangle : SpacialPolygon<Rectangle> { }
+public class SpacialRectangle : SpacialPolygon<Rectangle>
+{
+    public SpacialRectangle() { }
+    
+    public SpacialRectangle(BoxCollider2D boxCollider) : base(boxCollider.transform) => polygon = new(boxCollider);
+}
 
 }

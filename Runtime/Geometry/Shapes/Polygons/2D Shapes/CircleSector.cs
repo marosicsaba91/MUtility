@@ -76,7 +76,6 @@ public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumferenc
 
     public IEnumerable<Vector3> ToPolygon(int fullCircleFragmentCount = defaultFragmentCount)
     {
-        Winding wind = winding;
         float segmentLength = DeltaAngleDeg;
 
         float startAngleInRad = (-startAngleDeg + 90) * Mathf.Deg2Rad;
@@ -85,24 +84,25 @@ public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumferenc
 
         segmentLength *= Mathf.Deg2Rad;
         
-        var points = new Vector3[segmentCount * 2 + 1];
-
-        Vector3 right = new Vector2(radius, 0);
-        Vector3 up = new Vector2(0, radius);
-
-        int pointIndex = 0;
-        AddSegmentPoints(true);
-
-        right = new Vector2(InnerRadius, 0);
-        up = new Vector2(0, InnerRadius);
- 
-        AddSegmentPoints(false);
-        points[pointIndex] = points[0];
-
-        return points;
+        foreach (Vector3 point in AddSegmentPoints(true, radius))
+            yield return point;
+        
+        
+        if (innerRadiusRate < 1)
+        {
+            foreach (Vector3 point in AddSegmentPoints(false, InnerRadius))
+                yield return point; 
+            
+            Vector3 rightDir = new Vector2(radius, 0);
+            Vector3 upDir = new Vector2(0, radius);
+            yield return Mathf.Sin(startAngleInRad) * rightDir + Mathf.Cos(startAngleInRad) * upDir;
+        }
        
-        void AddSegmentPoints(bool bigRound)
+        IEnumerable<Vector3> AddSegmentPoints(bool bigRound, float radius)
         {  
+            Vector3 right = new Vector2(radius, 0);
+            Vector3 up = new Vector2(0, radius);
+            
             for (int i = 0; i < segmentCount; i++)
             {
                 float rate = (float)i / (segmentCount - 1);
@@ -111,13 +111,12 @@ public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumferenc
                     rate = 1 - rate;
                 
                 float phase = startAngleInRad - rate * segmentLength;
-                points[pointIndex] = Mathf.Sin(phase) * right + Mathf.Cos(phase) * up;
-                pointIndex++;
+                yield return Mathf.Sin(phase) * right + Mathf.Cos(phase) * up;
             }
         }
     }
  
-    public void OnDrawHandles()
+    public void DrawHandles()
     {
         Normalize ();
         

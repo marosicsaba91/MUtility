@@ -147,7 +147,7 @@ namespace MUtility
         }
 
         
-        public void OnDrawHandles()
+        public void DrawHandles()
         {
             EasyHandles.PositionHandle(origin);
             EasyHandles.PositionHandle(Head);

@@ -29,7 +29,7 @@ public class PolygonComponent : MonoBehaviourWithHandles
     
     bool HaveLocalPose => space == Space.World || space == Space.TransformWithOffset; 
 
-    public override bool InSelfSpace => space == Space.Self || space == Space.TransformWithOffset;
+    public override bool DrawHandlesInSelfSpace => space == Space.Self || space == Space.TransformWithOffset;
     public IEnumerable<Vector3> Points 
     { 
         get
@@ -42,7 +42,7 @@ public class PolygonComponent : MonoBehaviourWithHandles
             if(HaveLocalPose) 
                 points = points.Rotate(rotation).Offset(position);
         
-            if (InSelfSpace)
+            if (DrawHandlesInSelfSpace)
                 points = points.Transform(transform);
             
             foreach (Vector3 point in points)
@@ -99,7 +99,7 @@ public class PolygonComponent : MonoBehaviourWithHandles
             Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
 
             EasyHandles.PushMatrix(matrix);
-            handleable.OnDrawHandles();
+            handleable.DrawHandles();
             shape = (T)handleable;
             EasyHandles.PopMatrix(matrix);
         }
@@ -119,13 +119,13 @@ public class PolygonComponent : MonoBehaviourWithHandles
             {
                 Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
                 EasyHandles.PushMatrix(matrix);
-                handleableObject.OnDrawHandles();
+                handleableObject.DrawHandles();
                 _polygon = (IPolygon) handleableObject;
                 EasyHandles.PopMatrix(matrix);
             }
             else
             {
-                handleableObject.OnDrawHandles();
+                handleableObject.DrawHandles();
                 _polygon = (IPolygon) handleableObject;
             }
         }

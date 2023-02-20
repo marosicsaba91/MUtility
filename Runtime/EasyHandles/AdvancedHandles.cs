@@ -5,7 +5,6 @@ using UnityEngine;
 
 class AdvancedHandles
 {
-    // internal state for DragHandle()
     static readonly int _sDragHandleHash = "DragHandleHash".GetHashCode();
     static Vector2 _sDragHandleMouseStart;
     static Vector2 _sDragHandleMouseCurrent;
@@ -13,9 +12,8 @@ class AdvancedHandles
     static float _sDragHandleClickTime = 0;
     static int _sDragHandleClickID;
     static readonly float _sDragHandleDoubleClickInterval = 0.5f;
-    // static bool s_DragHandleHasMoved;
 
-    // externally accessible to get the ID of the most resently processed DragHandle
+    // externally accessible to get the ID of the most recently processed DragHandle
     public static int lastDragHandleID;
 
     public enum HandleEvent
@@ -117,9 +115,11 @@ class AdvancedHandles
                 Color currentColour = Handles.color;
                 Handles.color = (id == GUIUtility.hotControl) ? colorSelected :
                     HandleUtility.nearestControl == id ? focusedColor : color;
-  
 
-                Quaternion matrixR =  cachedMatrix.ToQuaternion() * rotation; 
+
+                Quaternion matrixR = cachedMatrix.ToQuaternion();
+                matrixR.Normalize();
+                matrixR *= rotation;
                 
                 Handles.matrix = Matrix4x4.identity;
                 capFunction(id, screenPosition, matrixR, handleSize, EventType.Repaint);
@@ -135,7 +135,7 @@ class AdvancedHandles
                 break;
         }
 
-        return new HandleResult() {clickPosition = _sDragHandleWorldStart, newPosition = position, handleEvent = handleEventType };
+        return new() {clickPosition = _sDragHandleWorldStart, newPosition = position, handleEvent = handleEventType };
     }
 
 

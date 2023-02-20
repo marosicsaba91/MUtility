@@ -51,7 +51,7 @@ public abstract class PathPolygon : IPolygon, IEasyHandleable
         return new Drawable(forwards.ToArray());
     }
 
-    public abstract void OnDrawHandles();
+    public abstract void DrawHandles();
 }
 
 [Serializable]
@@ -151,7 +151,7 @@ public abstract class PathPolygon<TControlPoint> : PathPolygon, IDrawable
 
     }
     
-    public override void OnDrawHandles()
+    public override void DrawHandles()
     {
         for (int index = 0; index < controlPoints.Count; index++)
             controlPoints[index] = DrawControlPointHandle(controlPoints[index]);

@@ -1,9 +1,4 @@
-﻿// ---------------------------------------------------------------------------- 
-// Author: Anton
-// https://github.com/antontidev
-// ----------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using UnityEngine;
 
 #if UNITY_EDITOR 
@@ -12,63 +7,90 @@ using UnityEngine;
 
 namespace MUtility
 {
-    /// <summary>
-    /// Used to pick scene from inspector.
-    /// Consider to use <see cref="SceneReference"/> type instead as it is more flexible
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public class SceneAttribute : PropertyAttribute
-    {
-    } 
+[Serializable]
+public class SceneReference
+{
+    [SerializeField] string guid;
+    [SerializeField] string sceneName;
+} 
+
+
 
 #if UNITY_EDITOR 
-    [CustomPropertyDrawer(typeof(SceneAttribute))]
+    [CustomPropertyDrawer(typeof(SceneReference))]
 	public class SceneDrawer : PropertyDrawer
 	{
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            SerializedProperty guidProperty = property.FindPropertyRelative("guid");
+            SerializedProperty nameProperty = property.FindPropertyRelative("sceneName");
+            string oldGuid = guidProperty.stringValue;
 
-            if (property.propertyType == SerializedPropertyType.String)
+            SceneAsset oldScene = GetSceneObject(oldGuid);
+            SceneAsset newScene = (SceneAsset)EditorGUI.ObjectField(position, label, oldScene, typeof(SceneAsset), true);
+                string newGuid = GetGiud(newScene);
+            if (newScene == null || newGuid == null)
             {
-                var sceneObject = GetSceneObject(property.stringValue);
-                var scene = EditorGUI.ObjectField(position, label, sceneObject, typeof(SceneAsset), true);
-                if (scene == null)
-                {
-                    property.stringValue = "";
-                }
-                else if (scene.name != property.stringValue)
-                {
-                    var sceneObj = GetSceneObject(scene.name);
-                    if (sceneObj == null)
-                    {
-                        Debug.LogWarning("The scene " + scene.name + " cannot be used. To use this scene add it to the build settings for the project");
-                    }
-                    else
-                    {
-                        property.stringValue = scene.name;
-                    }
-                }
+                guidProperty.stringValue = null;
+                nameProperty.stringValue = null;
             }
             else
-                EditorGUI.LabelField(position, label.text, "Use [Scene] with strings.");
+            {
+                guidProperty.stringValue = newGuid;
+                nameProperty.stringValue = newScene.name;
+            }
+
+            if (newScene != null && !IsInBuildSettings(newScene.name))
+            {
+                Rect p = position;
+                p.width = 18;
+                p.x = EditorHelper.ContentStartX - p.width - EditorGUIUtility.standardVerticalSpacing;
+                GUIContent content = new("⚠️", "Scene not found in build settings.");
+                EditorHelper.DrawErrorBox(p, true);
+                p.x += 2;
+                EditorGUI.LabelField(p, content);
+            }
         }
-        protected SceneAsset GetSceneObject(string sceneObjectName)
+
+        protected SceneAsset GetSceneObject(string guid)
         {
-            if (string.IsNullOrEmpty(sceneObjectName))
+            if (string.IsNullOrEmpty(guid))
+                return null;
+
+            
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            SceneAsset sceneObject = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
+            return sceneObject;
+        }
+
+        protected string GetGiud(SceneAsset sceneObject)
+        {
+            if (sceneObject == null)
             {
                 return null;
             }
 
-            foreach (var editorScene in EditorBuildSettings.scenes)
+            string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(sceneObject));
+            return guid;
+        }
+
+        protected bool IsInBuildSettings(string sceneObjectName)
+        {
+            if (string.IsNullOrEmpty(sceneObjectName))
             {
-                if (editorScene.path.IndexOf(sceneObjectName) != -1)
-                {
-                    return AssetDatabase.LoadAssetAtPath(editorScene.path, typeof(SceneAsset)) as SceneAsset;
-                }
+                return false;
             }
-            Debug.LogWarning("Scene [" + sceneObjectName + "] cannot be used. Add this scene to the 'Scenes in the Build' in build settings.");
-            return null;
+
+            foreach (EditorBuildSettingsScene editorScene in EditorBuildSettings.scenes)
+            {
+                if (editorScene.path.IndexOf(sceneObjectName, StringComparison.Ordinal)  != -1)     
+                    return true;
+
+            } 
+            return false;
         }
     }
 #endif
+
+
 }

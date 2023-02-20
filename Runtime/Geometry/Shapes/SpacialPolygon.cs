@@ -3,18 +3,42 @@ using UnityEngine;
 
 namespace MUtility
 {
-public abstract class SpacialPolygon<TPolygon> : IEasyHandleable, IPolygon where TPolygon : IPolygon
+public abstract class SpacialPolygon<TPolygon> : IEasyHandleable, IPolygon, IDrawable where TPolygon : IPolygon
 {
     public TPolygon polygon;
     public Vector3 position; 
     [EulerAngles] public Quaternion rotation;
+    
+    protected SpacialPolygon() { }
+
+    protected SpacialPolygon(Transform transform)
+    { 
+        position = transform.position;
+        rotation = transform.rotation;
+    }
+    
+    protected SpacialPolygon(TPolygon polygon, Transform transform)
+    {
+        this.polygon = polygon;
+        position = transform.position;
+        rotation = transform.rotation;
+    }
+
+    protected SpacialPolygon(TPolygon polygon, Vector3 position = default, Quaternion rotation = default)
+    {
+        this.polygon = polygon;
+        this.position = position;
+        this.rotation = rotation;
+    }
+    
 
     public IEnumerable<Vector3> Points => polygon.Points.Transform(position, rotation, 1);
 
-    public void OnDrawHandles() => SpacialShapeHelper.OnDrawHandles(ref polygon, ref position, ref rotation);
+    public void DrawHandles() => SpacialShapeHelper.OnDrawHandles(ref polygon, ref position, ref rotation);
 
     public Vector3 Right => rotation * Vector3.right;
     public Vector3 Up => rotation * Vector3.up;
     public Vector3 Forward => rotation * Vector3.forward;
+    public Drawable ToDrawable() => polygon.Points.Transform(position, rotation).ToDrawable();
 }
 }

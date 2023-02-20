@@ -59,7 +59,7 @@ public struct Ellipse : IPolygon, IDrawable, IEasyHandleable, ICircumference, IA
         return points;
     }
 
-    public void OnDrawHandles()
+    public void DrawHandles()
     {
         if (radiusHorizontal == 0 || radiusVertical == 0) return; 
         

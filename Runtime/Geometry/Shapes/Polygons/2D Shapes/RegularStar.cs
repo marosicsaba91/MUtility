@@ -93,7 +93,7 @@ public struct RegularStar : IPolygon, IDrawable, IEasyHandleable, ICircumference
         }
     }
     public Drawable ToDrawable() => Points.ToDrawable();
-    public void OnDrawHandles()
+    public void DrawHandles()
     {
         radius = EasyHandles.PositionHandle(Vector3.up* radius, Vector3.up, EasyHandles.Shape.Dot).y;
         
