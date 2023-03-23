@@ -102,11 +102,14 @@ namespace MUtility
         }
         
 
-        public void DrawHandles()
+        public bool DrawHandles()
         {
-            if (radius == 0) return; 
-            EasyHandles.fullObjectSize = 2 * radius; 
-            radius = EasyHandles.PositionHandle(new Vector2(radius, 0), Vector3.right, EasyHandles.Shape.Dot).x;
+            if (radius == 0) return false; 
+            EasyHandles.fullObjectSize = 2 * radius;
+            Vector3 newVector = EasyHandles.PositionHandle(new Vector2(radius, 0), Vector3.right, EasyHandles.Shape.Dot);
+            if(Math.Abs(radius - newVector.x) < float.Epsilon) return false;
+            radius = newVector.x;
+                return true;
         }
 
         public Vector2 GetRandomPointInArea()

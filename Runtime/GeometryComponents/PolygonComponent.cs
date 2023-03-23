@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MUtility
 {
-
 public class PolygonComponent : MonoBehaviourWithHandles
 { 
-    public enum Space 
+    public enum PolygonSpace 
     {
         Self,
         World,
-        Center,
-        TransformWithOffset
+        SelfWithPose,
+        WorldWithPose,
     }
     
     [SerializeReference, TypePicker(nameof(TypeFilter))] IPolygon _polygon;
@@ -23,13 +23,19 @@ public class PolygonComponent : MonoBehaviourWithHandles
             _polygon = (IPolygon)Activator.CreateInstance(type);
     }
 
-    [SerializeField] Space space;
-    [SerializeField, ShowIf(nameof(HaveLocalPose))] Vector3 position;
-    [SerializeField, ShowIf(nameof(HaveLocalPose)), EulerAngles] Quaternion rotation;
+    [SerializeField] PolygonSpace space;
+    [SerializeField, ShowIf(nameof(HavePose))] Vector3 position;
+    [SerializeField, ShowIf(nameof(HavePose))] Quaternion rotation; 
+    [SerializeField, ShowIf(nameof(HavePose))] bool drawPoseHandles = true;
     
-    bool HaveLocalPose => space == Space.World || space == Space.TransformWithOffset; 
+    public event Action Updated;
+    public PolygonSpace Space => space;
 
-    public override bool DrawHandlesInSelfSpace => space == Space.Self || space == Space.TransformWithOffset;
+    bool HavePose => 
+        space == PolygonSpace.WorldWithPose ||
+        space == PolygonSpace.SelfWithPose;
+    
+    public override bool DrawHandlesInSelfSpace => space == PolygonSpace.Self || space == PolygonSpace.SelfWithPose;
     public IEnumerable<Vector3> Points 
     { 
         get
@@ -39,7 +45,7 @@ public class PolygonComponent : MonoBehaviourWithHandles
             
             IEnumerable<Vector3> points = _polygon.Points;
         
-            if(HaveLocalPose) 
+            if(HavePose) 
                 points = points.Rotate(rotation).Offset(position);
         
             if (DrawHandlesInSelfSpace)
@@ -50,13 +56,21 @@ public class PolygonComponent : MonoBehaviourWithHandles
         }
     }
 
+    void OnValidate()
+    {
+        if (_polygon is Spline spline)
+            spline.SetDirty();
+        Updated?.Invoke();
+    }
+
     public IPolygon Polygon => _polygon;
 
 
     [Header("Gizmos")]
+    
     [SerializeField] bool drawGizmos = true;
     [SerializeField] Color gizmoColor = Color.white;
-    [SerializeField] bool drawHandles = true;
+    [FormerlySerializedAs("drawHandles")] [SerializeField] bool drawShapeHandles = true;
     
     public Type GetPolygonType() => _polygon?.GetType();
     
@@ -80,7 +94,6 @@ public class PolygonComponent : MonoBehaviourWithHandles
         return false;
     }
     
-
     void OnDrawGizmos()
     {
         if(!drawGizmos) return;
@@ -89,52 +102,48 @@ public class PolygonComponent : MonoBehaviourWithHandles
         
         Points.DrawGizmo();
     } 
-
-    public static void OnDrawHandles<T>(ref T shape, ref Vector3 position, ref Quaternion rotation)
-    { 
-        
-        if (shape is IEasyHandleable handleable)
-        {
-            rotation.Normalize();
-            Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
-
-            EasyHandles.PushMatrix(matrix);
-            handleable.DrawHandles();
-            shape = (T)handleable;
-            EasyHandles.PopMatrix(matrix);
-        }
-        
-        position = EasyHandles.PositionHandle(position, rotation, EasyHandles.Shape.SmallPosition);
-        rotation = EasyHandles.RotationHandle(position, rotation);
-    }
     
     public override void OnDrawHandles()
     {
-        if(!drawHandles) return;
-        
-        if (_polygon is IEasyHandleable handleableObject)
+        bool changed = false;
+
+        if (drawShapeHandles)
         {
-            rotation.Normalize(); 
-            if (HaveLocalPose)
+            EasyHandles.fullObjectSize = 10f;
+            if (_polygon is IEasyHandleable handleableObject)
             {
-                Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
-                EasyHandles.PushMatrix(matrix);
-                handleableObject.DrawHandles();
-                _polygon = (IPolygon) handleableObject;
-                EasyHandles.PopMatrix(matrix);
-            }
-            else
-            {
-                handleableObject.DrawHandles();
-                _polygon = (IPolygon) handleableObject;
+                rotation.Normalize();
+                if (HavePose)
+                {
+                    Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
+                    EasyHandles.PushMatrix(matrix);
+                    changed |= handleableObject.DrawHandles();
+                    _polygon = (IPolygon)handleableObject;
+                    EasyHandles.PopMatrix(matrix);
+                }
+                else
+                {
+                    changed |= handleableObject.DrawHandles();
+                    _polygon = (IPolygon)handleableObject;
+                }
             }
         }
 
-        if (HaveLocalPose)
+        if (HavePose && drawPoseHandles)
         {
-            position = EasyHandles.PositionHandle(position, rotation, EasyHandles.Shape.SmallPosition);
-            rotation = EasyHandles.RotationHandle(position, rotation);
+            Vector3 newPosition = EasyHandles.PositionHandle(position, rotation, EasyHandles.Shape.SmallPosition);
+            Quaternion newRotation = EasyHandles.RotationHandle(position, rotation);
+
+            if (position != newPosition || rotation != newRotation)
+            {
+                position = newPosition;
+                rotation = newRotation;
+                changed = true;
+            }
         }
+
+        if(changed)
+            Updated?.Invoke();
     }
 }
 }

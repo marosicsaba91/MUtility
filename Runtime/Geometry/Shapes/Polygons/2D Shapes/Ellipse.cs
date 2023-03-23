@@ -59,9 +59,10 @@ public struct Ellipse : IPolygon, IDrawable, IEasyHandleable, ICircumference, IA
         return points;
     }
 
-    public void DrawHandles()
+    public bool DrawHandles()
     {
-        if (radiusHorizontal == 0 || radiusVertical == 0) return; 
+        if (radiusHorizontal == 0 || radiusVertical == 0) return false; 
+        Ellipse old = this;
         
         Vector2 vx = Vector2.right * radiusHorizontal;
         Vector2 vy = Vector2.up * radiusVertical;
@@ -74,7 +75,9 @@ public struct Ellipse : IPolygon, IDrawable, IEasyHandleable, ICircumference, IA
         EasyHandles.fullObjectSize = size;
         
         radiusHorizontal = EasyHandles.PositionHandle(vx,  vx.normalized).x;
-        radiusVertical = EasyHandles.PositionHandle(vy, vy.normalized).y; 
+        radiusVertical = EasyHandles.PositionHandle(vy, vy.normalized).y;
+
+        return !Equals(old, this);
     } 
 
     public Vector2 GetRandomPointInArea()

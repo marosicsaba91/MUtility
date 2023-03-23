@@ -1,41 +1,52 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace MUtility
 {
 
-[ExecuteAlways]
-[RequireComponent(typeof(PolygonComponent))]
+[RequireComponent(typeof(PolygonComponent), typeof(LineRenderer))]
 public class PolygonRenderer : MonoBehaviour
 {
-    [SerializeField] PolygonComponent polygonComponent;
-    [SerializeField] LineRenderer lineRenderer;
+    [SerializeField, HideInInspector] PolygonComponent polygonComponent;
+    [SerializeField, HideInInspector] LineRenderer lineRenderer;
+    [SerializeField] DisplayMember updateLineRenderer = new(nameof(UpdateLine));
 
     void OnValidate()
     {
+        bool isNew = polygonComponent == null || lineRenderer == null;
+        
         if (polygonComponent == null)
             polygonComponent = GetComponent<PolygonComponent>();
         if (lineRenderer == null)
             lineRenderer = GetComponent<LineRenderer>();
-    }
-    
-    void Update()
-    {
-        if(polygonComponent == null || lineRenderer == null)
-            return;
         
-        // TODO: Optimize
-        if(!Application.isPlaying)
+        if (polygonComponent == null) return;
+        if (lineRenderer == null) return;
+
+        
+        polygonComponent.Updated -= UpdateLine;
+        polygonComponent.Updated += UpdateLine;
+        
+        if(isNew)
             UpdateLine();
     }
 
-    public void UpdateLine()
+    void UpdateLine()
     {
-        Vector3[] points = polygonComponent.Points.ToArray();
-        lineRenderer.positionCount = points.Length;
-        lineRenderer.SetPositions(points);
-        lineRenderer.useWorldSpace = true;
+        lineRenderer.useWorldSpace =
+            polygonComponent.Space == PolygonComponent.PolygonSpace.WorldWithPose ||
+            polygonComponent.Space == PolygonComponent.PolygonSpace.World;
+
+        var points = polygonComponent.Points;
+        
+        
+        if(!lineRenderer.useWorldSpace)
+            points = points.Select(p => transform.InverseTransformPoint(p));
+        
+
+        Vector3[] array = points.ToArray();
+        lineRenderer.positionCount = array.Length;
+        lineRenderer.SetPositions(array);
     }
 }
 }

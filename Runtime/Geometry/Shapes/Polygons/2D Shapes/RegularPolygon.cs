@@ -40,9 +40,12 @@ public struct RegularPolygon : IPolygon, IDrawable, IEasyHandleable, ICircumfere
         }
     }
     public Drawable ToDrawable() => Points.ToDrawable();
-    public void DrawHandles()
+    public bool DrawHandles()
     {
-        radius = EasyHandles.PositionHandle(Vector3.up* radius, Vector3.up, EasyHandles.Shape.Dot).y;
+        float newRadius = EasyHandles.PositionHandle(Vector3.up* radius, Vector3.up, EasyHandles.Shape.Dot).y;
+        if (newRadius == radius) return false;
+        radius = newRadius;
+        return true;
     }
 }
 }

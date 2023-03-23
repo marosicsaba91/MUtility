@@ -93,13 +93,27 @@ public struct RegularStar : IPolygon, IDrawable, IEasyHandleable, ICircumference
         }
     }
     public Drawable ToDrawable() => Points.ToDrawable();
-    public void DrawHandles()
+    public bool DrawHandles()
     {
-        radius = EasyHandles.PositionHandle(Vector3.up* radius, Vector3.up, EasyHandles.Shape.Dot).y;
+        var changed = false;
+        
+        float newRadius = EasyHandles.PositionHandle(Vector3.up* radius, Vector3.up, EasyHandles.Shape.Dot).y;
+        if (newRadius != radius)
+        {
+            radius = newRadius;
+            changed = true;
+        }
         
         float angle = Mathf.PI / pointsCounts;
-        Vector2 dir = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
-        InnerRadius = EasyHandles.PositionHandle(dir * InnerRadius, dir, EasyHandles.Shape.Dot).magnitude;
+        var dir = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
+        float newInnerRadius = EasyHandles.PositionHandle(dir * InnerRadius, dir, EasyHandles.Shape.Dot).magnitude;
+        if (InnerRadius != newInnerRadius)
+        {
+            InnerRadius = newInnerRadius;
+            changed = true;
+        }
+
+        return changed;
     }
 }
 }

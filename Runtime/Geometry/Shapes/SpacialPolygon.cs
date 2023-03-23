@@ -34,7 +34,7 @@ public abstract class SpacialPolygon<TPolygon> : IEasyHandleable, IPolygon, IDra
 
     public IEnumerable<Vector3> Points => polygon.Points.Transform(position, rotation, 1);
 
-    public void DrawHandles() => SpacialShapeHelper.OnDrawHandles(ref polygon, ref position, ref rotation);
+    public bool DrawHandles() => SpacialShapeHelper.OnDrawHandles(ref polygon, ref position, ref rotation);
 
     public Vector3 Right => rotation * Vector3.right;
     public Vector3 Up => rotation * Vector3.up;

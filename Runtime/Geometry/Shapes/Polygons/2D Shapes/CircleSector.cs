@@ -116,9 +116,10 @@ public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumferenc
         }
     }
  
-    public void DrawHandles()
+    public bool DrawHandles()
     {
-        Normalize ();
+        CircleSector old = this;
+        Normalize();
         
         float middleAngle = startAngleDeg + (DeltaAngleDeg / 2);
         Vector3 middleDirection = GeometryHelper.RadianToVector2D(middleAngle * Mathf.Deg2Rad);
@@ -132,6 +133,8 @@ public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumferenc
         
         Vector3 angle2 = GeometryHelper.RadianToVector2D(endAngleDeg * Mathf.Deg2Rad);
         endAngleDeg = EasyHandles.PositionHandle(angle2 * middleRadius).GetAngle();
+        
+        return !Equals(old, this);
     }
 
     void Normalize()

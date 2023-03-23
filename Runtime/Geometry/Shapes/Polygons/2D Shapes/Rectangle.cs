@@ -52,9 +52,10 @@ public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
     public Vector2 BottomRight => new Vector2(XMax, YMin);
     public Vector2 BottomLeft => new Vector2(XMin, YMin);
 
-    public void DrawHandles()
+    public bool DrawHandles()
     {
-        if (size.x == 0 || size.y == 0) return; 
+        if (size.x == 0 || size.y == 0) return false; 
+        Rectangle old = this;
         
         Vector3 right = EasyHandles.PositionHandle(Right);
         Vector3 left = EasyHandles.PositionHandle(Left);
@@ -63,6 +64,7 @@ public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
         
         size = new Vector2(right.x - left.x, top.y - bottom.y);
         size = EasyHandles.PositionHandle(TopRight)*2;
+        return !Equals(old, this);
     }
 
     public Vector2 GetRandomPointInArea() => new Vector2(

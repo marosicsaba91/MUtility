@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MUtility
@@ -147,10 +146,14 @@ namespace MUtility
         }
 
         
-        public void DrawHandles()
+        public bool DrawHandles()
         {
-            EasyHandles.PositionHandle(origin);
-            EasyHandles.PositionHandle(Head);
+            Arrow old = this;
+            
+            origin = EasyHandles.PositionHandle(origin);
+            Head = EasyHandles.PositionHandle(Head);
+            
+            return !Equals(old, this);
         }
         
 

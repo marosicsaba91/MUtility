@@ -94,7 +94,7 @@ public struct Capsule2D : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
 
     public IEnumerable<Vector3> ToPolygon(int segmentCount = defaultSegmentCount)
     {
-        if (size.x == size.y)
+        if (Math.Abs(size.x - size.y) < float.Epsilon)
         {
             Circle circle = new(Radius);
             foreach (Vector3 point in circle.ToPolygon(segmentCount))
@@ -142,17 +142,21 @@ public struct Capsule2D : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
 
     }
 
-    public void DrawHandles()
+    public bool DrawHandles()
     {
-        if (size.x == 0 || size.y == 0) return;
+        if (size.x == 0 || size.y == 0) return false;
+        
+        Vector2 oldSize = size;
 
         Vector3 right = EasyHandles.PositionHandle(Right);
         Vector3 left = EasyHandles.PositionHandle(Left);
         Vector3 top = EasyHandles.PositionHandle(Top);
         Vector3 bottom = EasyHandles.PositionHandle(Bottom);
 
-        Size = new(right.x - left.x, top.y - bottom.y);
+        Size = new Vector2(right.x - left.x, top.y - bottom.y);
         Size = EasyHandles.PositionHandle(TopRight) * 2;
+        
+        return oldSize != size;
     }
 
     public Vector2 GetRandomPointInArea()
