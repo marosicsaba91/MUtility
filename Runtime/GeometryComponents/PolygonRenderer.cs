@@ -9,7 +9,7 @@ namespace MUtility
     {
         [SerializeField, HideInInspector] PolygonComponent polygonComponent;
         [SerializeField, HideInInspector] LineRenderer lineRenderer;
-        [SerializeField] DisplayMember updateLineRenderer = new(nameof(UpdateLine));
+        [SerializeField] DisplayMember updateLineRenderer = new(nameof(ForceUpdateLine));
 
         void OnValidate()
         {
@@ -29,6 +29,14 @@ namespace MUtility
 
             if (isNew)
                 UpdateLine();
+        }
+        
+        void ForceUpdateLine()
+        {
+            if(polygonComponent.Polygon is Spline spline)
+                spline.ForceRecalculatePoints();
+            
+            UpdateLine();
         }
 
         void UpdateLine()

@@ -1,6 +1,4 @@
 using System;
-using System.Reflection;
-using UnityEditor;
 using UnityEngine;
 
 namespace MUtility
@@ -16,6 +14,7 @@ namespace MUtility
             Break,   // C0 G0 (Use SpeedIn & SpeedOut)
             Corner,  // C0 G0 (NO SpeedIn & SpeedOut)
         }
+        const int enumLength = 4;
 
         public Vector3 position;
 
@@ -23,6 +22,38 @@ namespace MUtility
         public Vector3 speedOut;
         public Type type;
 
+        public Vector3 SpeedIn
+        {
+            get => type == Type.Corner ? Vector3.zero : speedIn;
+            set => speedIn = value;
+        }
+
+        public Vector3 SpeedOut
+        {
+            get => type switch
+            {
+                Type.Corner => Vector3.zero,
+                Type.Mirror => speedIn,
+                Type.Smooth => speedIn.normalized * speedOut.magnitude,
+                _ => speedOut
+            };
+            set
+            {
+                if(type == Type.Mirror)
+                    speedIn = value;
+
+                if (type == Type.Smooth)
+                    speedIn = value.normalized * speedIn.magnitude;
+                
+                
+                speedOut = value;
+            }
+        }
+
+        public void NextType()
+        {
+            type = (Type)(((int)type + 1) % enumLength); 
+        }
     }
 
     [Serializable]
@@ -55,8 +86,8 @@ namespace MUtility
 
             Vector3 p0 = a.position;
             Vector3 p1 = b.position;
-            Vector3 v0 = a.speedOut;
-            Vector3 v1 = b.speedIn;
+            Vector3 v0 = a.SpeedOut;
+            Vector3 v1 = b.SpeedIn;
 
             position =
                 (2 * t3 - 3 * t2 + 1) * p0 +
@@ -67,15 +98,8 @@ namespace MUtility
             direction = Vector3.Lerp(v0, v1, t);
         }
 
-        public override Pose ControlPointToPose(ControlPoint point) => new Pose(point.position, Quaternion.identity);
-
-        public override ControlPoint PoseToControlPoint(Pose pose) => new ControlPoint() { position = pose.position };
-
-        protected override ControlPoint DrawControlPointHandle(ControlPoint controlPoint)
-        {
-            controlPoint.position = EasyHandles.PositionHandle(controlPoint.position);
-            return controlPoint;
-        }
+        public override ControlPoint PositionToControlPoint(Vector3 point) => new() 
+            { position = point, SpeedIn = Vector3.one, SpeedOut = Vector3.one };
 
         public override bool DrawHandles()
         {
@@ -85,26 +109,55 @@ namespace MUtility
             for (int i = 0; i < controlPoints.Count; i++)
             {
                 ControlPoint cp = controlPoints[i];
-                Vector3 c = cp.position;
-                 
-                Vector3 p1 = cp.position - cp.speedIn / mult;
-                Handles.DrawLine(c, p1);
+                Vector3 position = cp.position;
+                
+                if (cp.type == ControlPoint.Type.Corner)
+                    continue;
 
+                // IN
+                Vector3 p1 = position - cp.SpeedIn / mult;
+                EasyHandles.DrawLine(position, p1);
                 Vector3 p1New = EasyHandles.PositionHandle(p1);
-                if (!Equals(p1New, p1)) 
+                if (!Equals(p1New, p1))
                 {
-                    Vector3 distance = (c - p1New) * mult;
-                    cp.speedIn = distance;
+                    Vector3 distance = (position - p1New) * mult;
+                    cp.SpeedIn = distance;
                     controlPoints[i] = cp;
                     isChanged = true;
+                    IsDirty = true;
                 }
 
-                 
-                Vector3 p2 = cp.position + cp.speedOut / mult;
-                Handles.DrawLine(c, p2);
+                // OUT
+                Vector3 p2 = cp.position + cp.SpeedOut / mult;
+                EasyHandles.DrawLine(position, p2);
+                Vector3 p2New = EasyHandles.PositionHandle(p2);
+                if (!Equals(p2New, p2))
+                {
+                    Vector3 distance = (p2New - position) * mult;
+                    cp.SpeedOut = distance;
+                    controlPoints[i] = cp;
+                    isChanged = true;
+                    IsDirty = true;
+                }
             }
 
             return isChanged;
+        }
+
+        protected override bool LeftClickOnControlPoint(int index)
+        {
+            ControlPoint cp = ControlPoints[index];
+            cp.NextType();
+            controlPoints[index] = cp;
+            return true;
+        }
+
+        protected override bool Move(Vector3 newPos, int index)
+        {
+            ControlPoint cp = controlPoints[index];
+            cp.position = newPos;
+            controlPoints[index] = cp;
+            return true;
         }
     }
 }

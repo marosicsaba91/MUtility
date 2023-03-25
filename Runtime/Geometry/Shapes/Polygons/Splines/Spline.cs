@@ -211,36 +211,106 @@ public abstract class Spline<TControlPoint> : Spline
 
 
     protected abstract void SafeRecalculatePoints(List<InterpolatedPoint> result);
-
-
+ 
     public override bool DrawHandles()
-    {
-        var changed = false;
-        for (var index = 0; index < controlPoints.Count; index++)
+    { 
+        for (var i = 0; i < controlPoints.Count; i++)
         {
-            TControlPoint p = DrawControlPointHandle(controlPoints[index]);
-            if (Equals(p, controlPoints[index])) continue;
+            TControlPoint cp = controlPoints[i];
+            Vector3 pos =  ControlPointToPosition(cp);
+            Vector3 newPos = EasyHandles.PositionHandle(pos);
+
+            if (!Equals(pos, newPos) && EasyHandles.LastEvent == HandleEvent.LmbDrag)
+            {
+                if( Move(newPos, i))
+                {
+                    IsDirty = true; 
+                    return true;
+                }
+            } 
+                
+            if (EasyHandles.LastEvent == HandleEvent.LmbClick)
+            {
+                if (LeftClickOnControlPoint(i))
+                {
+                    IsDirty = true; 
+                    return true;
+                }
+            }
             
-            controlPoints[index] = p;
-            IsDirty = true;
-            changed = true;
+            if (EasyHandles.LastEvent == HandleEvent.RmbClick)
+            {
+                if (RightClickOnControlPoint(i))
+                {
+                    IsDirty = true;
+                    return true;
+                }
+            }
+            
+            // MIDDLE
+            Ray mid = Evaluate(i + 0.5f); 
+            EasyHandles.PositionHandle(mid.origin, EasyHandles.Shape.Sphere);
+            if (EasyHandles.LastEvent == HandleEvent.LmbClick)
+            {
+                if (LeftClickOnTheMiddlePoint(i, mid.origin))
+                {
+                    IsDirty = true;
+                    return true;
+                }
+            }
+            if (EasyHandles.LastEvent == HandleEvent.RmbClick)
+            {
+                if (RightClickOnTheMiddlePoint(i, mid.origin))
+                {
+                    IsDirty = true;
+                    return true;
+                }
+            }
+            
         }
 
-        return changed;
+        return false;
+    }
+
+    protected virtual bool Move(Vector3 newPos, int i)
+    {
+        TControlPoint cp = PositionToControlPoint(newPos);
+        controlPoints[i] = cp;
+        IsDirty = true; 
+        return true;
+    }
+
+    protected virtual bool RightClickOnControlPoint(int index)
+    {
+        // REMOVE
+        if (controlPoints.Count > 2)
+        {
+            controlPoints.RemoveAt(index);
+            return true;
+        }
+        return false;
+    }
+
+    protected virtual bool LeftClickOnControlPoint(int index) => false;
+
+
+
+    protected virtual bool LeftClickOnTheMiddlePoint(int index, Vector3 pos)
+    {
+        // ADD 
+        TControlPoint newPoint = PositionToControlPoint(pos);
+        controlPoints.Insert(index + 1, newPoint);
+        return true;
     }
     
-    protected virtual TControlPoint DrawControlPointHandle(TControlPoint controlPoint)
-    {
-        Pose pose = ControlPointToPose(controlPoint);
-        pose.position = EasyHandles.PositionHandle(pose.position);
-        return PoseToControlPoint(pose);
-    }
+    protected virtual bool RightClickOnTheMiddlePoint(int index, Vector3 pos) => false;
+
+
 
     // ------------------------- Abstract Methods -------------------------
 
     protected abstract Ray EvaluateSafe(float continuousIndex, int previousIndex, int index, int nextIndex, int next2Index);
     protected abstract Vector3 ControlPointToPosition(TControlPoint controlPoint);
-    public abstract Pose ControlPointToPose(TControlPoint point);
-    public abstract TControlPoint PoseToControlPoint(Pose pose);
+    public abstract TControlPoint PositionToControlPoint(Vector3 pose);
 }
 }

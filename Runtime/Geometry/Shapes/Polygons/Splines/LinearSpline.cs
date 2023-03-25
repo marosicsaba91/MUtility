@@ -64,18 +64,21 @@ namespace MUtility
             return signedArea;
         }
 
-        protected override Ray EvaluateSafe(float continuousIndex, int previousIndex, int index, int nextIndex,
-            int next2Index)
+        protected override Ray EvaluateSafe(float continuousIndex, int previousIndex, int index, int nextIndex, int next2Index)
         {
-            return
-                new Ray(); // TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+            Vector3 start = controlPoints[index];
+            Vector3 end = controlPoints[nextIndex];
+            float t = continuousIndex - index;
+            
+            Vector3 position = Vector3.Lerp(start, end, t);
+            Vector3 forward = end - start;
+            
+            return new Ray(position, forward);
         }
 
         protected override Vector3 ControlPointToPosition(Vector3 controlPoint) => controlPoint;
 
-        public override Pose ControlPointToPose(Vector3 point) => new(point, Quaternion.identity);
-
-        public override Vector3 PoseToControlPoint(Pose pose) => pose.position;
+        public override Vector3 PositionToControlPoint(Vector3 point) => point;
 
         protected override void SafeRecalculatePoints(List<InterpolatedPoint> result)
         {

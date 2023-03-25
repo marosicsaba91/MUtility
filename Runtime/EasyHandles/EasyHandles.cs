@@ -66,6 +66,19 @@ public static partial class EasyHandles
     {
         return PositionHandle(position, rotation, ForcedAxisMode.Non, shape);
     }
+    
+    public static bool Handle(Vector3 position, Quaternion rotation, Shape shape = Shape.Cube)
+    {
+        //return PositionHandle(position, rotation, ForcedAxisMode.Non, shape);
+        return false;
+    }
+
+    public static void DrawLine(Vector3 start, Vector3 end)
+    {
+#if UNITY_EDITOR
+        Handles.DrawLine(start, end);
+#endif
+    }
 
 // ----------- PRIVATE -------------
 
@@ -123,6 +136,9 @@ public static partial class EasyHandles
         if(pz != position) return pz;
         return p;
     }
+    
+    static HandleEvent _lastEvent = HandleEvent.None;
+    public static HandleEvent LastEvent => _lastEvent;
 
     static Vector3 DrawPositionHandle(
         Vector3 position, Quaternion rotation, Shape shape, ForcedAxisMode mode,
@@ -148,6 +164,7 @@ public static partial class EasyHandles
             focusedColor, selectedColor);
         
         position = result.newPosition;
+        _lastEvent = result.handleEvent;
 
         if (offset != 0)
             position += rotation * Vector3.back * (size * offset);

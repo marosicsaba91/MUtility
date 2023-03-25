@@ -15,7 +15,9 @@ namespace MUtility
             WorldWithPose,
         }
 
-        [SerializeReference, TypePicker(nameof(TypeFilter))] IPolygon _polygon;
+        [SerializeReference, TypePicker(nameof(TypeFilter))]
+        IPolygon _polygon;
+
         internal void SetShapeType(Type type)
         {
             Type bt = typeof(IPolygon);
@@ -24,9 +26,15 @@ namespace MUtility
         }
 
         [SerializeField] PolygonSpace space;
-        [SerializeField, ShowIf(nameof(HavePose))] Vector3 position;
-        [SerializeField, ShowIf(nameof(HavePose))] Quaternion rotation;
-        [SerializeField, ShowIf(nameof(HavePose))] bool drawPoseHandles = true;
+
+        [SerializeField, ShowIf(nameof(HavePose))]
+        Vector3 position;
+
+        [SerializeField, ShowIf(nameof(HavePose))]
+        Quaternion rotation;
+
+        [SerializeField, ShowIf(nameof(HavePose))]
+        bool drawPoseHandles = true;
 
         public event Action Updated;
         public PolygonSpace Space => space;
@@ -44,7 +52,7 @@ namespace MUtility
                 if (_polygon == null) yield break;
 
 
-                IEnumerable<Vector3> points = PointsLocal; 
+                IEnumerable<Vector3> points = PointsLocal;
 
                 if (DrawHandlesInSelfSpace)
                     points = points.Transform(transform);
@@ -55,7 +63,7 @@ namespace MUtility
         }
 
 
-        public IEnumerable<Vector3> PointsLocal  
+        public IEnumerable<Vector3> PointsLocal
         {
             get
             {
@@ -82,11 +90,11 @@ namespace MUtility
         public IPolygon Polygon => _polygon;
 
 
-        [Header("Gizmos")]
-
-        [SerializeField] bool drawGizmos = true;
+        [Header("Gizmos")] [SerializeField] bool drawGizmos = true;
         [SerializeField] Color gizmoColor = Color.white;
-        [FormerlySerializedAs("drawHandles")][SerializeField] bool drawShapeHandles = true;
+
+        [FormerlySerializedAs("drawHandles")] [SerializeField]
+        bool drawShapeHandles = true;
 
         public Type GetPolygonType() => _polygon?.GetType();
 
@@ -108,6 +116,7 @@ namespace MUtility
                     return true;
                 subclass = subclass.BaseType;
             }
+
             return false;
         }
 
@@ -161,6 +170,6 @@ namespace MUtility
 
             if (changed)
                 Updated?.Invoke();
-        }
+        } 
     }
 }

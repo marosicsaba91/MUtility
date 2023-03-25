@@ -34,9 +34,7 @@ namespace MUtility
             }
         }
 
-        public override Pose ControlPointToPose(Vector3 point) => new Pose(point, Quaternion.identity);
-
-        public override Vector3 PoseToControlPoint(Pose pose) => pose.position;
+        public override Vector3 PositionToControlPoint(Vector3 point) => point;
 
         public void GetSegmentInfo(float controlPointIndex, out Vector3 previous, out Vector3 a, out Vector3 b, out Vector3 next)
         {

@@ -3,7 +3,24 @@ using MUtility;
 using UnityEditor;
 using UnityEngine;
 
-class AdvancedHandles
+public enum HandleEvent
+{
+    None = 0,
+
+    LmbPress,
+    LmbClick,
+    LmbDoubleClick,
+    LmbDrag,
+    LmbRelease,
+
+    RmbPress,
+    RmbClick,
+    RmbDoubleClick,
+    RmbDrag,
+    RmbRelease,
+};
+
+public class AdvancedHandles
 {
     static readonly int _sDragHandleHash = "DragHandleHash".GetHashCode();
     static Vector2 _sDragHandleMouseStart;
@@ -11,28 +28,11 @@ class AdvancedHandles
     static Vector3 _sDragHandleWorldStart;
     static float _sDragHandleClickTime = 0;
     static int _sDragHandleClickID;
-    static readonly float _sDragHandleDoubleClickInterval = 0.5f;
+    static readonly float _sDragHandleDoubleClickInterval = 0.25f;
 
     // externally accessible to get the ID of the most recently processed DragHandle
     public static int lastDragHandleID;
-
-    public enum HandleEvent
-    {
-        None = 0,
-
-        LmbPress,
-        LmbClick,
-        LmbDoubleClick,
-        LmbDrag,
-        LmbRelease,
-
-        RmbPress,
-        RmbClick,
-        RmbDoubleClick,
-        RmbDrag,
-        RmbRelease,
-    };
-
+    
     public struct HandleResult
     {
         public HandleEvent handleEvent;

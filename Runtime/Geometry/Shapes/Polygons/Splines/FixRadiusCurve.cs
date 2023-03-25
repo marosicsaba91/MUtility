@@ -48,8 +48,7 @@ namespace MUtility
             }
         }
 
-        public override Pose ControlPointToPose(Vector3 point) => new(point, Quaternion.identity);
-        public override Vector3 PoseToControlPoint(Pose pose) => pose.position;
+        public override Vector3 PositionToControlPoint(Vector3 point) => point;
         protected override Ray EvaluateSafe(float continuousIndex, int previousIndex, int index, int nextIndex, int next2Index)
         {
             return new Ray(); // TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
