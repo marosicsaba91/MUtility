@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace MUtility
 {
     public class PolygonComponent : MonoBehaviourWithHandles
-    {
-        public enum PolygonSpace
-        {
-            Self,
-            World,
-            SelfWithPose,
-            WorldWithPose,
-        }
+    { 
 
         [SerializeReference, TypePicker(nameof(TypeFilter))]
         IPolygon _polygon;
@@ -25,25 +17,9 @@ namespace MUtility
                 _polygon = (IPolygon)Activator.CreateInstance(type);
         }
 
-        [SerializeField] PolygonSpace space;
-
-        [SerializeField, ShowIf(nameof(HavePose))]
-        Vector3 position;
-
-        [SerializeField, ShowIf(nameof(HavePose))]
-        Quaternion rotation;
-
-        [SerializeField, ShowIf(nameof(HavePose))]
-        bool drawPoseHandles = true;
-
-        public event Action Updated;
-        public PolygonSpace Space => space;
-
-        bool HavePose =>
-            space == PolygonSpace.WorldWithPose ||
-            space == PolygonSpace.SelfWithPose;
-
-        public override bool DrawHandlesInSelfSpace => space == PolygonSpace.Self || space == PolygonSpace.SelfWithPose;
+        public Space space = Space.Self;
+         
+        public event Action Updated;   
 
         public IEnumerable<Vector3> Points
         {
@@ -52,7 +28,7 @@ namespace MUtility
                 if (_polygon == null) yield break;
 
 
-                IEnumerable<Vector3> points = PointsLocal;
+                var points = PointsLocal;
 
                 if (DrawHandlesInSelfSpace)
                     points = points.Transform(transform);
@@ -61,23 +37,11 @@ namespace MUtility
                     yield return point;
             }
         }
+        
+        public override bool DrawHandlesInSelfSpace => space == Space.Self;
 
 
-        public IEnumerable<Vector3> PointsLocal
-        {
-            get
-            {
-                if (_polygon == null) yield break;
-
-                IEnumerable<Vector3> points = _polygon.Points;
-
-                if (HavePose)
-                    points = points.Rotate(rotation).Offset(position);
-
-                foreach (Vector3 point in points)
-                    yield return point;
-            }
-        }
+        public IEnumerable<Vector3> PointsLocal => _polygon.Points;
 
 
         void OnValidate()
@@ -92,9 +56,7 @@ namespace MUtility
 
         [Header("Gizmos")] [SerializeField] bool drawGizmos = true;
         [SerializeField] Color gizmoColor = Color.white;
-
-        [FormerlySerializedAs("drawHandles")] [SerializeField]
-        bool drawShapeHandles = true;
+        [SerializeField] bool drawHandles = true;
 
         public Type GetPolygonType() => _polygon?.GetType();
 
@@ -131,43 +93,20 @@ namespace MUtility
 
         public override void OnDrawHandles()
         {
-            bool changed = false;
+            var changed = false;
 
-            if (drawShapeHandles)
+            if (drawHandles)
             {
-                EasyHandles.fullObjectSize = 10f;
+                Vector3 size = _polygon.Bounds.size;
+                EasyHandles.fullObjectSize = Mathf.Max(1, (size.x + size.y + size.z) / 3f);
+                EasyHandles.sizeMultiplier = 1;
                 if (_polygon is IEasyHandleable handleableObject)
                 {
-                    rotation.Normalize();
-                    if (HavePose)
-                    {
-                        Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
-                        EasyHandles.PushMatrix(matrix);
-                        changed |= handleableObject.DrawHandles();
-                        _polygon = (IPolygon)handleableObject;
-                        EasyHandles.PopMatrix(matrix);
-                    }
-                    else
-                    {
-                        changed |= handleableObject.DrawHandles();
-                        _polygon = (IPolygon)handleableObject;
-                    }
+                    changed |= handleableObject.DrawHandles();
+                    _polygon = (IPolygon)handleableObject;
                 }
             }
-
-            if (HavePose && drawPoseHandles)
-            {
-                Vector3 newPosition = EasyHandles.PositionHandle(position, rotation, EasyHandles.Shape.SmallPosition);
-                Quaternion newRotation = EasyHandles.RotationHandle(position, rotation);
-
-                if (position != newPosition || rotation != newRotation)
-                {
-                    position = newPosition;
-                    rotation = newRotation;
-                    changed = true;
-                }
-            }
-
+ 
             if (changed)
                 Updated?.Invoke();
         } 

@@ -7,6 +7,8 @@ namespace MUtility
 public interface IPolygon
 {
     IEnumerable<Vector3> Points { get; }
+    Bounds Bounds { get; }
+    float Length { get; }
 }
 
 public static class PolygonExtensions

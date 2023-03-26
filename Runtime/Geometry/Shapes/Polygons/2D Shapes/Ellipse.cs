@@ -1,41 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MUtility
 {
 [Serializable]
-public struct Ellipse : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
+public struct Ellipse : IPolygon, IDrawable, IEasyHandleable, IArea
 {
     const int defaultFragmentCount = 30;
 
-    public float radiusHorizontal;
-    public float radiusVertical;
-
-    public Ellipse(float radiusHorizontal, float radiusVertical)
+    public Vector2 size; 
+    public Ellipse(float x, float y)
     {
-        this.radiusHorizontal = radiusHorizontal;
-        this.radiusVertical = radiusVertical;
+        size.x = x;
+        size.y = y;
     }
 
-    public float Circumference
+    public Ellipse(Vector2 size)
+    {
+       this.size = size;
+    }
+    
+    public float Length
     {
         get
         {
-            float a = radiusHorizontal;
-            float b = radiusVertical;
+            float a = size.x;
+            float b = size.y;
             float sqrt = Mathf.Sqrt((a * a + b * b) / 2f);
             float v = 2 * Mathf.PI * sqrt + Mathf.PI * (a + b);
             return v / 2;
         }
     }
 
-    public float Area => radiusVertical * radiusHorizontal * Mathf.PI;
+    public float Area => size.y * size.x * Mathf.PI;
+    
+    public Bounds Bounds => new(new Vector3(0, 0, 0), new Vector3(size.x, size.y, 0));
 
     public bool IsInsideShape(Vector2 point)
     {
         Vector2 vec = point;
-        vec = new Vector2(vec.x / radiusHorizontal, vec.y / radiusVertical);
+        vec = new Vector2(vec.x / size.x, vec.y / size.y);
         return vec.magnitude <= 1;
     }
 
@@ -50,32 +56,33 @@ public struct Ellipse : IPolygon, IDrawable, IEasyHandleable, ICircumference, IA
         {
             float phase = i * angle;
             points[i] = Mathf.Sin(phase) * Vector3.right + Mathf.Cos(phase) * Vector3.up;
-            points[i].x *= radiusHorizontal;
-            points[i].y *= radiusVertical;
+            points[i].x *= size.x;
+            points[i].y *= size.y;
         }
 
         points[fragmentCount - 1] = points[0];
 
         return points;
     }
-
+    
     public bool DrawHandles()
     {
-        if (radiusHorizontal == 0 || radiusVertical == 0) return false; 
+        if (size.x == 0 || size.y == 0) return false; 
         Ellipse old = this;
         
-        Vector2 vx = Vector2.right * radiusHorizontal;
-        Vector2 vy = Vector2.up * radiusVertical;
-        float ax = Mathf.Abs(radiusHorizontal);
-        float ay = Mathf.Abs(radiusVertical);
+        Vector2 vx = Vector2.right * size.x;
+        Vector2 vy = Vector2.up * size.y;
+        float ax = Mathf.Abs(size.x);
+        float ay = Mathf.Abs(size.y);
         
         float longer = Mathf.Max(ax, ay); 
         float average = (ax + ay) / 2f;
-        float size = Mathf.Max(average, longer * 0.75f);
-        EasyHandles.fullObjectSize = size;
         
-        radiusHorizontal = EasyHandles.PositionHandle(vx,  vx.normalized).x;
-        radiusVertical = EasyHandles.PositionHandle(vy, vy.normalized).y;
+        float handleSize = Mathf.Max(average, longer * 0.75f);
+        EasyHandles.fullObjectSize = handleSize;
+        
+        size.x = EasyHandles.PositionHandle(vx,  vx.normalized).x;
+        size.y = EasyHandles.PositionHandle(vy, vy.normalized).y;
 
         return !Equals(old, this);
     } 
@@ -85,13 +92,13 @@ public struct Ellipse : IPolygon, IDrawable, IEasyHandleable, ICircumference, IA
         float a = UnityEngine.Random.Range(0, 2 * Mathf.PI);
         float r = Mathf.Sqrt(UnityEngine.Random.Range(0f, 1f));
 
-        float x = r * Mathf.Sin(a) * radiusHorizontal;
-        float y = r * Mathf.Cos(a) * radiusVertical;
+        float x = r * Mathf.Sin(a) * size.x;
+        float y = r * Mathf.Cos(a) * size.y;
 
         return new Vector2(x, y);
     }
-
-    public Drawable ToDrawable() => Points.ToDrawable();
+    
+    public Drawable ToDrawable() => new Drawable ( Points.ToArray() );
 }
 
 

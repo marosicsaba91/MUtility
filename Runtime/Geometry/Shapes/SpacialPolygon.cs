@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MUtility
@@ -33,6 +34,8 @@ public abstract class SpacialPolygon<TPolygon> : IEasyHandleable, IPolygon, IDra
     
 
     public IEnumerable<Vector3> Points => polygon.Points.Transform(position, rotation, 1);
+    public Bounds Bounds => polygon.Bounds.Transform(position, rotation);
+    public float Length => polygon.Length;
 
     public bool DrawHandles() => SpacialShapeHelper.OnDrawHandles(ref polygon, ref position, ref rotation);
 

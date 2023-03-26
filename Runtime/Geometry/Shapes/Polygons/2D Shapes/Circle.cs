@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MUtility
 {
     [Serializable]
-    public struct Circle : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
+    public struct Circle : IPolygon, IDrawable, IEasyHandleable, IArea
     {
         public const int defaultSegmentCount = 20;
 
@@ -40,7 +40,9 @@ namespace MUtility
 
         public float Area => radius * radius * Mathf.PI; 
 
-        public float Circumference => 2f * radius * Mathf.PI; 
+        public float Length => 2f * radius * Mathf.PI;
+
+        public Bounds Bounds => new(Vector3.zero, new Vector3(2 * radius, 2 * radius, 0));
 
         public bool IsPointInside(Vector2 point) => point.magnitude <= radius;
 

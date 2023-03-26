@@ -44,13 +44,36 @@ public abstract class Spline : IPolygon, IEasyHandleable, IDrawable
     } 
     public abstract IEnumerable<Vector3> ControlPointPositions { get; }
 
+
+    Bounds _bounds;
+
     public IEnumerable<Vector3> Points
     {
         get
         {
             TryRecalculatePoints();
-            return interpolatedPoints.Select(point => point.position);
+            return interpolatedPoints.Select(p => p.position);
+            
         }
+    }
+
+    public Bounds Bounds
+    {
+        get
+        {
+            TryRecalculatePoints();
+            return _bounds;
+        } 
+    }
+    
+    float _length;
+    public float Length
+    {
+        get
+        {
+            TryRecalculatePoints();
+            return _length;
+        } 
     }
 
     protected void TryRecalculatePoints()
@@ -64,12 +87,14 @@ public abstract class Spline : IPolygon, IEasyHandleable, IDrawable
     {
         IsDirty = false;
         interpolatedPoints.Clear(); 
-        RecalculatePoints(interpolatedPoints);
+        RecalculatePoints(interpolatedPoints, out Bounds b,out float l);
+        _bounds = b;
+        _length = l;
     }
 
-    protected abstract void RecalculatePoints(List<InterpolatedPoint> result);
+    protected abstract void RecalculatePoints(List<InterpolatedPoint> result, out Bounds bounds, out float length);
     public abstract bool DrawHandles();
-    public Drawable ToDrawable() => new(Points.ToArray());
+    public Drawable ToDrawable() => new(ControlPointPositions.ToArray());
 
     protected void OnRegenerated()
     {
@@ -197,20 +222,30 @@ public abstract class Spline<TControlPoint> : Spline
         return InterpolatedPoint.Lerp(p1, p2, controlPointIndex - index).distance;
     }
 
-    protected sealed override void RecalculatePoints(List<InterpolatedPoint> result)
+    protected sealed override void RecalculatePoints(List<InterpolatedPoint> result, out Bounds bounds,  out float length)
     {
         if (controlPoints == null || controlPoints.Count == 0)
+        {
+            bounds = default;
+            length = 0;
             return;
+        }
+
         if (controlPoints.Count == 1)
+        {
+            bounds = new Bounds(ControlPointToPosition(controlPoints[0]), Vector3.zero);
+            length = 0;
             result.Add(new InterpolatedPoint(0, ControlPointToPosition(controlPoints[0]), Vector3.zero, 0));
+        }
         else
-            SafeRecalculatePoints(result);
+            SafeRecalculatePoints(result, out bounds, out length);
 
         OnRegenerated();
     }
 
 
-    protected abstract void SafeRecalculatePoints(List<InterpolatedPoint> result);
+    // controlPoints are not null and have at least 2 elements
+    protected abstract void SafeRecalculatePoints(List<InterpolatedPoint> result, out Bounds bounds, out float length);
  
     public override bool DrawHandles()
     { 

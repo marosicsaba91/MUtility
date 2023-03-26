@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct Capsule2D : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
+public struct Capsule2D : IPolygon, IDrawable, IEasyHandleable, IArea
 {
     public const int defaultSegmentCount = 50;
 
@@ -84,11 +84,12 @@ public struct Capsule2D : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
 
     public float Area => ((LongAxis - ShortAxis) * ShortAxis) + Radius * Radius * Mathf.PI;
 
-    public float Circumference => (LongAxis - ShortAxis) + (2 * Radius * Mathf.PI);
+    public float Length => (LongAxis - ShortAxis) + (2 * Radius * Mathf.PI);
 
     public Drawable ToDrawable() => new(Points.ToArray());
 
     public Drawable ToDrawable(int circleSegmentCount) => new(ToPolygon(circleSegmentCount).ToArray());
+    public Bounds Bounds => new(Vector3.zero, size);
 
     public IEnumerable<Vector3> Points => ToPolygon();
 

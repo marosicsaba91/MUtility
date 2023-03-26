@@ -5,13 +5,14 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct RegularStar : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
+public struct RegularStar : IPolygon, IDrawable, IEasyHandleable, IArea
 {
     [SerializeField, Min(3)] int pointsCounts;
     [SerializeField] float radius;
     [SerializeField, Range(0,1)] float innerRadiusRate;
-    
-    public float Circumference => SideLength * pointsCounts * 2;
+
+    public Bounds Bounds => new Bounds(Vector3.zero, Vector3.one * radius * 2);
+    public float Length => SideLength * pointsCounts * 2;
     
     public float PointInnerAngle  => (180 - (360f / pointsCounts)) * innerRadiusRate;
     

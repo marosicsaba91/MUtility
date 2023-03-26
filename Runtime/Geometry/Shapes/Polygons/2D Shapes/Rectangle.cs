@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MUtility
 {
 [Serializable]
-public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
+public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, IArea
 {
     public Vector2 size;
 
@@ -32,7 +33,7 @@ public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
 
     public float Area => size.x * size.y;
 
-    public float Circumference => 2f * (size.x + size.y);
+    public float Length => 2f * (size.x + size.y);
 
     public float Width => size.x;
     public float Height => size.y;
@@ -78,6 +79,7 @@ public struct Rectangle : IPolygon, IDrawable, IEasyHandleable, ICircumference, 
     
     internal Rect ToRect() => new Rect(size / 2f, size);
 
+    public Bounds Bounds => new(Vector3.zero, size);
 
     public IEnumerable<Vector3> Points
     {

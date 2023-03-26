@@ -7,8 +7,8 @@ namespace MUtility
     [RequireComponent(typeof(PolygonComponent), typeof(LineRenderer))]
     public class PolygonRenderer : MonoBehaviour
     {
-        [SerializeField, HideInInspector] PolygonComponent polygonComponent;
-        [SerializeField, HideInInspector] LineRenderer lineRenderer;
+        [SerializeField] PolygonComponent polygonComponent;
+        [SerializeField] LineRenderer lineRenderer;
         [SerializeField] DisplayMember updateLineRenderer = new(nameof(ForceUpdateLine));
 
         void OnValidate()
@@ -41,9 +41,7 @@ namespace MUtility
 
         void UpdateLine()
         {
-            lineRenderer.useWorldSpace =
-                polygonComponent.Space == PolygonComponent.PolygonSpace.WorldWithPose ||
-                polygonComponent.Space == PolygonComponent.PolygonSpace.World;
+            lineRenderer.useWorldSpace = polygonComponent.space == Space.World;
 
 
             Vector3[] array = polygonComponent.PointsLocal.ToArray();

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct RegularPolygon : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
+public struct RegularPolygon : IPolygon, IDrawable, IEasyHandleable, IArea
 {
     [SerializeField, Min(3)] int sides;
     [SerializeField] float radius;
@@ -15,7 +15,8 @@ public struct RegularPolygon : IPolygon, IDrawable, IEasyHandleable, ICircumfere
     public float InnerAngle => 180 - (360f / sides);
     public float OuterAngle => 360 - InnerAngle;
 
-    public float Circumference => SideLength * sides;
+    public Bounds Bounds => new Bounds(Vector3.zero, Vector3.one * radius * 2);
+    public float Length => SideLength * sides;
 
     public float Area
     {

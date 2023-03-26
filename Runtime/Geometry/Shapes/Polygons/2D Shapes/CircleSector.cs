@@ -5,9 +5,9 @@ using UnityEngine;
 namespace MUtility
 {
 [Serializable]
-public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumference, IArea
+public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, IArea
 {
-    const int defaultFragmentCount = 75;
+    const int defaultFullCircleFragmentCount = 75;
 
     [SerializeField, Min(0)] float radius;
     [SerializeField, Range(0, 1)] float innerRadiusRate;
@@ -67,14 +67,16 @@ public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumferenc
         get => radius * innerRadiusRate;
         set => InnerRadiusRate = value / radius;
     }
+
+    public Bounds Bounds => new(Vector3.zero, new Vector3(2 * radius, 2 * radius, 0));
     
-    public float Circumference => 2 * ((radius + InnerRadius) * Mathf.PI * DeltaAngleRate + (radius - InnerRadius));
+    public float Length => 2 * ((radius + InnerRadius) * Mathf.PI * DeltaAngleRate + (radius - InnerRadius));
 
     public float Area => (radius * radius * Mathf.PI) - (InnerRadius * InnerRadius * Mathf.PI) * DeltaAngleRate;
 
     public IEnumerable<Vector3> Points => ToPolygon();
 
-    public IEnumerable<Vector3> ToPolygon(int fullCircleFragmentCount = defaultFragmentCount)
+    public IEnumerable<Vector3> ToPolygon(int fullCircleFragmentCount = defaultFullCircleFragmentCount)
     {
         float segmentLength = DeltaAngleDeg;
 
@@ -115,6 +117,7 @@ public struct CircleSector : IPolygon, IDrawable, IEasyHandleable, ICircumferenc
             }
         }
     }
+    
  
     public bool DrawHandles()
     {

@@ -27,22 +27,24 @@ namespace MUtility
             }
         }
 
-        protected override void SafeRecalculatePoints(List<InterpolatedPoint> result)
+        protected override void SafeRecalculatePoints(List<InterpolatedPoint> result, out Bounds bounds, out float length)
         {
             if (drawingPointPerSegment < 1)
                 drawingPointPerSegment = 1;
 
             float step = 1f / drawingPointPerSegment;
-            float distance = 0;
+            length = 0;
             Ray ray = Evaluate(0);
             Vector3 lastPosition = ray.origin;
+            bounds = new Bounds(ray.origin, Vector3.zero);
             result.Add(new InterpolatedPoint(0, ray.origin, ray.direction, 0));
 
             for (float i = step; i <= SegmentCount + step / 2f; i += step)
             {
                 ray = Evaluate(i);
-                distance += Vector3.Distance(lastPosition, ray.origin);
-                result.Add(new InterpolatedPoint(i, ray.origin, ray.direction, distance));
+                bounds.Encapsulate(ray.origin);
+                length += Vector3.Distance(lastPosition, ray.origin);
+                result.Add(new InterpolatedPoint(i, ray.origin, ray.direction, length));
             }
         }
     }

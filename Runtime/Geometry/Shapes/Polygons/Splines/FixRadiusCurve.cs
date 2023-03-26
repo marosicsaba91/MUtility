@@ -57,17 +57,16 @@ namespace MUtility
         protected override Vector3 ControlPointToPosition(Vector3 controlPoint) => controlPoint;
 
 
-        protected override void SafeRecalculatePoints(List<InterpolatedPoint> result)
+        protected override void SafeRecalculatePoints(List<InterpolatedPoint> result, out Bounds bounds, out float length)
         {
             _centers.Clear();
             _curveEnds.Clear();
             _segments.Clear();
             _directions.Clear();
 
-            if (controlPoints.Count >= 1)
-            {
-                result.Add(new InterpolatedPoint(0,controlPoints[0], Vector3.zero, 0));
-            }
+            bounds = new Bounds(controlPoints[0], Vector3.zero);
+            length = 0;
+            result.Add(new InterpolatedPoint(0, controlPoints[0], Vector3.zero, 0));
 
             if (controlPoints.Count == 2)
             {
