@@ -37,14 +37,6 @@ public static class VectorExtensions
         }
     }
 
-    public static Vector3 MultiplyAllAxis(this Vector3 vector, Vector3 multiplier) =>
-        new Vector3(vector.x * multiplier.x, vector.y * multiplier.y, vector.z * multiplier.z);
-    
-
-    public static Vector2 MultiplyAllAxis(this Vector2 vector, Vector2 multiplier) =>
-        new Vector2(vector.x * multiplier.x, vector.y * multiplier.y);
-    
-
     public static float GetAngle(this Vector2 original)
     {
         float angle = Vector2.Angle(Vector2.right, original);
@@ -147,5 +139,33 @@ public static class VectorExtensions
         
         LeftHand( thumb,  out index, middle);
     }
+    
+    
+    
+    
+    
+    public static Vector2 MultiplyAllAxis(this Vector2 s, Vector2 v) => new(s.x * v.x, s.y * v.y);
+    public static Vector2 MultiplyAllAxis(this Vector2 s, Vector2Int v) => new(s.x * v.x, s.y * v.y);
+    public static Vector2 MultiplyAllAxis(this Vector2 s, float x, float y, float z) => new(s.x * x, s.y * y);
+
+
+    public static Vector2 MultiplyAllAxis(this Vector2Int s, Vector2 v) => new(s.x * v.x, s.y * v.y);
+    public static Vector2Int MultiplyAllAxis(this Vector2Int s, Vector2Int v) => new(s.x * v.x, s.y * v.y);
+    public static Vector2Int MultiplyAllAxis(this Vector2Int s, int x, int y, int z) => new(s.x * x , s.y * y); 
+    public static Vector2 MultiplyAllAxis(this Vector2Int s, float x, float y, float z) => new(s.x * x , s.y * y); 
+        
+        
+        
+    public static Vector3 MultiplyAllAxis(this Vector3 s, Vector3 v) => new(s.x * v.x, s.y * v.y, s.z * v.z);
+    public static Vector3 MultiplyAllAxis(this Vector3 s, Vector3Int v) => new(s.x * v.x, s.y * v.y, s.z * v.z);
+    public static Vector3 MultiplyAllAxis(this Vector3 s, float x, float y, float z) => new(s.x * x, s.y * y, s.z * z);
+
+    public static Vector3 MultiplyAllAxis(this Vector3Int s, Vector3 v) => new(s.x * v.x, s.y * v.y, s.z * v.z);
+    public static Vector3Int MultiplyAllAxis(this Vector3Int s, Vector3Int v) => new(s.x * v.x, s.y * v.y, s.z * v.z);
+    public static Vector3Int MultiplyAllAxis(this Vector3Int s, int x, int y, int z) => new(s.x * x , s.y * y, s.z * z ); 
+    public static Vector3 MultiplyAllAxis(this Vector3Int s, float x, float y, float z) => new(s.x * x , s.y * y, s.z * z ); 
+    
+    
+    
 }
 }

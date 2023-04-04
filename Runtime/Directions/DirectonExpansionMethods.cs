@@ -38,7 +38,6 @@ namespace MUtility
             }
         }
 
-
         // Equals
         public static bool Equals(this GeneralDirection2D self, GeneralDirection3D dir) =>
             (int) self == (int) dir;
@@ -63,15 +62,29 @@ namespace MUtility
         public static bool Equals(this Direction2D self, GeneralDirection3D dir) => 
             (int) self == (int) dir;
         
+        public static bool Equals(this GeneralDirection3D self, Direction3D dir) =>
+            (int) self == (int) dir;
+        
+        public static bool Equals(this GeneralDirection2D self, Direction3D dir) =>
+            (int) self == (int) dir;
+        
+        public static bool Equals(this Direction2D self, Direction3D dir) =>
+            (int) self == (int) dir;
 
 
         // Convert
-        public static Direction2D ToDirection8(this GeneralDirection2D self) =>
+        public static Direction2D ToDirection2D(this GeneralDirection2D self) =>
             (Direction2D) (int) self;
         
-
-        public static GeneralDirection3D ToDirection6(this GeneralDirection2D self) =>
+        public static GeneralDirection3D ToGeneralDirection3D(this GeneralDirection2D self) =>
             (GeneralDirection3D) (int) self;
+        
+        public static Direction3D ToDirection3D(this GeneralDirection2D self) =>
+            (Direction3D) (int) self;
+        
+        
+        public static Direction3D ToDirection3D(this GeneralDirection3D self) =>
+            (Direction3D) (int) self;
         
 
         // To Vector Float
@@ -98,6 +111,21 @@ namespace MUtility
                 case GeneralDirection3D.Left: return new Vector3(-1, 0, 0);
                 case GeneralDirection3D.Forward: return new Vector3(0, 0, 1);
                 case GeneralDirection3D.Back: return new Vector3(0, 0, -1);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
+            }
+        }
+        
+        public static Vector3 ToVector(this Direction3D dir)
+        {
+            switch (dir)
+            {
+                case Direction3D.Up: return new Vector3(0, 1, 0);
+                case Direction3D.Down: return new Vector3(0, -1, 0);
+                case Direction3D.Right: return new Vector3(1, 0, 0);
+                case Direction3D.Left: return new Vector3(-1, 0, 0);
+                case Direction3D.Forward: return new Vector3(0, 0, 1);
+                case Direction3D.Back: return new Vector3(0, 0, -1);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
             }
