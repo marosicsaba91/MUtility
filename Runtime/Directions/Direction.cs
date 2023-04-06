@@ -1,4 +1,6 @@
-﻿namespace MUtility
+﻿using System.Collections.Generic;
+
+namespace MUtility
 {
     public enum HorizontalDirection
     {
@@ -99,6 +101,8 @@
 
     public static class DirectionUtility
     {
+        public static readonly Axis3D[] allAxis3D = {Axis3D.X, Axis3D.Y, Axis3D.Z};
+
         public static readonly GeneralDirection3D[] generalDirection3DValues =
         {
             GeneralDirection3D.Right,

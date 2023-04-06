@@ -254,6 +254,8 @@ namespace MUtility
                     : GeneralDirection3D.Forward;
             }
         }
+        
+        
 
         public static Direction2D Opposite(this Direction2D dir)
         {

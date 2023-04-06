@@ -166,6 +166,75 @@ public static class VectorExtensions
     public static Vector3 MultiplyAllAxis(this Vector3Int s, float x, float y, float z) => new(s.x * x , s.y * y, s.z * z ); 
     
     
+    // Rotate
+    
+    public static Vector3Int Rotate(this Vector3Int vector, Axis3D axis, int rotations90)
+    {
+        rotations90 = (rotations90 % 4 + 4) % 4;
+        if (rotations90 == 0) return vector; 
+        
+        int x = vector.x;
+        int y = vector.y;
+        int z = vector.z;
+
+        switch (axis)
+        {
+            case Axis3D.X:
+                switch (rotations90)
+                {
+                    case 1:
+                        vector.y = -z;
+                        vector.z = y;
+                        break;
+                    case 2:
+                        vector.y = -y;
+                        vector.z = -z;
+                        break;
+                    case 3:
+                        vector.y = z;
+                        vector.z = -y;
+                        break;
+                }
+                break;
+            case Axis3D.Y:
+                switch (rotations90)
+                {
+                    case 1:
+                        vector.z = -x;
+                        vector.x = z;
+                        break;
+                    case 2:
+                        vector.z = -z;
+                        vector.x = -x;
+                        break;
+                    case 3:
+                        vector.z = x;
+                        vector.x = -z;
+                        break;
+                }
+                break;
+            case Axis3D.Z:
+                switch (rotations90)
+                {
+                    case 1:
+                        vector.x = -y;
+                        vector.y = x;
+                        break;
+                    case 2:
+                        vector.x = -x;
+                        vector.y = -y;
+                        break;
+                    case 3:
+                        vector.x = y;
+                        vector.y = -x;
+                        break;
+                }
+                break;
+        }
+
+        return vector;
+    }
+    
     
 }
 }

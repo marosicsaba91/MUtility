@@ -5,13 +5,25 @@ namespace MUtility
 {
     public static class AxisExpansionMethods
     {
-        public static Vector3 ToPositiveVector(this Axis3D axis)
+        public static Vector3 ToVector(this Axis3D axis)
         {
             switch (axis)
             {
                 case Axis3D.X: return Vector3.right;
                 case Axis3D.Y: return Vector3.up;
                 case Axis3D.Z: return Vector3.forward;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+            }
+        }
+        
+        public static Vector3Int ToIntVector(this Axis3D axis)
+        {
+            switch (axis)
+            {
+                case Axis3D.X: return Vector3Int.right;
+                case Axis3D.Y: return Vector3Int.up;
+                case Axis3D.Z: return Vector3Int.forward;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
             }
