@@ -41,29 +41,31 @@ public class DisplayMemberDrawer : PropertyDrawer
             return;
         }
 
+        bool isExpanded = property.isExpanded;
         Undo.RecordObject(_serializedObject, "Inspector Member Changed");
         if (_floatFunction != null)
-        {
-            bool isExpanded = property.isExpanded;
+        { 
             Rect content = EditorHelper.ContentRect(position);
             Rect labelRect = EditorHelper.LabelRect(position);
-            property.isExpanded = EditorGUI.Foldout(labelRect, isExpanded, label);
+            property.isExpanded = EditorGUI.Foldout(labelRect, isExpanded, label); 
 
             Vector2 size = new Vector2(1, 1);
             Rect area = new Rect(- (size / 2f), size);
             _curvePreview.zoom = _displayMember.functionZoom ;
             _curvePreview.offset = _displayMember.functionOffset;
             _curvePreview.Draw(content, _floatFunction, area, EditorHelper.functionColor, isExpanded); 
+            property.isExpanded = isExpanded;
             _displayMember.functionOffset = _curvePreview.offset;
             _displayMember.functionZoom =_curvePreview.zoom;
             
             return;
         }
-        
+         
         if (_fieldInfo != null)
         {
-            object oldValue = _fieldInfo.GetValue(_owner);
-            object newValue = AnythingField(position, _type, oldValue, label);
+            object oldValue = _fieldInfo.GetValue(_owner); 
+            object newValue = AnythingField(position, _type, oldValue, label, ref isExpanded);
+            property.isExpanded = isExpanded;
             if (!Equals(oldValue, newValue))
                 _fieldInfo.SetValue(_owner, newValue);
             return;
@@ -76,61 +78,74 @@ public class DisplayMemberDrawer : PropertyDrawer
             if (_propertyInfo.SetMethod == null)
                 GUI.enabled = false;
             
-            object newValue = AnythingField(position, _type, oldValue, label);
+            object newValue = AnythingField(position, _type, oldValue, label, ref isExpanded);
             GUI.enabled = savedEnabled;
             if (!Equals(oldValue, newValue))
-                _propertyInfo.SetValue(_owner, newValue);
+            {
+                try
+                {
+                    _propertyInfo.SetValue(_owner, newValue);
+                }catch(Exception e)
+                { 
+                    property.SetValue(newValue);
+                }
+            }
 
+            property.isExpanded = isExpanded;
             return;
         }
 
+        Debug.Log(isExpanded);
+        property.isExpanded = isExpanded;
         Error(position,  label, $"No valid member named: {_displayMember.memberName}"); 
     }
 
-    object AnythingField(Rect position, Type t, object value, GUIContent label)
+    object AnythingField(Rect position, Type t, object value, GUIContent label, ref bool isExpanded)
     {
         try
         {
             if (t == typeof(bool))
-                return EditorGUI.Toggle(position, label, (bool)value);
+                return EditorGUI.Toggle(position, label, (bool) value);
             if (t == typeof(int))
-                return EditorGUI.IntField(position, label, (int)value);
+                return EditorGUI.IntField(position, label, (int) value);
             if (t == typeof(float))
-                return EditorGUI.FloatField(position, label, (float)value);
+                return EditorGUI.FloatField(position, label, (float) value);
             if (t == typeof(string))
-                return EditorGUI.TextField(position, label, (string)value);
+                return EditorGUI.TextField(position, label, (string) value);
             if (t == typeof(Vector2))
-                return EditorGUI.Vector2Field(position, label, (Vector2)value);
+                return EditorGUI.Vector2Field(position, label, (Vector2) value);
             if (t == typeof(Vector3))
-                return EditorGUI.Vector3Field(position, label, (Vector3)value);
+                return EditorGUI.Vector3Field(position, label, (Vector3) value);
             if (t == typeof(Vector4))
-                return EditorGUI.Vector4Field(position, label, (Vector4)value);
+                return EditorGUI.Vector4Field(position, label, (Vector4) value);
             if (t == typeof(Vector2Int))
-                return EditorGUI.Vector2IntField(position, label, (Vector2Int)value);
+                return EditorGUI.Vector2IntField(position, label, (Vector2Int) value);
             if (t == typeof(Vector3Int))
-                return EditorGUI.Vector3IntField(position, label, (Vector3Int)value);
+                return EditorGUI.Vector3IntField(position, label, (Vector3Int) value);
             if (t == typeof(Color))
-                return EditorGUI.ColorField(position, label, (Color)value);
+                return EditorGUI.ColorField(position, label, (Color) value);
             if (t == typeof(Gradient))
-                return EditorGUI.GradientField(position, label, (Gradient)value);
+                return EditorGUI.GradientField(position, label, (Gradient) value);
             if (t == typeof(Rect))
-                return EditorGUI.RectField(position, label, (Rect)value);
+                return EditorGUI.RectField(position, label, (Rect) value);
             if (t == typeof(Bounds))
-                return EditorGUI.BoundsField(position, label, (Bounds)value); 
+                return EditorGUI.BoundsField(position, label, (Bounds) value);
             if (t == typeof(AnimationCurve))
-                return EditorGUI.CurveField(position, label, (AnimationCurve)value); 
+                return EditorGUI.CurveField(position, label, (AnimationCurve) value);
             if (t == typeof(double))
-                return EditorGUI.DoubleField(position, label, (double)value); 
+                return EditorGUI.DoubleField(position, label, (double) value);
             if (t == typeof(long))
-                return EditorGUI.LongField(position, label, (long)value);
+                return EditorGUI.LongField(position, label, (long) value);
             if (t.IsSubclassOf(typeof(Object)))
-                return EditorGUI.ObjectField(position, label, (Object)value, t, true);
+                return EditorGUI.ObjectField(position, label, (Object) value, t, true);
             if (t == typeof(RectInt))
-                return EditorGUI.RectIntField(position, label, (RectInt)value);
-            if (t== typeof(BoundsInt))
-                return EditorGUI.BoundsIntField(position, label, (BoundsInt)value);
+                return EditorGUI.RectIntField(position, label, (RectInt) value);
+            if (t == typeof(BoundsInt))
+                return EditorGUI.BoundsIntField(position, label, (BoundsInt) value);
             if (t.IsSubclassOf(typeof(Enum)))
-                return EditorGUI.EnumPopup(position, label, (Enum)value);
+                return EditorGUI.EnumPopup(position, label, (Enum) value);
+            if (t == typeof(Matrix4x4))
+                return Nice4X4MatrixDrawer.Draw(position, label, (Matrix4x4) value, ref isExpanded);  // Add Universal solution
         }
         catch (InvalidCastException)
         {
@@ -180,10 +195,10 @@ public class DisplayMemberDrawer : PropertyDrawer
         if (_floatFunction != null)
             return property.isExpanded ? 120 : EditorGUIUtility.singleLineHeight;
 
-        return AnythingHeight(_type);
+        return AnythingHeight(_type, property);
     }
     
-    float AnythingHeight( Type t)
+    float AnythingHeight( Type t, SerializedProperty property)
     {
         if (t == typeof(Rect) ||
             t == typeof(RectInt))
@@ -191,6 +206,8 @@ public class DisplayMemberDrawer : PropertyDrawer
         if (t == typeof(Bounds) ||
             t == typeof(BoundsInt))
             return 3 * EditorGUIUtility.singleLineHeight + 2 * EditorGUIUtility.standardVerticalSpacing;
+        if (t == typeof(Matrix4x4))
+            return Nice4X4MatrixDrawer.PropertyHeight(property);  // Add Universal solution
         
         return EditorGUIUtility.singleLineHeight;
     }

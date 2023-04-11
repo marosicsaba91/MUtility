@@ -7,7 +7,6 @@ public static class Matrix4X4Extensions
 {
     public static Quaternion ToQuaternion(this Matrix4x4 m) 
     {
-        // Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
         Quaternion q = new Quaternion();
         q.w = Mathf.Sqrt( Mathf.Max( 0, 1 + m[0,0] + m[1,1] + m[2,2] ) ) / 2; 
         q.x = Mathf.Sqrt( Mathf.Max( 0, 1 + m[0,0] - m[1,1] - m[2,2] ) ) / 2; 
@@ -23,5 +22,33 @@ public static class Matrix4X4Extensions
     { 
         return m.GetColumn(3);
     }
+    
+    public static string ToNiceString(this Matrix4x4 matrix)
+    {
+        var text = "(";
+        for (var y = 0; y < 4; y++)
+        for (var x = 0; x < 4; x++)
+        {
+            if(x == 0 && y > 0 )
+                text += ")(";
+                    
+            int i = x * 4 + y;
+            float value = matrix[i]; 
+            var s = value.ToString("0.##");
+            text += s;
+            if (x != 3)
+                text += ", ";
+        }
+        text += ")";
+        return text;
+    }
+
+    public static void SetTransform(this Matrix4x4 matrix, Transform transform)
+    {
+        transform.localPosition = matrix.GetColumn(3);
+        transform.localRotation = matrix.rotation;
+        transform.localScale = matrix.lossyScale;
+    }
+
 }
 }
