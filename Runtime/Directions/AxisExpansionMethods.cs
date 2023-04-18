@@ -5,6 +5,33 @@ namespace MUtility
 {
     public static class AxisExpansionMethods
     {
+        public static Axis3D ToAxis(this Vector3 vector)
+        {
+            float absX = Mathf.Abs(vector.x);
+            float absY = Mathf.Abs(vector.y);
+            float absZ = Mathf.Abs(vector.z);
+
+            if (absX > absY && absX > absZ)
+                return Axis3D.X;
+            if (absY > absX && absY > absZ)
+                return Axis3D.Y;
+            return Axis3D.Z;
+        }
+        
+        public static Axis3D ToAxis(this Vector3Int vector)
+        {
+            float absX = Mathf.Abs(vector.x);
+            float absY = Mathf.Abs(vector.y);
+            float absZ = Mathf.Abs(vector.z);
+
+            if (absX > absY && absX > absZ)
+                return Axis3D.X;
+            if (absY > absX && absY > absZ)
+                return Axis3D.Y;
+            return Axis3D.Z;
+        }
+
+
         public static Vector3 ToVector(this Axis3D axis)
         {
             switch (axis)

@@ -2,14 +2,14 @@
 {
     public enum Axis3D : byte
     {
-        X = 1,
-        Y = 2,
-        Z = 3
+        X = 0,
+        Y = 1,
+        Z = 2
     }
 
     public enum Axis2D : byte
     {
-        Horizontal  = 1,
-        Vertical = 2
+        Horizontal  = 0,
+        Vertical = 1
     }
 }
