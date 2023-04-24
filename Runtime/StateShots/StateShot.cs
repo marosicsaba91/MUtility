@@ -5,32 +5,32 @@ using UnityEditor;
 #endif
 namespace MUtility
 {
-public abstract class StateShot : ScriptableObject
-{
-    public TimeStamp timeStamp;
+	public abstract class StateShot : ScriptableObject
+	{
+		public TimeStamp timeStamp;
 
-    public void Record(GameObject gameObject)
-    { 
+		public void Record(GameObject gameObject)
+		{
 #if UNITY_EDITOR
-        Undo.RecordObject(this, "World State Recorded");
-#endif 
-        RecordState(gameObject);
-        timeStamp = TimeStamp.Now();
+			Undo.RecordObject(this, "World State Recorded");
+#endif
+			RecordState(gameObject);
+			timeStamp = TimeStamp.Now();
 #if UNITY_EDITOR
-        EditorUtility.SetDirty(this);
-#endif 
-    }
+			EditorUtility.SetDirty(this);
+#endif
+		}
 
-    public void ApplyToObject(GameObject gameObject)
-    { 
+		public void ApplyToObject(GameObject gameObject)
+		{
 #if UNITY_EDITOR
-        Undo.RecordObjects(gameObject.transform.GetAllUnityObjects(), "World State Shot Applied");
-#endif 
-        ApplyStateToObject( gameObject ); 
-    }
+			Undo.RecordObjects(gameObject.transform.GetAllUnityObjects(), "World State Shot Applied");
+#endif
+			ApplyStateToObject(gameObject);
+		}
 
-    protected abstract void RecordState(GameObject gameObject);
-    protected abstract void ApplyStateToObject(GameObject gameObject);
-    
-}
+		protected abstract void RecordState(GameObject gameObject);
+		protected abstract void ApplyStateToObject(GameObject gameObject);
+
+	}
 }

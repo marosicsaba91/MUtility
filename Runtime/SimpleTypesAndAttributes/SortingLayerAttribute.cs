@@ -12,9 +12,9 @@ using UnityEditor;
 
 namespace MUtility
 {
-	public class SortingLayerAttribute : PropertyAttribute { } 
+	public class SortingLayerAttribute : PropertyAttribute { }
 
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
 	[CustomPropertyDrawer(typeof(SortingLayerAttribute))]
 	public class SortingLayerAttributeDrawer : PropertyDrawer
 	{
@@ -22,12 +22,13 @@ namespace MUtility
 		{
 			if (property.propertyType != SerializedPropertyType.Integer)
 			{
-				if (!_checkedType) PropertyTypeWarning(property);
+				if (!_checkedType)
+					PropertyTypeWarning(property);
 				EditorGUI.PropertyField(position, property, label);
 				return;
 			}
 
-			var SortingLayerNames = GetSortingLayerNames();
+			string[] SortingLayerNames = GetSortingLayerNames();
 			HandleSortingLayerSelectionUI(position, property, label, SortingLayerNames);
 		}
 
@@ -77,7 +78,7 @@ namespace MUtility
 			string layerName = SortingLayer.IDToName(property.intValue);
 
 			// Return the index where on it matches.
-			for (var i = 0; i < SortingLayerNames.Length; ++i)
+			for (int i = 0; i < SortingLayerNames.Length; ++i)
 			{
 				if (SortingLayerNames[i].Equals(layerName))
 				{
@@ -93,9 +94,9 @@ namespace MUtility
 
 		string[] GetSortingLayerNames()
 		{
-			var result = new string[SortingLayer.layers.Length];
+			string[] result = new string[SortingLayer.layers.Length];
 
-			for (var i = 0; i < result.Length; ++i)
+			for (int i = 0; i < result.Length; ++i)
 				result[i] = SortingLayer.layers[i].name;
 
 			return result;

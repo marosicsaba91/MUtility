@@ -6,31 +6,31 @@ using UnityEngine;
 
 namespace MUtility
 {
-public class CheckboxColumn<TRow> : EditableColumn<TRow, bool>
-{
-    public CheckboxColumn( 
-        Func<TRow, bool> valueGetter,
-        Action<TRow, bool> valueSetter, 
-        ColumnInfo columnInfo = null) 
-        : base(valueGetter, valueSetter, columnInfo)
-    { }
+	public class CheckboxColumn<TRow> : EditableColumn<TRow, bool>
+	{
+		public CheckboxColumn(
+			Func<TRow, bool> valueGetter,
+			Action<TRow, bool> valueSetter,
+			ColumnInfo columnInfo = null)
+			: base(valueGetter, valueSetter, columnInfo)
+		{ }
 
-    protected override bool DrawEditableCell(Rect position, bool value, GUIStyle style)
-    {
-        const float checkBoxWidth = 14;
-        float x = position.x + (position.width - checkBoxWidth) / 2;
-        Rect pos = new Rect(x, position.y, checkBoxWidth, position.height);
-        return EditorGUI.Toggle(pos, value, style);
-    }
+		protected override bool DrawEditableCell(Rect position, bool value, GUIStyle style)
+		{
+			const float checkBoxWidth = 14;
+			float x = position.x + (position.width - checkBoxWidth) / 2;
+			Rect pos = new Rect(x, position.y, checkBoxWidth, position.height);
+			return EditorGUI.Toggle(pos, value, style);
+		}
 
-    protected override GUIStyle GetDefaultStyle() => new GUIStyle(GUI.skin.toggle)
-    {
-        alignment = TextAnchor.MiddleCenter 
-    };
+		protected override GUIStyle GetDefaultStyle() => new GUIStyle(GUI.skin.toggle)
+		{
+			alignment = TextAnchor.MiddleCenter
+		};
 
-    public override Alignment HeaderAlignment => Alignment.Center;
+		public override Alignment HeaderAlignment => Alignment.Center;
 
-}
+	}
 
 }
 #endif

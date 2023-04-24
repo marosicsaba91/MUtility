@@ -12,35 +12,36 @@ using UnityEditor;
 
 namespace MUtility
 {
-public class TagAttribute : PropertyAttribute
-{
-}
+	public class TagAttribute : PropertyAttribute
+	{
+	}
 
 #if UNITY_EDITOR
-[CustomPropertyDrawer(typeof(TagAttribute))]
-public class TagAttributeDrawer : PropertyDrawer
-{
-	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+	[CustomPropertyDrawer(typeof(TagAttribute))]
+	public class TagAttributeDrawer : PropertyDrawer
 	{
-		if (property.propertyType != SerializedPropertyType.String)
+		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			if (!_checked) Warning(property);
-			EditorGUI.PropertyField(position, property, label);
-			return;
+			if (property.propertyType != SerializedPropertyType.String)
+			{
+				if (!_checked)
+					Warning(property);
+				EditorGUI.PropertyField(position, property, label);
+				return;
+			}
+
+			property.stringValue = EditorGUI.TagField(position, label, property.stringValue);
 		}
 
-		property.stringValue = EditorGUI.TagField(position, label, property.stringValue);
-	}
+		bool _checked;
 
-	bool _checked;
-
-	void Warning(SerializedProperty property)
-	{
-		Debug.LogWarning(string.Format(
-			"Property <color=brown>{0}</color> in object <color=brown>{1}</color> is of wrong type. Expected: String",
-			property.name, property.serializedObject.targetObject));
-		_checked = true;
+		void Warning(SerializedProperty property)
+		{
+			Debug.LogWarning(string.Format(
+				"Property <color=brown>{0}</color> in object <color=brown>{1}</color> is of wrong type. Expected: String",
+				property.name, property.serializedObject.targetObject));
+			_checked = true;
+		}
 	}
-}
 #endif
 }

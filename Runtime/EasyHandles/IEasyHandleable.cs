@@ -1,7 +1,7 @@
 namespace MUtility
 {
-public interface IEasyHandleable
-{
-    bool DrawHandles();
-}
+	public interface IEasyHandleable
+	{
+		bool DrawHandles();
+	}
 }

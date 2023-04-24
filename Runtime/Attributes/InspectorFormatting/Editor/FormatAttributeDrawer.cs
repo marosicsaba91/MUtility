@@ -6,123 +6,128 @@ using UnityEngine;
 
 namespace MUtility
 {
-[CustomPropertyDrawer(typeof(FormattingAttribute), true)]
-public class FormatAttributeDrawer : PropertyDrawer
-{
-    bool _initialized = false;
-    object _owner;
-    PropertyDrawer _customPropertyDrawer;
-    ShowIfAttribute _showIfAttribute;
-    HideIfAttribute _hideIfAttribute;
-    ReadOnlyAttribute _readOnlyAttribute;
-    EnableIfAttribute _enableIfAttribute;
-    DisableIfAttribute _disableIfAttribute;
-    ColorAttribute _colorAttribute;
-    ValueChangeCallbackAttribute _valueChangeCallbackAttribute;
-    
-    bool _toShow = true; 
-    bool _enabled = true; 
-    Color _color; 
+	[CustomPropertyDrawer(typeof(FormattingAttribute), true)]
+	public class FormatAttributeDrawer : PropertyDrawer
+	{
+		bool _initialized = false;
+		object _owner;
+		PropertyDrawer _customPropertyDrawer;
+		ShowIfAttribute _showIfAttribute;
+		HideIfAttribute _hideIfAttribute;
+		ReadOnlyAttribute _readOnlyAttribute;
+		EnableIfAttribute _enableIfAttribute;
+		DisableIfAttribute _disableIfAttribute;
+		ColorAttribute _colorAttribute;
+		ValueChangeCallbackAttribute _valueChangeCallbackAttribute;
 
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        _owner = property.GetObjectWithProperty();
+		bool _toShow = true;
+		bool _enabled = true;
+		Color _color;
 
-        if (!_initialized)
-        {
-            object[] attributes = fieldInfo.GetCustomAttributes(typeof(FormattingAttribute), true);
-            _showIfAttribute = Find<ShowIfAttribute>();
-            _hideIfAttribute = Find<HideIfAttribute>();
-            _enableIfAttribute = Find<EnableIfAttribute>();
-            _disableIfAttribute = Find<DisableIfAttribute>();
-            _readOnlyAttribute = Find<ReadOnlyAttribute>();
-            _colorAttribute = Find<ColorAttribute>();
-            _valueChangeCallbackAttribute = Find<ValueChangeCallbackAttribute>();
-            T Find<T>() => (T)attributes.FirstOrDefault(o => o.GetType() == typeof(T));
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+		{
+			_owner = property.GetObjectWithProperty();
 
-            _showIfAttribute?.Initialize(_owner);
-            _hideIfAttribute?.Initialize(_owner);
-            _enableIfAttribute?.Initialize(_owner);
-            _disableIfAttribute?.Initialize(_owner);
-            _colorAttribute?.Initialize(_owner);
-            _valueChangeCallbackAttribute?.Initialize(_owner);
+			if (!_initialized)
+			{
+				object[] attributes = fieldInfo.GetCustomAttributes(typeof(FormattingAttribute), true);
+				_showIfAttribute = Find<ShowIfAttribute>();
+				_hideIfAttribute = Find<HideIfAttribute>();
+				_enableIfAttribute = Find<EnableIfAttribute>();
+				_disableIfAttribute = Find<DisableIfAttribute>();
+				_readOnlyAttribute = Find<ReadOnlyAttribute>();
+				_colorAttribute = Find<ColorAttribute>();
+				_valueChangeCallbackAttribute = Find<ValueChangeCallbackAttribute>();
+				T Find<T>() => (T)attributes.FirstOrDefault(o => o.GetType() == typeof(T));
 
-            _customPropertyDrawer = GetPropertyDrawer(property);
-            _initialized = true;
-        }
+				_showIfAttribute?.Initialize(_owner);
+				_hideIfAttribute?.Initialize(_owner);
+				_enableIfAttribute?.Initialize(_owner);
+				_disableIfAttribute?.Initialize(_owner);
+				_colorAttribute?.Initialize(_owner);
+				_valueChangeCallbackAttribute?.Initialize(_owner);
 
-        _toShow =
-            (_showIfAttribute == null || _showIfAttribute.CheckConditions(_owner)) &&
-            (_hideIfAttribute == null || !_hideIfAttribute.CheckConditions(_owner));
+				_customPropertyDrawer = GetPropertyDrawer(property);
+				_initialized = true;
+			}
 
-        _enabled = _readOnlyAttribute == null &&
-                   (_enableIfAttribute == null || _enableIfAttribute.CheckConditions(_owner)) &&
-                   (_disableIfAttribute == null || !_disableIfAttribute.CheckConditions(_owner));
+			_toShow =
+				(_showIfAttribute == null || _showIfAttribute.CheckConditions(_owner)) &&
+				(_hideIfAttribute == null || !_hideIfAttribute.CheckConditions(_owner));
 
-        _color = GUI.color;
-        if (_colorAttribute != null)
-            if (_colorAttribute.TryGetColor(_owner, out Color c))
-                _color = c;
+			_enabled = _readOnlyAttribute == null &&
+					   (_enableIfAttribute == null || _enableIfAttribute.CheckConditions(_owner)) &&
+					   (_disableIfAttribute == null || !_disableIfAttribute.CheckConditions(_owner));
 
-        if (!_toShow) return -EditorGUIUtility.standardVerticalSpacing;
-        
-        if (_customPropertyDrawer != null) 
-            return _customPropertyDrawer.GetPropertyHeight(property, label);
-        return EditorGUI.GetPropertyHeight(property);
-    }
+			_color = GUI.color;
+			if (_colorAttribute != null)
+				if (_colorAttribute.TryGetColor(_owner, out Color c))
+					_color = c;
 
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-    {
-        if (!_toShow) return;
-        bool savedEnabled = GUI.enabled;
-        Color savedColor = GUI.color;
-        GUI.enabled = _enabled;
-        GUI.color = _color;
+			if (!_toShow)
+				return -EditorGUIUtility.standardVerticalSpacing;
 
-        object oldValue = default;
-        if(_valueChangeCallbackAttribute != null)
-            oldValue = property.GetValue();
-        
-        if (_customPropertyDrawer != null) 
-            _customPropertyDrawer.OnGUI(position, property, label);
-        else 
-            EditorGUI.PropertyField(position, property, label, true);
-        property.serializedObject.ApplyModifiedProperties();
-        
-        if (_valueChangeCallbackAttribute != null)
-        {
-            object newValue = property.GetValue();
-            if (!Equals(oldValue, newValue))
-                _valueChangeCallbackAttribute.CallBack(_owner, oldValue, newValue);
-        }
+			if (_customPropertyDrawer != null)
+				return _customPropertyDrawer.GetPropertyHeight(property, label);
+			return EditorGUI.GetPropertyHeight(property);
+		}
 
-        GUI.enabled = savedEnabled;
-        GUI.color = savedColor;
-    }
+		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+		{
+			if (!_toShow)
+				return;
+			bool savedEnabled = GUI.enabled;
+			Color savedColor = GUI.color;
+			GUI.enabled = _enabled;
+			GUI.color = _color;
 
-    PropertyDrawer GetPropertyDrawer(SerializedProperty property)
-    {
-        PropertyDrawer customDrawer = InspectorDrawingUtility.GetPropertyDrawerForProperty(property, fieldInfo, attribute);
-        if (customDrawer != null) return customDrawer;
+			object oldValue = default;
+			if (_valueChangeCallbackAttribute != null)
+				oldValue = property.GetValue();
 
-        PropertyAttribute[] attributes = fieldInfo
-            .GetCustomAttributes(typeof(PropertyAttribute), false)
-            .Cast<PropertyAttribute>()
-            .ToArray();
-        
-        PropertyAttribute formattingAttribute = attributes.FirstOrDefault(a => !(a is FormattingAttribute));
-        
-        if (formattingAttribute == null) return null;
-				 
-        // Try to get drawer for any other Attribute than FormattingAttribute
-        Type attributeType = formattingAttribute.GetType();
-        Type customDrawerType = InspectorDrawingUtility.GetPropertyDrawerTypeForFieldType(attributeType);
-        if (customDrawerType == null) return null;
+			if (_customPropertyDrawer != null)
+				_customPropertyDrawer.OnGUI(position, property, label);
+			else
+				EditorGUI.PropertyField(position, property, label, true);
+			property.serializedObject.ApplyModifiedProperties();
 
-        customDrawer = InspectorDrawingUtility.InstantiatePropertyDrawer(customDrawerType, fieldInfo, formattingAttribute);
+			if (_valueChangeCallbackAttribute != null)
+			{
+				object newValue = property.GetValue();
+				if (!Equals(oldValue, newValue))
+					_valueChangeCallbackAttribute.CallBack(_owner, oldValue, newValue);
+			}
 
-        return customDrawer; 
-    }
-}
+			GUI.enabled = savedEnabled;
+			GUI.color = savedColor;
+		}
+
+		PropertyDrawer GetPropertyDrawer(SerializedProperty property)
+		{
+			PropertyDrawer customDrawer = InspectorDrawingUtility.GetPropertyDrawerForProperty(property, fieldInfo, attribute);
+			if (customDrawer != null)
+				return customDrawer;
+
+			PropertyAttribute[] attributes = fieldInfo
+				.GetCustomAttributes(typeof(PropertyAttribute), false)
+				.Cast<PropertyAttribute>()
+				.ToArray();
+
+			PropertyAttribute formattingAttribute = attributes.FirstOrDefault(a => !(a is FormattingAttribute));
+
+			if (formattingAttribute == null)
+				return null;
+
+			// Try to get drawer for any other Attribute than FormattingAttribute
+			Type attributeType = formattingAttribute.GetType();
+			Type customDrawerType = InspectorDrawingUtility.GetPropertyDrawerTypeForFieldType(attributeType);
+			if (customDrawerType == null)
+				return null;
+
+			customDrawer = InspectorDrawingUtility.InstantiatePropertyDrawer(customDrawerType, fieldInfo, formattingAttribute);
+
+			return customDrawer;
+		}
+	}
 }
 #endif

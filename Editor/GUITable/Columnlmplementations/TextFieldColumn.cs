@@ -6,22 +6,22 @@ using UnityEngine;
 
 namespace MUtility
 {
-public class TextFieldColumn<TRow> : EditableColumn<TRow, string>
-{
-    public TextFieldColumn( 
-        Func<TRow, string> valueGetter,
-        Action<TRow, string> valueSetter, 
-        ColumnInfo columnInfo = null) 
-        : base(valueGetter, valueSetter, columnInfo)
-    { }
+	public class TextFieldColumn<TRow> : EditableColumn<TRow, string>
+	{
+		public TextFieldColumn(
+			Func<TRow, string> valueGetter,
+			Action<TRow, string> valueSetter,
+			ColumnInfo columnInfo = null)
+			: base(valueGetter, valueSetter, columnInfo)
+		{ }
 
-    protected override string DrawEditableCell(Rect position, string value, GUIStyle style) =>
-        EditorGUI.TextField(position, value, style);
-    
-protected override GUIStyle GetDefaultStyle() => new GUIStyle(GUI.skin.textField) { };
+		protected override string DrawEditableCell(Rect position, string value, GUIStyle style) =>
+			EditorGUI.TextField(position, value, style);
+
+		protected override GUIStyle GetDefaultStyle() => new GUIStyle(GUI.skin.textField) { };
 
 
-}
+	}
 
 }
 #endif

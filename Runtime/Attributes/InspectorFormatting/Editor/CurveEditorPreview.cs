@@ -5,321 +5,327 @@ using UnityEngine;
 
 namespace MUtility
 {
-public class CurveEditorPreview
-{
-    public static readonly float valueLabelHeight = EditorGUIUtility.singleLineHeight;
-    public const float valueLabelWidth = 60;
-    public const float defaultZoom = 1.25f;
+	public class CurveEditorPreview
+	{
+		public static readonly float valueLabelHeight = EditorGUIUtility.singleLineHeight;
+		public const float valueLabelWidth = 60;
+		public const float defaultZoom = 1.25f;
 
-    public float zoom = defaultZoom;
-    public Vector2 offset = Vector2.zero;
-    Vector2 _dragStart;
+		public float zoom = defaultZoom;
+		public Vector2 offset = Vector2.zero;
+		Vector2 _dragStart;
 
-    public float Zoom
-    {
-        get => zoom;
-        set => zoom = Mathf.Clamp(value, 0.001f, 1000);
-    }
-
-
-    static Material mat;
-    static Material Mat
-    {
-        get{
-            if(mat == null)
-                mat = new Material(Shader.Find("Hidden/Internal-Colored"));
-            return mat;
-        }
-    } 
-
-    static readonly GUIStyle centerRightAlignedText = new GUIStyle(GUI.skin.label)
-        {alignment = TextAnchor.UpperCenter};
+		public float Zoom
+		{
+			get => zoom;
+			set => zoom = Mathf.Clamp(value, 0.001f, 1000);
+		}
 
 
-    static readonly GUIStyle upperRightAlignedText = new GUIStyle(GUI.skin.label)
-        {alignment = TextAnchor.MiddleRight};
+		static Material mat;
+		static Material Mat
+		{
+			get
+			{
+				if (mat == null)
+					mat = new Material(Shader.Find("Hidden/Internal-Colored"));
+				return mat;
+			}
+		}
+
+		static readonly GUIStyle centerRightAlignedText = new GUIStyle(GUI.skin.label)
+		{ alignment = TextAnchor.UpperCenter };
 
 
-    public void Draw(Rect position, AnimationCurve curve, Color color) =>
-        Draw(position, curve.Evaluate, AnimationCurveContainingRect(curve), color);
-
-    public static Rect AnimationCurveContainingRect(AnimationCurve function, bool showMargin = true)
-    {
-        if (function == null || function.keys.Length == 0)
-            return new Rect(x: -1, y: -1, width: 2, height: 2);
-
-        Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
-        Vector2 max = new Vector2(float.MinValue, float.MinValue);
-
-        foreach (Keyframe keyframe in function.keys)
-        {
-            if (keyframe.time < min.x)
-                min.x = keyframe.time;
-            if (keyframe.time > max.x)
-                max.x = keyframe.time;
-
-            if (keyframe.value < min.y)
-                min.y = keyframe.value;
-            if (keyframe.value > max.y)
-                max.y = keyframe.value;
-        }
-
-        return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
-    }
-
-    public void Draw(Rect position, Func<float, float> function, Rect mustContainArea, Color color, bool showMargin = true)
-    {
-        if (showMargin)
-        {
-            position.y += valueLabelHeight;
-            position.height -= valueLabelHeight;
-        }
-
-        mustContainArea.position -= mustContainArea.size * ((Zoom - 1) / 2);
-        mustContainArea.size *= Zoom;
-        if (Event.current.type != EventType.MouseDrag)
-            mustContainArea.position += offset;
+		static readonly GUIStyle upperRightAlignedText = new GUIStyle(GUI.skin.label)
+		{ alignment = TextAnchor.MiddleRight };
 
 
-        Rect ranges = GetUndistortedArea(position, mustContainArea);
+		public void Draw(Rect position, AnimationCurve curve, Color color) =>
+			Draw(position, curve.Evaluate, AnimationCurveContainingRect(curve), color);
 
-        bool showValuePreview = false;
-        Vector2 valuePreviewPixel = Vector2.zero;
-        float valuePreviewY = 0;
-        float valuePreviewX = 0;
+		public static Rect AnimationCurveContainingRect(AnimationCurve function, bool showMargin = true)
+		{
+			if (function == null || function.keys.Length == 0)
+				return new Rect(x: -1, y: -1, width: 2, height: 2);
 
-        // Handle Zooming
-        if (position.Contains(Event.current.mousePosition))
-        {
-            if (Event.current.type == EventType.MouseMove)
-            {
-                Debug.Log("USE");
-                Event.current.Use(); 
-            }
+			Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
+			Vector2 max = new Vector2(float.MinValue, float.MinValue);
 
-            else if (Event.current.type == EventType.ScrollWheel)
-            {
-                Zoom *= 1 + Event.current.delta.y / 20;
-                Event.current.Use();
-            }
-            else if (Event.current.type == EventType.MouseDown)
-            {
-                if (Event.current.button == 0) // Left Click
-                    _dragStart = ScreenToFunctionPosition(Event.current.mousePosition, position, ranges);
-                else
-                    Reset();
+			foreach (Keyframe keyframe in function.keys)
+			{
+				if (keyframe.time < min.x)
+					min.x = keyframe.time;
+				if (keyframe.time > max.x)
+					max.x = keyframe.time;
 
-                Event.current.Use();
-            }
-            else if (Event.current.type == EventType.MouseDrag)
-            {
-                if (Event.current.button == 0) //  Not Left Click
-                    offset = _dragStart - ScreenToFunctionPosition(Event.current.mousePosition, position, ranges);
-                mustContainArea.position += offset;
-                Event.current.Use();
-            }
-            else
-            {
-                valuePreviewPixel.x = Event.current.mousePosition.x;
-                valuePreviewX = ScreenToFunctionPositionX(valuePreviewPixel.x, position, ranges);
-                valuePreviewY = function(valuePreviewX);
-                valuePreviewPixel.y = MathHelper.Lerp(
-                    valuePreviewY,
-                    position.yMax,
-                    position.yMin,
-                    ranges.yMin,
-                    ranges.yMax);
+				if (keyframe.value < min.y)
+					min.y = keyframe.value;
+				if (keyframe.value > max.y)
+					max.y = keyframe.value;
+			}
 
-                const float minimumDistanceToShowValuePreview = 15;
-                if (Mathf.Abs(valuePreviewPixel.y - Event.current.mousePosition.y) <
-                    minimumDistanceToShowValuePreview)
-                    showValuePreview = true;
-            }
-        }
+			return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
+		}
 
-        int intent = EditorGUI.indentLevel;
-        EditorGUI.indentLevel = 0;
-        EditorHelper.DrawBox(position);
-        DrawGrid(position, ranges, EditorHelper.tableBorderColor, showMargin);
-        EditorHelper.DrawFunction(position, ranges, function, color);
+		public void Draw(Rect position, Func<float, float> function, Rect mustContainArea, Color color, bool showMargin = true)
+		{
+			if (showMargin)
+			{
+				position.y += valueLabelHeight;
+				position.height -= valueLabelHeight;
+			}
 
-        if (showValuePreview)
-        {
-            Rect r = new Rect(
-                Event.current.mousePosition.x - valueLabelWidth, valuePreviewPixel.y - valueLabelHeight / 2,
-                valueLabelWidth, valueLabelHeight
-            );
+			mustContainArea.position -= mustContainArea.size * ((Zoom - 1) / 2);
+			mustContainArea.size *= Zoom;
+			if (Event.current.type != EventType.MouseDrag)
+				mustContainArea.position += offset;
 
-            const float valuePreviewLineHeight = 10;
-            float x = (valuePreviewPixel.x - position.x) / position.width;
-            float y1 = (valuePreviewPixel.y - position.y - valuePreviewLineHeight / 2) / position.height;
-            float y2 = (valuePreviewPixel.y - position.y + valuePreviewLineHeight / 2) / position.height;
-            EditorHelper.DrawLine(position, x, y1, x, y2, color);
-            EditorGUI.LabelField(r, "Y:" + valuePreviewY.ToString("0.00"), centerRightAlignedText);
-            r.y -= valueLabelHeight;
-            EditorGUI.LabelField(r, "X:" + valuePreviewX.ToString("0.00"), centerRightAlignedText);
-        }
 
-        EditorGUI.indentLevel = intent;
-    }
+			Rect ranges = GetUndistortedArea(position, mustContainArea);
 
-    Vector2 ScreenToFunctionPosition(Vector2 pos, Rect position, Rect ranges)
-    {
-        return new Vector2(
-            ScreenToFunctionPositionX(pos.x, position, ranges),
-            ScreenToFunctionPositionY(pos.y, position, ranges));
-    }
+			bool showValuePreview = false;
+			Vector2 valuePreviewPixel = Vector2.zero;
+			float valuePreviewY = 0;
+			float valuePreviewX = 0;
 
-    float ScreenToFunctionPositionX(float x, Rect position, Rect ranges)
-    {
-        return MathHelper.LerpUnclamped(
-            x,
-            ranges.xMin,
-            ranges.xMax,
-            position.xMin,
-            position.xMax);
-    }
+			// Handle Zooming
+			if (position.Contains(Event.current.mousePosition))
+			{
+				if (Event.current.type == EventType.MouseMove)
+				{
+					Debug.Log("USE");
+					Event.current.Use();
+				}
 
-    float ScreenToFunctionPositionY(float y, Rect position, Rect ranges)
-    {
-        return MathHelper.LerpUnclamped(
-            y,
-            ranges.yMax,
-            ranges.yMin,
-            position.yMin,
-            position.yMax);
-    }
+				else if (Event.current.type == EventType.ScrollWheel)
+				{
+					Zoom *= 1 + Event.current.delta.y / 20;
+					Event.current.Use();
+				}
+				else if (Event.current.type == EventType.MouseDown)
+				{
+					if (Event.current.button == 0) // Left Click
+						_dragStart = ScreenToFunctionPosition(Event.current.mousePosition, position, ranges);
+					else
+						Reset();
 
-    public void Reset()
-    {
-        zoom = defaultZoom;
-        offset = Vector2.zero;
-    }
+					Event.current.Use();
+				}
+				else if (Event.current.type == EventType.MouseDrag)
+				{
+					if (Event.current.button == 0) //  Not Left Click
+						offset = _dragStart - ScreenToFunctionPosition(Event.current.mousePosition, position, ranges);
+					mustContainArea.position += offset;
+					Event.current.Use();
+				}
+				else
+				{
+					valuePreviewPixel.x = Event.current.mousePosition.x;
+					valuePreviewX = ScreenToFunctionPositionX(valuePreviewPixel.x, position, ranges);
+					valuePreviewY = function(valuePreviewX);
+					valuePreviewPixel.y = MathHelper.Lerp(
+						valuePreviewY,
+						position.yMax,
+						position.yMin,
+						ranges.yMin,
+						ranges.yMax);
 
-    static Rect GetUndistortedArea(Rect position, Rect mustContainArea)
-    {
-        float ratio = position.width / position.height;
-        Rect ranges = new Rect
-        {
-            size = ratio < mustContainArea.width / mustContainArea.height
-                ? new Vector2(mustContainArea.width, mustContainArea.width / ratio)
-                : new Vector2(mustContainArea.height * ratio, mustContainArea.height),
-            center = mustContainArea.center
-        };
+					const float minimumDistanceToShowValuePreview = 15;
+					if (Mathf.Abs(valuePreviewPixel.y - Event.current.mousePosition.y) <
+						minimumDistanceToShowValuePreview)
+						showValuePreview = true;
+				}
+			}
 
-        return ranges;
-    }
+			int intent = EditorGUI.indentLevel;
+			EditorGUI.indentLevel = 0;
+			EditorHelper.DrawBox(position);
+			DrawGrid(position, ranges, EditorHelper.tableBorderColor, showMargin);
+			EditorHelper.DrawFunction(position, ranges, function, color);
 
-    static void DrawGrid(Rect position, Rect ranges, Color color, bool showMargin)
-    {
-        const int smallInBig = 5;
-        const int logBase = 5;
-        const int roundDigit = 5;
+			if (showValuePreview)
+			{
+				Rect r = new Rect(
+					Event.current.mousePosition.x - valueLabelWidth, valuePreviewPixel.y - valueLabelHeight / 2,
+					valueLabelWidth, valueLabelHeight
+				);
 
-        const float axisAlpha = 0.8f;
-        const float bigGridAlpha = 0.5f;
-        const float smallGridAlpha = 0.25f;
-        
-        Color axisColor = new Color(color.r, color.g, color.b, axisAlpha);
+				const float valuePreviewLineHeight = 10;
+				float x = (valuePreviewPixel.x - position.x) / position.width;
+				float y1 = (valuePreviewPixel.y - position.y - valuePreviewLineHeight / 2) / position.height;
+				float y2 = (valuePreviewPixel.y - position.y + valuePreviewLineHeight / 2) / position.height;
+				EditorHelper.DrawLine(position, x, y1, x, y2, color);
+				EditorGUI.LabelField(r, "Y:" + valuePreviewY.ToString("0.00"), centerRightAlignedText);
+				r.y -= valueLabelHeight;
+				EditorGUI.LabelField(r, "X:" + valuePreviewX.ToString("0.00"), centerRightAlignedText);
+			}
 
-        float minSize = Mathf.Min(ranges.width, ranges.height);
-        float log = Mathf.Log(minSize, logBase);
-        int exponentOf10 = Mathf.FloorToInt(log);
-        float rate = MathHelper.Mod(log, 1);
-        float bigStep = Mathf.Pow(logBase, exponentOf10);
-        float smallStep = bigStep / smallInBig;
+			EditorGUI.indentLevel = intent;
+		}
 
-        Color bigGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(bigGridAlpha, smallGridAlpha, rate));
-        Color smallGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(smallGridAlpha, 0, rate));
+		Vector2 ScreenToFunctionPosition(Vector2 pos, Rect position, Rect ranges)
+		{
+			return new Vector2(
+				ScreenToFunctionPositionX(pos.x, position, ranges),
+				ScreenToFunctionPositionY(pos.y, position, ranges));
+		}
 
-        if(!showMargin) return;
-        
-        
-        // Horizontal Values:
-        float start = Mathf.Floor(ranges.xMin / smallStep) * smallStep;
-        float end = Mathf.Ceil(ranges.xMax / smallStep) * smallStep;
-        int index = MathHelper.Mod(Mathf.FloorToInt(ranges.xMin / smallStep), smallInBig);
-        for (float value = start; value <= end; value += smallStep)
-        {
-            bool big = index % smallInBig == 0;
-            value = (float) Math.Round(value, roundDigit);
-            Color c =
-                value == 0 ? axisColor :
-                big ? bigGridColor :
-                smallGridColor;
-            DrawHorizontalValue(position, value, ranges.xMin, ranges.xMax, c, big);
-            index++;
-        }
+		float ScreenToFunctionPositionX(float x, Rect position, Rect ranges)
+		{
+			return MathHelper.LerpUnclamped(
+				x,
+				ranges.xMin,
+				ranges.xMax,
+				position.xMin,
+				position.xMax);
+		}
 
-        // Vertical Values:
-        start = Mathf.Floor(ranges.yMin / smallStep) * smallStep;
-        end = Mathf.Ceil(ranges.yMax / smallStep) * smallStep;
-        index = MathHelper.Mod(Mathf.FloorToInt(ranges.yMin / smallStep), smallInBig);
-        for (float value = start; value <= end; value += smallStep)
-        {
-            bool big = index % smallInBig == 0;
-            value = (float) Math.Round(value, roundDigit);
-            Color c =
-                value == 0 ? axisColor :
-                big ? bigGridColor :
-                smallGridColor;
-            DrawVerticalValue(position, value, ranges.yMin, ranges.yMax, c, big);
-            index++;
-        }
-    }
+		float ScreenToFunctionPositionY(float y, Rect position, Rect ranges)
+		{
+			return MathHelper.LerpUnclamped(
+				y,
+				ranges.yMax,
+				ranges.yMin,
+				position.yMin,
+				position.yMax);
+		}
 
-    static void DrawHorizontalValue(Rect position, float value, float min, float max, Color color,
-        bool showValue = true, bool showLine = true)
-    {
-        if (value < min || value > max) return;
+		public void Reset()
+		{
+			zoom = defaultZoom;
+			offset = Vector2.zero;
+		}
 
-        float rate = (value - min) / (max - min);
+		static Rect GetUndistortedArea(Rect position, Rect mustContainArea)
+		{
+			float ratio = position.width / position.height;
+			Rect ranges = new Rect
+			{
+				size = ratio < mustContainArea.width / mustContainArea.height
+					? new Vector2(mustContainArea.width, mustContainArea.width / ratio)
+					: new Vector2(mustContainArea.height * ratio, mustContainArea.height),
+				center = mustContainArea.center
+			};
 
-        if (showLine)
-            EditorHelper.DrawLine(position, rate, 0, rate, 1, color);
-        if (!showValue) return;
-        
-        float x = Mathf.Lerp(
-            position.x,
-            position.x + position.width, rate);
-        int xPixel = Mathf.RoundToInt(x - valueLabelWidth / 2f);
-        Rect pos = new Rect(xPixel, position.y - valueLabelHeight, valueLabelWidth, valueLabelHeight);
-        EditorGUI.LabelField(pos, NormalString(value), centerRightAlignedText);
-    }
+			return ranges;
+		}
 
-    static void DrawVerticalValue(Rect position, float value, float min, float max, Color color,
-        bool showValue = true, bool showLine = true)
-    {
-        if (value < min || value > max)
-            return;
+		static void DrawGrid(Rect position, Rect ranges, Color color, bool showMargin)
+		{
+			const int smallInBig = 5;
+			const int logBase = 5;
+			const int roundDigit = 5;
 
-        float rate = 1 - (value - min) / (max - min);
+			const float axisAlpha = 0.8f;
+			const float bigGridAlpha = 0.5f;
+			const float smallGridAlpha = 0.25f;
 
-        if (showLine)
-            EditorHelper.DrawLine(position, 0, rate, 1, rate, color);
-        if (!showValue) return;
-        
-        float y = Mathf.Lerp(
-            position.y,
-            position.y + position.height, rate);
-        int yPixel = Mathf.RoundToInt(y - valueLabelHeight / 2f);
-        Rect pos = new Rect(position.x - valueLabelWidth, yPixel, valueLabelWidth, valueLabelHeight);
-        EditorGUI.LabelField(pos, NormalString(value), upperRightAlignedText);
-    }
+			Color axisColor = new Color(color.r, color.g, color.b, axisAlpha);
 
-    static string NormalString(float value)
-    {
-        if (value == 0) return "0";
-        
-        float abs = Mathf.Abs(value);
-        if (abs >= 100)
-            return value.ToString("0.");
-        if (abs >= 10)
-            return value.ToString("0.#");
-        if (abs >= 0.02)
-            return value.ToString("0.##");
-        return value.ToString("0.#E+0");
-    }
-}
+			float minSize = Mathf.Min(ranges.width, ranges.height);
+			float log = Mathf.Log(minSize, logBase);
+			int exponentOf10 = Mathf.FloorToInt(log);
+			float rate = MathHelper.Mod(log, 1);
+			float bigStep = Mathf.Pow(logBase, exponentOf10);
+			float smallStep = bigStep / smallInBig;
+
+			Color bigGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(bigGridAlpha, smallGridAlpha, rate));
+			Color smallGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(smallGridAlpha, 0, rate));
+
+			if (!showMargin)
+				return;
+
+
+			// Horizontal Values:
+			float start = Mathf.Floor(ranges.xMin / smallStep) * smallStep;
+			float end = Mathf.Ceil(ranges.xMax / smallStep) * smallStep;
+			int index = MathHelper.Mod(Mathf.FloorToInt(ranges.xMin / smallStep), smallInBig);
+			for (float value = start; value <= end; value += smallStep)
+			{
+				bool big = index % smallInBig == 0;
+				value = (float)Math.Round(value, roundDigit);
+				Color c =
+					value == 0 ? axisColor :
+					big ? bigGridColor :
+					smallGridColor;
+				DrawHorizontalValue(position, value, ranges.xMin, ranges.xMax, c, big);
+				index++;
+			}
+
+			// Vertical Values:
+			start = Mathf.Floor(ranges.yMin / smallStep) * smallStep;
+			end = Mathf.Ceil(ranges.yMax / smallStep) * smallStep;
+			index = MathHelper.Mod(Mathf.FloorToInt(ranges.yMin / smallStep), smallInBig);
+			for (float value = start; value <= end; value += smallStep)
+			{
+				bool big = index % smallInBig == 0;
+				value = (float)Math.Round(value, roundDigit);
+				Color c =
+					value == 0 ? axisColor :
+					big ? bigGridColor :
+					smallGridColor;
+				DrawVerticalValue(position, value, ranges.yMin, ranges.yMax, c, big);
+				index++;
+			}
+		}
+
+		static void DrawHorizontalValue(Rect position, float value, float min, float max, Color color,
+			bool showValue = true, bool showLine = true)
+		{
+			if (value < min || value > max)
+				return;
+
+			float rate = (value - min) / (max - min);
+
+			if (showLine)
+				EditorHelper.DrawLine(position, rate, 0, rate, 1, color);
+			if (!showValue)
+				return;
+
+			float x = Mathf.Lerp(
+				position.x,
+				position.x + position.width, rate);
+			int xPixel = Mathf.RoundToInt(x - valueLabelWidth / 2f);
+			Rect pos = new Rect(xPixel, position.y - valueLabelHeight, valueLabelWidth, valueLabelHeight);
+			EditorGUI.LabelField(pos, NormalString(value), centerRightAlignedText);
+		}
+
+		static void DrawVerticalValue(Rect position, float value, float min, float max, Color color,
+			bool showValue = true, bool showLine = true)
+		{
+			if (value < min || value > max)
+				return;
+
+			float rate = 1 - (value - min) / (max - min);
+
+			if (showLine)
+				EditorHelper.DrawLine(position, 0, rate, 1, rate, color);
+			if (!showValue)
+				return;
+
+			float y = Mathf.Lerp(
+				position.y,
+				position.y + position.height, rate);
+			int yPixel = Mathf.RoundToInt(y - valueLabelHeight / 2f);
+			Rect pos = new Rect(position.x - valueLabelWidth, yPixel, valueLabelWidth, valueLabelHeight);
+			EditorGUI.LabelField(pos, NormalString(value), upperRightAlignedText);
+		}
+
+		static string NormalString(float value)
+		{
+			if (value == 0)
+				return "0";
+
+			float abs = Mathf.Abs(value);
+			if (abs >= 100)
+				return value.ToString("0.");
+			if (abs >= 10)
+				return value.ToString("0.#");
+			if (abs >= 0.02)
+				return value.ToString("0.##");
+			return value.ToString("0.#E+0");
+		}
+	}
 }
 #endif

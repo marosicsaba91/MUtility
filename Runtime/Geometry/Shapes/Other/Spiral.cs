@@ -1,7 +1,7 @@
 ﻿namespace MUtility
 {
-public struct Spiral
-{
-    // TODO
-}
+	public struct Spiral
+	{
+		// TODO
+	}
 }

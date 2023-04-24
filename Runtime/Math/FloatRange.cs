@@ -25,8 +25,8 @@ namespace MUtility
 		public override string ToString() => "(" + min + "/" + max + ")";
 	}
 
-	
-	public class RangeLimitsAttribute: PropertyAttribute
+
+	public class RangeLimitsAttribute : PropertyAttribute
 	{
 		public float min;
 		public float max;
