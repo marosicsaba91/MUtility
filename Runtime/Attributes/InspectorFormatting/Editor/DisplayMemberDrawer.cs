@@ -86,7 +86,7 @@ namespace MUtility
 					{
 						_propertyInfo.SetValue(_owner, newValue);
 					}
-					catch (Exception e)
+					catch (Exception)
 					{
 						property.SetValue(newValue);
 					}
