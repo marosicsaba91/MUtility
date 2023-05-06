@@ -6,7 +6,7 @@ namespace MUtility
 {
 	public readonly struct Drawable
 	{
-		public enum DrawingType { Gizmo, Debug }
+		public enum DrawingType { Gizmo, Debug, Handle}
 		public readonly List<Vector3[]> polygons;
 
 		public Drawable(List<Vector3[]> polygons)
@@ -30,7 +30,7 @@ namespace MUtility
 			polygons.Add(polygon);
 
 		public Drawable Transform(Transform transform) =>
-			ModifyEach((polygon) => polygon.Transform(transform));
+			ModifyEach((polygon) => polygon.Transform(transform)); 
 
 		public Drawable Offset(Vector3 offset) =>
 			ModifyEach((polygon) => polygon.Offset(offset));
@@ -111,19 +111,6 @@ namespace MUtility
 				Transform(transform).DrawDebug(color);
 		}
 
-
-		void DrawInSpace(Transform transform, Space space, Color? color, DrawingType type)
-		{
-			if (transform == null)
-				space = Space.World;
-
-
-			if (space == Space.World)
-				Draw(color, type);
-			else
-				Transform(transform).Draw(color, type);
-		}
-
 		public void DrawGizmo(Vector3 offset, Color color) =>
 			Offset(offset).DrawGizmo(color);
 
@@ -160,15 +147,21 @@ namespace MUtility
 		public void DrawDebug() =>
 			Each((polygon) => polygon.DrawDebug());
 
-		public void DrawDebug(Color? color) =>
-			Each((polygon) => polygon.DrawDebug(color));
+		public void DrawHandle(Color color) =>
+			Each((polygon) => polygon.DrawHandle(color));
 
-		public void Draw(Color? color, DrawingType drawingType)
+		public void DrawHandle() =>
+			Each((polygon) => polygon.DrawHandle());
+
+
+		public void Draw(DrawingType drawingType, Color color = default)
 		{
 			if (drawingType == DrawingType.Gizmo)
 				Each((polygon) => polygon.DrawGizmo(color));
 			else if (drawingType == DrawingType.Debug)
 				Each((polygon) => polygon.DrawDebug(color));
+			else if (drawingType == DrawingType.Handle)
+				Each((polygon) => polygon.DrawHandle(color));
 		}
 
 		void Each(Action<Vector3[]> action)

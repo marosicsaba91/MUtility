@@ -62,33 +62,36 @@ namespace MUtility
 		}
 
 		public static void DrawGizmo(this IEnumerable<Vector3> polygon, Color color) =>
-			DrawPolygonDebug(polygon, color, Drawable.DrawingType.Gizmo);
+			DrawPolygon(polygon, color, Drawable.DrawingType.Gizmo);
 
 		public static void DrawGizmo(this IEnumerable<Vector3> polygon) =>
-			DrawPolygonDebug(polygon, null, Drawable.DrawingType.Gizmo);
+			DrawPolygon(polygon, default, Drawable.DrawingType.Gizmo);
 
-		public static void DrawGizmo(this IEnumerable<Vector3> polygon, Color? color) =>
-			DrawPolygonDebug(polygon, color, Drawable.DrawingType.Debug);
 
 		public static void DrawDebug(this IEnumerable<Vector3> polygon, Color color) =>
-			DrawPolygonDebug(polygon, color, Drawable.DrawingType.Debug);
+			DrawPolygon(polygon, color, Drawable.DrawingType.Debug);
 
 		public static void DrawDebug(this IEnumerable<Vector3> polygon) =>
-			DrawPolygonDebug(polygon, null, Drawable.DrawingType.Debug);
+			DrawPolygon(polygon, default, Drawable.DrawingType.Debug);
 
-		public static void DrawDebug(this IEnumerable<Vector3> polygon, Color? color) =>
-			DrawPolygonDebug(polygon, color, Drawable.DrawingType.Debug);
+
+		public static void DrawHandle(this IEnumerable<Vector3> polygon, Color color) =>
+			DrawPolygon(polygon, color, Drawable.DrawingType.Handle);
+
+		public static void DrawHandle(this IEnumerable<Vector3> polygon) =>
+			DrawPolygon(polygon, default, Drawable.DrawingType.Handle);
+
 
 		// Private
 
-		static void DrawPolygonDebug(IEnumerable<Vector3> polygon, Color? color, Drawable.DrawingType type)
+		static void DrawPolygon(IEnumerable<Vector3> polygon, Color color, Drawable.DrawingType type)
 		{
 			if (type == Drawable.DrawingType.Debug)
 			{
 				Vector3? last = null;
+				Color c = color == default ? color : Color.white;
 				foreach (Vector3 p in polygon)
 				{
-					Color c = color ?? Color.white;
 					if (last != null)
 						Debug.DrawLine(last.Value, p, c);
 					last = p;
@@ -96,8 +99,8 @@ namespace MUtility
 			}
 			else if (type == Drawable.DrawingType.Gizmo)
 			{
-				if (color.HasValue)
-					Gizmos.color = color.Value;
+				if (color == default)
+					Gizmos.color = color;
 
 				Vector3? last = null;
 				foreach (Vector3 p in polygon)
@@ -106,6 +109,23 @@ namespace MUtility
 						Gizmos.DrawLine(last.Value, p);
 					last = p;
 				}
+			}
+			else if (type == Drawable.DrawingType.Handle)
+			{
+				#if UNITY_EDITOR
+
+				if (color != default)
+					UnityEditor.Handles.color = color;
+
+				Vector3? last = null;
+				foreach (Vector3 p in polygon)
+				{
+					if (last != null)
+						UnityEditor.Handles.DrawLine(last.Value, p);
+					last = p;
+				}
+
+				#endif
 			}
 		}
 	}

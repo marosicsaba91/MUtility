@@ -215,7 +215,7 @@ namespace MUtility
 			if (field == null)
 				return false;
 			object oldValue = field.GetValue(source);
-			if (newValue.Equals(oldValue))
+			if (Equals(oldValue, newValue))
 				return false;
 
 			field.SetValue(source, newValue);

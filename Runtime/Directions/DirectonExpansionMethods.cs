@@ -5,50 +5,54 @@ namespace MUtility
 {
 	public static class DirectionExpanded
 	{
-		public static GeneralDirection3D GetPerpendicularRightHand(this GeneralDirection3D dir)
+		public static GeneralDirection3D GetPerpendicularRightHand(this GeneralDirection3D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case GeneralDirection3D.Right:
-					return GeneralDirection3D.Down;
-				case GeneralDirection3D.Up:
-					return GeneralDirection3D.Back;
-				case GeneralDirection3D.Forward:
-					return GeneralDirection3D.Left;
+			GeneralDirection3D.Right => GeneralDirection3D.Down,
+			GeneralDirection3D.Up => GeneralDirection3D.Back,
+			GeneralDirection3D.Forward => GeneralDirection3D.Left,
+			GeneralDirection3D.Left => GeneralDirection3D.Forward,
+			GeneralDirection3D.Down => GeneralDirection3D.Right,
+			GeneralDirection3D.Back => GeneralDirection3D.Up,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
 
-				case GeneralDirection3D.Left:
-					return GeneralDirection3D.Forward;
-				case GeneralDirection3D.Down:
-					return GeneralDirection3D.Right;
-				case GeneralDirection3D.Back:
-					return GeneralDirection3D.Up;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
 
 		//Perpendicular
-		public static GeneralDirection3D GetPerpendicularLeftHand(this GeneralDirection3D dir)
+		public static GeneralDirection3D GetPerpendicularLeftHand(this GeneralDirection3D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case GeneralDirection3D.Right:
-					return GeneralDirection3D.Back;
-				case GeneralDirection3D.Up:
-					return GeneralDirection3D.Left;
-				case GeneralDirection3D.Forward:
-					return GeneralDirection3D.Down;
+			GeneralDirection3D.Right => GeneralDirection3D.Back,
+			GeneralDirection3D.Up => GeneralDirection3D.Left,
+			GeneralDirection3D.Forward => GeneralDirection3D.Down,
+			GeneralDirection3D.Left => GeneralDirection3D.Up,
+			GeneralDirection3D.Down => GeneralDirection3D.Forward,
+			GeneralDirection3D.Back => GeneralDirection3D.Right,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
 
-				case GeneralDirection3D.Left:
-					return GeneralDirection3D.Up;
-				case GeneralDirection3D.Down:
-					return GeneralDirection3D.Forward;
-				case GeneralDirection3D.Back:
-					return GeneralDirection3D.Right;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+		public static GeneralDirection3D Next(this GeneralDirection3D dir) => dir switch
+		{
+			GeneralDirection3D.Right => GeneralDirection3D.Up,
+			GeneralDirection3D.Up => GeneralDirection3D.Forward,
+			GeneralDirection3D.Forward => GeneralDirection3D.Left,
+			GeneralDirection3D.Left => GeneralDirection3D.Down,
+			GeneralDirection3D.Down => GeneralDirection3D.Back,
+			GeneralDirection3D.Back => GeneralDirection3D.Right,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
+
+
+		//Perpendicular
+		public static GeneralDirection3D Previous(this GeneralDirection3D dir) => dir switch
+		{
+			GeneralDirection3D.Right => GeneralDirection3D.Back,
+			GeneralDirection3D.Up => GeneralDirection3D.Right,
+			GeneralDirection3D.Forward => GeneralDirection3D.Up,
+			GeneralDirection3D.Left => GeneralDirection3D.Forward,
+			GeneralDirection3D.Down => GeneralDirection3D.Left,
+			GeneralDirection3D.Back => GeneralDirection3D.Down,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
+
 
 		// Equals
 		public static bool Equals(this GeneralDirection2D self, GeneralDirection3D dir) =>

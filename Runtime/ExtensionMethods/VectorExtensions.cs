@@ -8,9 +8,15 @@ namespace MUtility
 		public static Vector2 Round(this Vector2 vector) =>
 			new(Mathf.Round(vector.x), Mathf.Round(vector.y));
 
-
 		public static Vector3 Round(this Vector3 vector) =>
 			new(Mathf.Round(vector.x), Mathf.Round(vector.y), Mathf.Round(vector.z));
+
+
+		public static Vector2Int RoundToInt(this Vector2 vector) =>
+			new(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y));
+
+		public static Vector3Int RoundToInt(this Vector3 vector) =>
+			new(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y), Mathf.RoundToInt(vector.z));
 
 
 		public static Vector2 ToVector2(this Vector3 vector, Axis3D deleteAxis) => deleteAxis switch
@@ -70,6 +76,22 @@ namespace MUtility
 				input.x < min.x ? min.x : input.x > max.x ? max.x : input.x,
 				input.y < min.y ? min.y : input.y > max.y ? max.y : input.y,
 				input.z < min.z ? min.z : input.z > max.y ? max.z : input.z);
+
+		public static Vector3Int Clamp(this Vector3Int input, Vector3Int min, Vector3Int max) => new(
+				input.x < min.x ? min.x : input.x > max.x ? max.x : input.x,
+				input.y < min.y ? min.y : input.y > max.y ? max.y : input.y,
+				input.z < min.z ? min.z : input.z > max.y ? max.z : input.z);
+		public static Vector2Int Clamp(this Vector2Int input, Vector2Int min, Vector2Int max) => new(
+				input.x < min.x ? min.x : input.x > max.x ? max.x : input.x,
+				input.y < min.y ? min.y : input.y > max.y ? max.y : input.y);
+
+		public static Vector3Int Clamp(this Vector3Int input, int min, int max) => new(
+				input.x < min ? min : input.x > max ? max : input.x,
+				input.y < min ? min : input.y > max ? max : input.y,
+				input.z < min ? min : input.z > max ? max : input.z);
+		public static Vector2Int Clamp(this Vector2Int input, int min, int max) => new(
+				input.x < min ? min : input.x > max ? max : input.x,
+				input.y < min ? min : input.y > max ? max : input.y);
 
 		public static Vector2 Clamp01(this Vector2 areaPos) => areaPos.Clamp(0, 1);
 
@@ -138,10 +160,7 @@ namespace MUtility
 		public static Vector3Int MultiplyAllAxis(this Vector3Int s, Vector3Int v) => new(s.x * v.x, s.y * v.y, s.z * v.z);
 		public static Vector3Int MultiplyAllAxis(this Vector3Int s, int x, int y, int z) => new(s.x * x, s.y * y, s.z * z);
 		public static Vector3 MultiplyAllAxis(this Vector3Int s, float x, float y, float z) => new(s.x * x, s.y * y, s.z * z);
-
-
-		// Rotate
-
+		 
 		public static Vector3Int Rotate(this Vector3Int vector, Axis3D axis, int rotations90)
 		{
 			rotations90 = (rotations90 % 4 + 4) % 4;
@@ -210,6 +229,36 @@ namespace MUtility
 			return vector;
 		}
 
+		public static Vector3Int Abs(this Vector3Int vector)
+		{
+			vector.x = Mathf.Abs(vector.x);
+			vector.y = Mathf.Abs(vector.y);
+			vector.z = Mathf.Abs(vector.z);
+			return vector;
+		}
 
+		public static float Mean(this Vector2 vector) => (vector.x + vector.y) / 2f;
+		public static float AbsMean(this Vector2 vector) =>
+			(Mathf.Abs(vector.x) + Mathf.Abs(vector.y)) / 2f;
+
+		public static float Mean(this Vector3 vector) => (vector.x + vector.y + vector.z) / 3f;
+		public static float AbsMean(this Vector3 vector) =>
+			(Mathf.Abs(vector.x) + Mathf.Abs(vector.y) + Mathf.Abs(vector.z)) / 3f;
+
+		public static float Mean(this Vector2Int vector) => (vector.x + vector.y) / 2f;
+		public static float AbsMean(this Vector2Int vector) =>
+			(Mathf.Abs(vector.x) + Mathf.Abs(vector.y)) / 2f;
+
+		public static float Mean(this Vector3Int vector) => (vector.x + vector.y + vector.z) / 3f;
+		public static float AbsMean(this Vector3Int vector) =>
+			(Mathf.Abs(vector.x) + Mathf.Abs(vector.y) + Mathf.Abs(vector.z)) / 3f;
+
+		public static int GetAxis(this Vector3Int vector, Axis3D axis) => axis switch
+		{
+			Axis3D.X => vector.x,
+			Axis3D.Y => vector.y,
+			Axis3D.Z => vector.z,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null)
+		};
 	}
 }

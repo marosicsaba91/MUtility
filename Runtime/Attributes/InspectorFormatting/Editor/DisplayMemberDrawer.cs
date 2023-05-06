@@ -91,12 +91,10 @@ namespace MUtility
 						property.SetValue(newValue);
 					}
 				}
-
 				property.isExpanded = isExpanded;
 				return;
 			}
 
-			Debug.Log(isExpanded);
 			property.isExpanded = isExpanded;
 			Error(position, label, $"No valid member named: {_displayMember.memberName}");
 		}
