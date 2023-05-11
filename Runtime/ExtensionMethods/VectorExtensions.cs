@@ -260,5 +260,13 @@ namespace MUtility
 			Axis3D.Z => vector.z,
 			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null)
 		};
+
+		public static Vector3 GetPerpendicular(this Vector3 dir)
+		{
+			dir.Normalize();
+			if(dir == Vector3.up)
+				return Vector3.Cross(Vector3.right, dir);
+			return Vector3.Cross(Vector3.up, dir);
+		}
 	}
 }

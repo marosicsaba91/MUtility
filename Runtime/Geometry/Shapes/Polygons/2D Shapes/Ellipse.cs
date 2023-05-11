@@ -104,7 +104,7 @@ namespace MUtility
 
 
 	[Serializable]
-	public class SpacialEllipse : SpacialPolygon<Ellipse>
+	public class SpatialEllipse : SpatialPolygon<Ellipse>
 	{
 	}
 }

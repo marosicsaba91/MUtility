@@ -100,11 +100,11 @@ namespace MUtility
 	}
 
 	[Serializable]
-	public class SpacialRectangle : SpacialPolygon<Rectangle>
+	public class SpatialRectangle : SpatialPolygon<Rectangle>
 	{
-		public SpacialRectangle() { }
+		public SpatialRectangle() { }
 
-		public SpacialRectangle(BoxCollider2D boxCollider) : base(boxCollider.transform) => polygon = new(boxCollider);
+		public SpatialRectangle(BoxCollider2D boxCollider) : base(boxCollider.transform) => polygon = new(boxCollider);
 	}
 
 }

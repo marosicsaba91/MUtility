@@ -167,6 +167,6 @@ namespace MUtility
 	}
 
 	[Serializable]
-	public class SpacialCircleSector : SpacialPolygon<CircleSector> { }
+	public class SpatialCircleSector : SpatialPolygon<CircleSector> { }
 
 }

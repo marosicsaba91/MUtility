@@ -194,5 +194,5 @@ namespace MUtility
 
 
 	[Serializable]
-	public class SpacialSphere : SpacialMesh<Sphere> { }
+	public class SpatialSphere : SpatialMesh<Sphere> { }
 }

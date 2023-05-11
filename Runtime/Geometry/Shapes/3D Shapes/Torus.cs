@@ -119,5 +119,5 @@ namespace MUtility
 		}
 	}
 	[Serializable]
-	public class SpacialTorus : SpacialMesh<Torus> { }
+	public class SpatialTorus : SpatialMesh<Torus> { }
 }

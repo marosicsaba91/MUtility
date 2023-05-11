@@ -63,9 +63,9 @@ namespace MUtility
 
 		bool TypeFilter(Type type)
 		{
-			if (IsSubclassOfRawGeneric(type, typeof(SpacialPolygon<>)))
+			if (IsSubclassOfRawGeneric(type, typeof(SpatialPolygon<>)))
 				return false;
-			if (IsSubclassOfRawGeneric(type, typeof(SpacialMesh<>)))
+			if (IsSubclassOfRawGeneric(type, typeof(SpatialMesh<>)))
 				return false;
 			return true;
 		}

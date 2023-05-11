@@ -127,9 +127,15 @@ namespace MUtility
 		}
 	}
 
-	public class SpacialCircle : SpacialPolygon<Circle>
+	public class SpatialCircle : SpatialPolygon<Circle>
 	{
-		public SpacialCircle(CircleCollider2D collider) : base(collider.transform) => polygon = new(collider);
+		public SpatialCircle(Vector3 center, float radius, Vector3 normal)
+		{
+			position = center;
+			rotation = Quaternion.LookRotation(normal);
+			polygon = new Circle(radius);
+		}
+		public SpatialCircle(CircleCollider2D collider) : base(collider.transform) => polygon = new(collider);
 	}
 
 }

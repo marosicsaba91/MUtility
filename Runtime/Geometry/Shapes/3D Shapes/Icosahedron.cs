@@ -81,7 +81,7 @@ public struct Icosahedron : IDrawable
 }
 
 
-// [Serializable] public class SpacialIcosahedron : SpacialMesh<Icosahedron> { }
+// [Serializable] public class SpatialIcosahedron : SpatialMesh<Icosahedron> { }
 
 }
 */

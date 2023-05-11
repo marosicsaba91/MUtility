@@ -67,49 +67,49 @@ namespace MUtility
 		RightTopBackCorner, LeftTopBackCorner, RightBottomBackCorner, LeftBottomBackCorner
 	};
 
-		public SpacialRectangle RightSide => new SpacialRectangle()
+		public SpatialRectangle RightSide => new SpatialRectangle()
 		{
 			polygon = new Rectangle(size.z, size.y),
 			position = RightCenter,
 			rotation = Quaternion.LookRotation(Vector3.right, Vector3.up)
 		};
 
-		public SpacialRectangle LeftSide => new SpacialRectangle()
+		public SpatialRectangle LeftSide => new SpatialRectangle()
 		{
 			polygon = new Rectangle(size.z, size.y),
 			position = LeftCenter,
 			rotation = Quaternion.LookRotation(Vector3.left, Vector3.up)
 		};
 
-		public SpacialRectangle TopSide => new SpacialRectangle()
+		public SpatialRectangle TopSide => new SpatialRectangle()
 		{
 			polygon = new Rectangle(size.x, size.z),
 			position = TopCenter,
 			rotation = Quaternion.LookRotation(Vector3.up, Vector3.forward)
 		};
 
-		public SpacialRectangle BottomSide => new SpacialRectangle()
+		public SpatialRectangle BottomSide => new SpatialRectangle()
 		{
 			polygon = new Rectangle(size.x, size.z),
 			position = BottomCenter,
 			rotation = Quaternion.LookRotation(Vector3.down, Vector3.forward)
 		};
 
-		public SpacialRectangle FrontSide => new SpacialRectangle()
+		public SpatialRectangle FrontSide => new SpatialRectangle()
 		{
 			polygon = new Rectangle(size.x, size.y),
 			position = FrontCenter,
 			rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up)
 		};
 
-		public SpacialRectangle BackSide => new SpacialRectangle()
+		public SpatialRectangle BackSide => new SpatialRectangle()
 		{
 			polygon = new Rectangle(size.x, size.y),
 			position = BackCenter,
 			rotation = Quaternion.LookRotation(Vector3.back, Vector3.up)
 		};
 
-		public SpacialRectangle[] Sides => new[]
+		public SpatialRectangle[] Sides => new[]
 		{
 		RightSide, TopSide, FrontSide, LeftSide, BottomSide, BackSide
 	};
@@ -214,8 +214,8 @@ namespace MUtility
 
 			int vertexIndex = 0;
 			int triangleIndex = 0;
-			SpacialRectangle[] sides = Sides;
-			foreach (SpacialRectangle side in sides)
+			SpatialRectangle[] sides = Sides;
+			foreach (SpatialRectangle side in sides)
 			{
 				Vector3[] corners = side.Points.ToArray();
 				Vector3 normal = side.rotation * (normalOut ? Vector3.up : Vector3.down);
@@ -278,5 +278,5 @@ namespace MUtility
 	}
 
 	[Serializable]
-	public class SpacialCuboid : SpacialMesh<Cuboid> { }
+	public class SpatialCuboid : SpatialMesh<Cuboid> { }
 }

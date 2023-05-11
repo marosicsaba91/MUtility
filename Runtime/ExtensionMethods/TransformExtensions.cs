@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Collections.Generic; 
+using UnityEngine; 
 using Object = UnityEngine.Object;
+using Scene = UnityEngine.SceneManagement.Scene;
 
 namespace MUtility
 {
@@ -71,10 +72,8 @@ namespace MUtility
 		{
 			self.SetParent(parent);
 			self.localScale = Vector3.one;
-			self.localRotation = Quaternion.identity;
-			self.localPosition = Vector3.zero;
-			RectTransform rect = self.GetComponent<RectTransform>();
-			if (rect == null)
+			self.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+			if (!self.TryGetComponent(out RectTransform rect))
 				return;
 			rect.sizeDelta = new Vector2(0, 0);
 			rect.anchoredPosition = new Vector2(0, 0);
@@ -198,7 +197,7 @@ namespace MUtility
 
 		public static Vector3 TransformPointUnscaled(this Transform transform, Vector3 position)
 		{
-			Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+			var localToWorldMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
 			return localToWorldMatrix.MultiplyPoint3x4(position);
 		}
 
@@ -257,6 +256,7 @@ namespace MUtility
 		public static IEnumerable<TComponent> EnumerateComponentsInParents<TComponent>(
 			this Transform self,
 			bool includeInactive = false)
+			where TComponent : Component
 		{
 			if (self == null)
 				yield break;
@@ -291,8 +291,7 @@ namespace MUtility
 			{
 				if (self.parent == null)
 					return null;
-				T comp = self.parent.GetComponent<T>();
-				if (comp != null)
+				if (self.parent.TryGetComponent(out T comp))
 					return comp;
 				self = self.parent;
 			}
@@ -311,15 +310,15 @@ namespace MUtility
 		}
 
 
-		public static Pose GetPose(this Transform transform) => new Pose(transform.position, transform.rotation);
+		public static Pose GetPose(this Transform transform) => new (transform.position, transform.rotation);
 
-		public static Pose TransformPose(this Transform transform, Pose localPose) => new Pose
+		public static Pose TransformPose(this Transform transform, Pose localPose) => new ()
 		{
 			position = transform.TransformPoint(localPose.position),
 			rotation = transform.TransformRotation(localPose.rotation)
 		};
 
-		public static Pose InverseTransformPose(this Transform transform, Pose localPose) => new Pose
+		public static Pose InverseTransformPose(this Transform transform, Pose localPose) => new ()
 		{
 			position = transform.InverseTransformPoint(localPose.position),
 			rotation = transform.InverseTransformRotation(localPose.rotation)
@@ -328,11 +327,38 @@ namespace MUtility
 		public static void SetPose(this Transform transform, Pose pose) =>
 			transform.SetPositionAndRotation(pose.position, pose.rotation);
 
-		public static void SetLocalPose(this Transform transform, Pose pose)
+		public static void SetLocalPose(this Transform transform, Pose pose) =>
+			transform.SetLocalPositionAndRotation(pose.position, pose.rotation);
+
+		public static Transform GetUpperSibling(this Transform transform)
 		{
-			transform.localPosition = pose.position;
-			transform.localRotation = pose.rotation;
+			int index = transform.GetSiblingIndex();
+			int siblingIndex = index - 1;
+			return GetSibling(transform, siblingIndex);
 		}
 
+		public static Transform GetDownerSibling(this Transform transform)
+		{
+			int index = transform.GetSiblingIndex();
+			int siblingIndex = index + 1;
+			return GetSibling(transform, siblingIndex);
+		}
+
+		public static Transform GetSibling(this Transform transform, int siblingIndex)
+		{
+			if (siblingIndex < 0)
+				return null;
+
+			if (transform.parent == null)
+			{
+				Scene scene = transform.gameObject.scene;
+				if (scene.rootCount < siblingIndex)
+					return null;
+				return scene.GetRootGameObjects()[siblingIndex].transform;
+			}
+			if (transform.parent.childCount < siblingIndex)
+				return null;
+			return transform.parent.GetChild(siblingIndex);
+		}
 	}
 }

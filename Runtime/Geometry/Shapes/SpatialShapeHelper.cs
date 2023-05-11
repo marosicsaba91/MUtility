@@ -2,7 +2,7 @@
 
 namespace MUtility
 {
-	public static class SpacialShapeHelper
+	public static class SpatialShapeHelper
 	{
 		public static bool OnDrawHandles<T>(ref T shape, ref Vector3 position, ref Quaternion rotation)
 		{

@@ -99,7 +99,7 @@ namespace MUtility
 			}
 			else if (type == Drawable.DrawingType.Gizmo)
 			{
-				if (color == default)
+				if (color != default)
 					Gizmos.color = color;
 
 				Vector3? last = null;

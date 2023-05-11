@@ -174,11 +174,11 @@ namespace MUtility
 	}
 
 	[Serializable]
-	public class SpacialCapsule2D : SpacialPolygon<Capsule2D>
+	public class SpatialCapsule2D : SpatialPolygon<Capsule2D>
 	{
-		public SpacialCapsule2D(CapsuleCollider2D collider) : base(collider.transform) => polygon = new(collider);
+		public SpatialCapsule2D(CapsuleCollider2D collider) : base(collider.transform) => polygon = new(collider);
 
-		public SpacialCapsule2D(Capsule2D capsule, Transform transform) : base(capsule, transform) { }
+		public SpatialCapsule2D(Capsule2D capsule, Transform transform) : base(capsule, transform) { }
 	}
 
 }

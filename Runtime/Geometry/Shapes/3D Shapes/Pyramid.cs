@@ -83,5 +83,5 @@ namespace MUtility
 		public float Volume => 0; // TODO
 	}
 
-	// [Serializable] public class SpacialPyramid : SpacialMesh<Pyramid> { }
+	// [Serializable] public class SpatialPyramid : SpatialMesh<Pyramid> { }
 }

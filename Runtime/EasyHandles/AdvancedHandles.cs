@@ -38,14 +38,14 @@ public class AdvancedHandles
 		public HandleEvent handleEvent;
 		public Vector3 newPosition;
 		public Vector3 clickPosition;
-		public Vector3 IsDragged => newPosition - clickPosition;
+		public Vector3 dragPosition => newPosition - clickPosition;
 	}
 
 	public static HandleResult Handle(Vector3 position, Quaternion rotation, float handleSize, Handles.CapFunction capFunction, Color color, Color focusedColor, Color colorSelected)
 	{
 		int id = GUIUtility.GetControlID(_sDragHandleHash, FocusType.Passive);
 		lastDragHandleID = id;
-
+		 
 
 		Vector3 screenPosition = Handles.matrix.MultiplyPoint(position);
 		Matrix4x4 cachedMatrix = Handles.matrix;
@@ -121,7 +121,7 @@ public class AdvancedHandles
 					HandleUtility.nearestControl == id ? focusedColor : color;
 
 
-				Quaternion matrixR = cachedMatrix.ToQuaternion();
+				Quaternion matrixR = cachedMatrix.rotation;
 				matrixR.Normalize();
 				matrixR *= rotation;
 

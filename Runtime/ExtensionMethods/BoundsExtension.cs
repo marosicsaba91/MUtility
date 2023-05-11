@@ -56,18 +56,18 @@ namespace MUtility
 			return new Vector3(x, y, z);
 		}
 
-		public static void Clamp(this BoundsInt bounds, Vector3Int min, Vector3Int max)
+		public static void Clamp(this ref BoundsInt bounds, Vector3Int min, Vector3Int max)
 		{
 			bounds.min = Vector3Int.Max(bounds.min, min);
 			bounds.max = Vector3Int.Min(bounds.max, max);
 		}
 
-		public static void AddPoint(this BoundsInt bounds, Vector3Int point)
+		public static void AddPoint(this ref BoundsInt bounds, Vector3Int point)
 		{
 			bounds.min = Vector3Int.Min(point, bounds.min);
 			bounds.max = Vector3Int.Max(point, bounds.max);
 		}
-		public static void Combine(this BoundsInt bounds, BoundsInt other)
+		public static void Combine(this ref BoundsInt bounds, BoundsInt other)
 		{
 			bounds.min = Vector3Int.Min(bounds.min, other.min);
 			bounds.max = Vector3Int.Max(bounds.max, other.max);
@@ -131,6 +131,64 @@ namespace MUtility
 			Vector3Int size = max - min;
 			return new BoundsInt(min, max - min);
 		}
-		
+
+		public static BoundsInt Resize(this BoundsInt bounds, GeneralDirection3D direction, int steps) 
+		{
+			Vector3Int change = direction.ToVectorInt() * steps;
+
+			if (direction.IsPositive())
+				bounds.size += change;
+			else
+				bounds.min += change;
+
+			return bounds;
+		}
+
+		public static BoundsInt ResizeWithLimits(this BoundsInt bounds, GeneralDirection3D direction, int steps,
+			Vector3Int minPositionLimit, Vector3Int maxPositionLimit, Vector3Int minSizeLimit)
+		{
+			if (steps == 0)
+				return bounds;
+
+			if (steps < 0)
+			{
+				int minSize  = minSizeLimit.GetAxis(direction.GetAxis());
+				int size = bounds.size.GetAxis(direction.GetAxis());
+				steps = Mathf.Max(steps, minSize - size);
+			}
+
+			Vector3Int change = direction.ToVectorInt() * steps;
+
+			if (direction.IsPositive())
+			{
+				bounds.max += change;
+			}
+			else
+			{
+				bounds.min += change;
+			}
+
+			bounds.max = Vector3Int.Min(bounds.max, maxPositionLimit);
+			bounds.min = Vector3Int.Max(bounds.min, minPositionLimit);
+
+			return bounds;
+		}
+
+		public static BoundsInt MoveWithLimits(this BoundsInt bounds, GeneralDirection3D direction, int steps,
+			Vector3Int minPositionLimit, Vector3Int maxPositionLimit)
+		{
+			if (steps == 0)
+				return bounds;
+
+			Vector3Int change = direction.ToVectorInt() * steps;
+			change = Vector3Int.Max(change, minPositionLimit - bounds.min);
+			change = Vector3Int.Min(change, maxPositionLimit - bounds.max);
+
+			bounds.position += change;
+			 
+			return bounds;
+		}
+
+
 	}
 }
