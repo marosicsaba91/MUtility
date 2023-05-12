@@ -132,11 +132,7 @@ namespace MUtility
 				Stop();
 
 			_stringBuilder.Clear();
-			double allDuration = 0;
-			foreach (KeyValuePair<string, TimeSpan> module in _modules)
-			{
-				allDuration += module.Value.TotalMilliseconds;
-			}
+			double allDuration = GetTotalTotalMilliseconds();
 			_stringBuilder.AppendLine($"{Name} - Total Time:\t {allDuration:F2} ms");
 			_stringBuilder.AppendLine("------------------------------------");
 			foreach (KeyValuePair<string, TimeSpan> module in _modules)
@@ -151,6 +147,14 @@ namespace MUtility
 				Start();
 			return result;
 
+		}
+
+		public double GetTotalTotalMilliseconds() 
+		{
+			double allDuration = 0;
+			foreach (KeyValuePair<string, TimeSpan> module in _modules)
+				allDuration += module.Value.TotalMilliseconds;
+			return allDuration;
 		}
 	}
 }
