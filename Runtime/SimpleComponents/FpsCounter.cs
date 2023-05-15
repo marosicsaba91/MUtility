@@ -6,6 +6,7 @@ namespace MarosiUtility
 	[RequireComponent(typeof(TMP_Text))]
 	public class FpsCounter : MonoBehaviour
 	{
+		[SerializeField] int targetFrameRate = 60;
 		[SerializeField] TMP_Text uiText;
 		[SerializeField] bool smooth = true;
 		[SerializeField] string suffixText = " FPS";
@@ -16,8 +17,13 @@ namespace MarosiUtility
 				uiText = GetComponent<TMP_Text>();
 		}
 
-		void Update()
+		void Start()
 		{
+			Application.targetFrameRate = targetFrameRate;
+		}
+
+		void Update()
+		{ 
 			float deltaTime = smooth ? Time.smoothDeltaTime : Time.deltaTime;
 			string text = (1f / deltaTime).ToString("F0");
 
