@@ -158,7 +158,7 @@ namespace MUtility
 			if (offset != 0)
 				position += rotation * Vector3.forward * (size * offset);
 
-			AdvancedHandles.HandleResult result = AdvancedHandles.Handle(
+			HandleResult result = AdvancedHandles.Handle(
 				position,
 				rotation,
 				size,
