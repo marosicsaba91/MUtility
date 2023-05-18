@@ -264,9 +264,10 @@ namespace MUtility
 		public static Vector3 GetPerpendicular(this Vector3 dir)
 		{
 			dir.Normalize();
-			if(dir == Vector3.up)
+			if(dir == Vector3.up || dir == Vector3Int.down)
 				return Vector3.Cross(Vector3.right, dir);
 			return Vector3.Cross(Vector3.up, dir);
 		}
+		 
 	}
 }

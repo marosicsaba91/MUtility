@@ -32,20 +32,27 @@ namespace MUtility
 
 		public static void CopyTo<T>(this List<T> source, int sourceIndex, List<T> destination, int destinationIndex, int length)
 		{
-			int destCount = destination.Count;
+			int destinationCount = destination.Count;
 
-			int j = 0;
-			for (int i = 0; i < length; i++)
+			int di = destinationIndex;
+			for (int si = sourceIndex; si < length; si++)
 			{
-				if (destCount >= j)
-				{
-					destination.Add(source[i]);
-				}
+				if (destinationCount >= di)
+					destination.Add(source[si]);
 				else
-				{
-					destination[i] = source[j];
-				}
-				j++;
+					destination[di] = source[si];
+				di++;
+			}
+		}
+
+		public static void SetCount<T>(this List<T> list, int count, Func<T> create)
+		{
+			if (list.Count > count)
+				list.RemoveRange(count, list.Count - count);
+			else
+			{
+				while (list.Count < count)
+					list.Add(create());
 			}
 		}
 	}

@@ -189,86 +189,49 @@ namespace MUtility
 		}
 
 		// To Vector Int
-		public static Vector2Int ToVectorInt(this GeneralDirection2D dir)
+		public static Vector2Int ToVectorInt(this GeneralDirection2D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case GeneralDirection2D.Up:
-					return new Vector2Int(0, 1);
-				case GeneralDirection2D.Down:
-					return new Vector2Int(0, -1);
-				case GeneralDirection2D.Right:
-					return new Vector2Int(1, 0);
-				case GeneralDirection2D.Left:
-					return new Vector2Int(-1, 0);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			GeneralDirection2D.Up => Vector2Int.up,
+			GeneralDirection2D.Down => Vector2Int.down,
+			GeneralDirection2D.Right => Vector2Int.right,
+			GeneralDirection2D.Left => Vector2Int.left,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
 
-		public static Vector3Int ToVectorInt(this GeneralDirection3D dir)
-		{
-			switch (dir)
-			{
-				case GeneralDirection3D.Up:
-					return new Vector3Int(0, 1, 0);
-				case GeneralDirection3D.Down:
-					return new Vector3Int(0, -1, 0);
-				case GeneralDirection3D.Right:
-					return new Vector3Int(1, 0, 0);
-				case GeneralDirection3D.Left:
-					return new Vector3Int(-1, 0, 0);
-				case GeneralDirection3D.Forward:
-					return new Vector3Int(0, 0, 1);
-				case GeneralDirection3D.Back:
-					return new Vector3Int(0, 0, -1);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+		};
 
-		public static Vector2Int ToVectorInt(this Direction2D dir)
+		public static Vector3Int ToVectorInt(this GeneralDirection3D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case Direction2D.Up:
-					return new Vector2Int(0, 1);
-				case Direction2D.Down:
-					return new Vector2Int(0, -1);
-				case Direction2D.Right:
-					return new Vector2Int(1, 0);
-				case Direction2D.Left:
-					return new Vector2Int(-1, 0);
-				case Direction2D.UpRight:
-					return new Vector2Int(1, 1);
-				case Direction2D.DownRight:
-					return new Vector2Int(1, -1);
-				case Direction2D.DownLeft:
-					return new Vector2Int(-1, -1);
-				case Direction2D.UpLeft:
-					return new Vector2Int(-1, 1);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			GeneralDirection3D.Up => Vector3Int.up,
+			GeneralDirection3D.Down => Vector3Int.down,
+			GeneralDirection3D.Right => Vector3Int.right,
+			GeneralDirection3D.Left => Vector3Int.left,
+			GeneralDirection3D.Forward => Vector3Int.forward,
+			GeneralDirection3D.Back => Vector3Int.back,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
+
+		public static Vector2Int ToVectorInt(this Direction2D dir) => dir switch
+		{
+			Direction2D.Up => new Vector2Int(0, 1),
+			Direction2D.Down => new Vector2Int(0, -1),
+			Direction2D.Right => new Vector2Int(1, 0),
+			Direction2D.Left => new Vector2Int(-1, 0),
+			Direction2D.UpRight => new Vector2Int(1, 1),
+			Direction2D.DownRight => new Vector2Int(1, -1),
+			Direction2D.DownLeft => new Vector2Int(-1, -1),
+			Direction2D.UpLeft => new Vector2Int(-1, 1),
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
 
 		// To angle (Right = 0, Up = 90)
-		public static int GetAngle(this GeneralDirection2D dir)
+		public static int GetAngle(this GeneralDirection2D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case GeneralDirection2D.Up:
-					return 90;
-				case GeneralDirection2D.Down:
-					return 270;
-				case GeneralDirection2D.Right:
-					return 0;
-				case GeneralDirection2D.Left:
-					return 180;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			GeneralDirection2D.Up => 90,
+			GeneralDirection2D.Down => 270,
+			GeneralDirection2D.Right => 0,
+			GeneralDirection2D.Left => 180,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
 
 		public static int GetAngle(this Direction2D dir)
 		{
