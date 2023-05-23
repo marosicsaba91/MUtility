@@ -32,7 +32,7 @@ namespace MUtility
 				IEnumerable<Vector3> points = PointsLocal;
 
 				if (DrawHandlesInSelfSpace)
-					points = points.Transform(transform);
+					points = points.TransformAll(transform);
 
 				foreach (Vector3 point in points)
 					yield return point;

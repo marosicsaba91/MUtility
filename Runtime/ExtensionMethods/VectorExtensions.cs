@@ -268,6 +268,49 @@ namespace MUtility
 				return Vector3.Cross(Vector3.right, dir);
 			return Vector3.Cross(Vector3.up, dir);
 		}
-		 
+
+		public static void SetAxis(this ref Vector3Int v, Axis3D axis, int value)
+		{
+			if (axis == Axis3D.X)
+				v.x = value;
+			else if (axis == Axis3D.Y)
+				v.y = value;
+			else if (axis == Axis3D.Z)
+				v.z = value;
+			else
+				throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+		}
+
+		public static void SetAxis(this ref Vector3 v, Axis3D axis, float value)
+		{
+			if (axis == Axis3D.X)
+				v.x = value;
+			else if (axis == Axis3D.Y)
+				v.y = value;
+			else if (axis == Axis3D.Z)
+				v.z = value;
+			else
+				throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+		}
+
+		public static void SetAxis(this ref Vector2Int v, Axis2D axis, int value)
+		{
+			if (axis == Axis2D.Horizontal)
+				v.x = value;
+			else if (axis == Axis2D.Vertical)
+				v.y = value;
+			else
+				throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+		}
+
+		public static void SetAxis(this ref Vector2 v, Axis2D axis, float value)
+		{
+			if (axis == Axis2D.Horizontal)
+				v.x = value;
+			else if (axis == Axis2D.Vertical)
+				v.y = value; 
+			else
+				throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+		}
 	}
 }

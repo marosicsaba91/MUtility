@@ -55,7 +55,7 @@ namespace MUtility
 				Vector3[] polygon = c1.ToPolygon(circleSegmentCount).ToArray();
 
 				polygon.Rotate(Quaternion.Euler(90, 0, 0));
-				polygon.Offset(new Vector3(0, h, 0));
+				polygon.Translate(new Vector3(0, h, 0));
 				polygons[i] = polygon;
 
 				// Height

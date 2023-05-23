@@ -16,6 +16,7 @@ namespace MUtility
 		}
 
 		public Vector3 Intersect(Line line) => Intersect(line.a, line.b, false).Value;
+		public Vector3 Intersect(Ray ray) => Intersect(ray.origin, ray.origin + ray.direction, false).Value;
 
 		public Vector3? Intersect(LineSegment segment) => Intersect(segment.a, segment.b, true);
 

@@ -16,6 +16,7 @@ namespace MUtility
 
 		public BenchmarkTimer(string name)
 		{
+
 			Name = name;
 		}
 

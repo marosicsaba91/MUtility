@@ -76,7 +76,7 @@ namespace MUtility
 				new Vector3[] { p3, ap },
 				new Vector3[] { p4, ap });
 
-			return d.Rotate(rotation).Offset(basePos);
+			return d.GetRotated(rotation).GetTranslated(basePos);
 		}
 
 		public float Surface => 0; // TODO

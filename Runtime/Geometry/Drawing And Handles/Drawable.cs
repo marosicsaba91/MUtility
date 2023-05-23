@@ -29,47 +29,76 @@ namespace MUtility
 		public void AddPolygon(Vector3[] polygon) =>
 			polygons.Add(polygon);
 
-		public Drawable Transform(Transform transform) =>
-			ModifyEach((polygon) => polygon.Transform(transform)); 
+		// ------------------------------------------------------------
 
-		public Drawable Offset(Vector3 offset) =>
-			ModifyEach((polygon) => polygon.Offset(offset));
+		public void Transform(Transform transform) =>
+			Each(polygon => polygon.Transform(transform));
 
-		public Drawable Rotate(Quaternion rotate) =>
-			ModifyEach(polygon => polygon.Rotate(rotate));
+		public void Translate(Vector3 offset) =>
+			Each((polygon) => polygon.Translate(offset));
+
+		public void Rotate(Quaternion rotate) =>
+			Each(polygon => polygon.Rotate(rotate));
+
+
+		public void Scale(float scale) =>
+			Each((polygon) => polygon.Scale(scale));
+
+		public void Scale(Vector3 scale) =>
+			Each((polygon) => polygon.Scale(scale));
+
+		public void Transform(Vector3 offset, Quaternion rotate, float scale) =>
+			Each((polygon) => polygon.Transform(offset, rotate, scale));
+
+		public void Transform(Vector3 offset, Quaternion rotate, Vector3 scale) =>
+			Each((polygon) => polygon.Transform(offset, rotate, scale));
+
+		// ------------------------------------------------------------
+
+		public Drawable GetTransformed(Transform transform) =>
+			CreateCopy(v3 => transform.TransformPoint(v3));
+
+		public Drawable GetTranslated(Vector3 offset) =>
+			CreateCopy(v3 => offset + v3);
+
+		public Drawable GetRotated(Quaternion rotate) =>
+			CreateCopy(v3 => rotate * v3);
+
+
+		public Drawable GetScaled(float scale) =>
+			CreateCopy(v3 => scale * v3);
+
+		public Drawable GetScaled(Vector3 scale) =>
+			CreateCopy(v3 => v3.MultiplyAllAxis(scale));
+
+		public Drawable GetTransformed(Vector3 offset, Quaternion rotate, float scale) =>
+			CreateCopy(v3 => (rotate * (offset + v3)) * scale);
+
+		public Drawable GetTransformed(Vector3 offset, Quaternion rotate, Vector3 scale) =>
+			CreateCopy(v3 => (rotate * (offset + v3)).MultiplyAllAxis(scale));
+
+		// ------------------------------------------------------------------
 
 		public Drawable To3D(Axis3D normalAxis)
 		{
 			if (normalAxis == Axis3D.X)
-				return Rotate(Quaternion.Euler(x: 0, y: 90, z: 90));
+				return GetRotated(Quaternion.Euler(x: 0, y: 90, z: 90));
 			if (normalAxis == Axis3D.Y)
-				return Rotate(Quaternion.Euler(x: 90, y: 0, z: 90));
+				return GetRotated(Quaternion.Euler(x: 90, y: 0, z: 90));
 			return this;
 		}
 
-		public Drawable Scale(float scale) =>
-			ModifyEach((polygon) => polygon.Scale(scale));
-
-		public Drawable Scale(Vector3 scale) =>
-			ModifyEach((polygon) => polygon.Scale(scale));
-
-		public Drawable Transform(Vector3 offset, Quaternion rotate, float scale) =>
-			ModifyEach((polygon) => polygon.Transform(offset, rotate, scale));
-
-		public Drawable Transform(Vector3 offset, Quaternion rotate, Vector3 scale) =>
-			ModifyEach((polygon) => polygon.Transform(offset, rotate, scale));
-
 		public void DrawGizmo(Transform transform, Color color) =>
-			Transform(transform).DrawGizmo(color);
+			GetTransformed(transform).DrawGizmo(color);
 
 		public void DrawGizmo(Transform transform) =>
-			Transform(transform).DrawGizmo();
+			GetTransformed(transform).DrawGizmo();
 
 		public void DrawDebug(Transform transform) =>
-			Transform(transform).DrawDebug();
+			GetTransformed(transform).DrawDebug();
 
 		public void DrawDebug(Transform transform, Color color) =>
-			Transform(transform).DrawDebug(color);
+			GetTransformed(transform).DrawDebug(color);
 
 		public void DrawGizmo(Transform transform, Space space)
 		{
@@ -78,7 +107,7 @@ namespace MUtility
 			if (space == Space.World)
 				DrawGizmo();
 			else
-				Transform(transform).DrawGizmo();
+				GetTransformed(transform).DrawGizmo();
 		}
 
 		public void DrawGizmo(Transform transform, Space space, Color color)
@@ -88,7 +117,7 @@ namespace MUtility
 			if (space == Space.World)
 				DrawGizmo(color);
 			else
-				Transform(transform).DrawGizmo(color);
+				GetTransformed(transform).DrawGizmo(color);
 		}
 
 		public void DrawDebug(Transform transform, Space space)
@@ -98,7 +127,7 @@ namespace MUtility
 			if (space == Space.World)
 				DrawDebug();
 			else
-				Transform(transform).DrawDebug();
+				GetTransformed(transform).DrawDebug();
 		}
 
 		public void DrawDebug(Transform transform, Space space, Color color)
@@ -108,32 +137,32 @@ namespace MUtility
 			if (space == Space.World)
 				DrawDebug(color);
 			else
-				Transform(transform).DrawDebug(color);
+				GetTransformed(transform).DrawDebug(color);
 		}
 
 		public void DrawGizmo(Vector3 offset, Color color) =>
-			Offset(offset).DrawGizmo(color);
+			GetTranslated(offset).DrawGizmo(color);
 
 		public void DrawDebug(Vector3 offset, Color color) =>
-			Offset(offset).DrawDebug(color);
+			GetTranslated(offset).DrawDebug(color);
 
 		public void DrawGizmo(Quaternion rotate, Color color) =>
-			Rotate(rotate).DrawGizmo(color);
+			GetRotated(rotate).DrawGizmo(color);
 
 		public void DrawDebug(Quaternion rotate, Color color) =>
-			Rotate(rotate).DrawDebug(color);
+			GetRotated(rotate).DrawDebug(color);
 
 		public void DrawGizmo(Vector3 offset, Quaternion rotate, float scale, Color color) =>
-			Transform(offset, rotate, scale).DrawGizmo(color);
+			GetTransformed(offset, rotate, scale).DrawGizmo(color);
 
 		public void DrawDebug(Vector3 offset, Quaternion rotate, float scale, Color color) =>
-			Transform(offset, rotate, scale).DrawDebug(color);
+			GetTransformed(offset, rotate, scale).DrawDebug(color);
 
 		public void DrawGizmo(Vector3 offset, Quaternion rotate, Vector3 scale, Color color) =>
-			Transform(offset, rotate, scale).DrawGizmo(color);
+			GetTransformed(offset, rotate, scale).DrawGizmo(color);
 
 		public void DrawDebug(Vector3 offset, Quaternion rotate, Vector3 scale, Color color) =>
-			Transform(offset, rotate, scale).DrawDebug(color);
+			GetTransformed(offset, rotate, scale).DrawDebug(color);
 
 		public void DrawGizmo(Color color) =>
 			Each((polygon) => polygon.DrawGizmo(color));
@@ -170,11 +199,20 @@ namespace MUtility
 				action(polygons[i]);
 		}
 
-		Drawable ModifyEach(Action<Vector3[]> action)
+		Drawable CreateCopy(Func<Vector3, Vector3> action)
 		{
-			for (int i = 0; i < polygons.Count; i++)
-				action(polygons[i]);
-			return new Drawable(polygons);
+			List<Vector3[]> newPolygons = new(polygons.Count);
+			for (int i = 0; i < polygons.Count; i++) 
+			{
+				Vector3[] originalPolygon = polygons[i];
+				Vector3[] newPolygon = new Vector3[originalPolygon.Length];
+				for (int j = 0; j < originalPolygon.Length; j++)
+				{ 
+					newPolygon[j] = action(originalPolygon[j]);
+				}
+				newPolygons.Add(newPolygon); 
+			}
+			return new Drawable(newPolygons);
 		}
 	}
 }

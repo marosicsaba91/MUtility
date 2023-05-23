@@ -121,5 +121,22 @@ namespace MUtility
 					throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
 			}
 		}
+
+		public static Axis3D Next(this Axis3D axis) => axis switch
+		{ 
+			Axis3D.X => Axis3D.Y, 
+			Axis3D.Y => Axis3D.Z, 
+			Axis3D.Z => Axis3D.X,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null) 			
+		};
+
+
+		public static Axis3D Previous(this Axis3D axis) => axis switch
+		{
+			Axis3D.X => Axis3D.Z, 
+			Axis3D.Y => Axis3D.X, 
+			Axis3D.Z => Axis3D.Y,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null)
+		};
 	}
 }
