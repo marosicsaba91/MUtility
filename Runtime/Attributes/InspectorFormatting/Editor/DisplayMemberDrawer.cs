@@ -18,7 +18,7 @@ namespace MUtility
 		DisplayMember _displayMember;
 		MethodInfo _buttonMethodInfo;
 		Func<float, float> _floatFunction;
-		CurveEditorPreview _curvePreview = new CurveEditorPreview();
+		CurveEditorPreview _curvePreview;
 		FieldInfo _fieldInfo;
 		PropertyInfo _propertyInfo;
 		Object _serializedObject;

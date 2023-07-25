@@ -5,6 +5,16 @@ namespace MUtility
 {
 	public static class DirectionExpanded
 	{
+		static readonly float diagonal2DLength;
+		static readonly float diagonal3DLength;
+
+		static DirectionExpanded()
+		{
+			diagonal2DLength = Mathf.Sqrt(2);
+			diagonal3DLength = Mathf.Sqrt(3);
+
+		}
+
 		public static GeneralDirection3D GetPerpendicularRightHand(this GeneralDirection3D dir) => dir switch
 		{
 			GeneralDirection3D.Right => GeneralDirection3D.Down,
@@ -104,89 +114,119 @@ namespace MUtility
 
 
 		// To Vector Float
-		public static Vector2 ToVector(this GeneralDirection2D dir)
+		public static Vector2 ToVector(this GeneralDirection2D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case GeneralDirection2D.Up:
-					return new Vector2(0, 1);
-				case GeneralDirection2D.Down:
-					return new Vector2(0, -1);
-				case GeneralDirection2D.Right:
-					return new Vector2(1, 0);
-				case GeneralDirection2D.Left:
-					return new Vector2(-1, 0);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			GeneralDirection2D.Up => new Vector2(0, 1),
+			GeneralDirection2D.Down => new Vector2(0, -1),
+			GeneralDirection2D.Right => new Vector2(1, 0),
+			GeneralDirection2D.Left => new Vector2(-1, 0),
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 
-		public static Vector3 ToVector(this GeneralDirection3D dir)
+		public static Vector3 ToVector(this GeneralDirection3D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case GeneralDirection3D.Up:
-					return new Vector3(0, 1, 0);
-				case GeneralDirection3D.Down:
-					return new Vector3(0, -1, 0);
-				case GeneralDirection3D.Right:
-					return new Vector3(1, 0, 0);
-				case GeneralDirection3D.Left:
-					return new Vector3(-1, 0, 0);
-				case GeneralDirection3D.Forward:
-					return new Vector3(0, 0, 1);
-				case GeneralDirection3D.Back:
-					return new Vector3(0, 0, -1);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			GeneralDirection3D.Up => new Vector3(0, 1, 0),
+			GeneralDirection3D.Down => new Vector3(0, -1, 0),
+			GeneralDirection3D.Right => new Vector3(1, 0, 0),
+			GeneralDirection3D.Left => new Vector3(-1, 0, 0),
+			GeneralDirection3D.Forward => new Vector3(0, 0, 1),
+			GeneralDirection3D.Back => new Vector3(0, 0, -1),
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 
-		public static Vector3 ToVector(this Direction3D dir)
+		public static Vector3 ToVector(this Direction3D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case Direction3D.Up:
-					return new Vector3(0, 1, 0);
-				case Direction3D.Down:
-					return new Vector3(0, -1, 0);
-				case Direction3D.Right:
-					return new Vector3(1, 0, 0);
-				case Direction3D.Left:
-					return new Vector3(-1, 0, 0);
-				case Direction3D.Forward:
-					return new Vector3(0, 0, 1);
-				case Direction3D.Back:
-					return new Vector3(0, 0, -1);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			Direction3D.Up => new Vector3(0, 1, 0),
+			Direction3D.Down => new Vector3(0, -1, 0),
+			Direction3D.Right => new Vector3(1, 0, 0),
+			Direction3D.Left => new Vector3(-1, 0, 0),
+			Direction3D.Forward => new Vector3(0, 0, 1),
+			Direction3D.Back => new Vector3(0, 0, -1),
 
-		public static Vector2 ToVector(this Direction2D dir)
+			Direction3D.RightUp => new Vector3(1, 1, 0),
+			Direction3D.RightDown => new Vector3(1, -1, 0),
+			Direction3D.LeftDown => new Vector3(-1, -1, 0),
+			Direction3D.LeftUp => new Vector3(-1, 1, 0),
+			Direction3D.UpForward => new Vector3(0, 1, 1),
+			Direction3D.DownForward => new Vector3(0, -1, 1),
+			Direction3D.UpBack => new Vector3(0, 1, -1),
+			Direction3D.DownBack => new Vector3(0, -1, -1),
+			Direction3D.RightForward => new Vector3(1, 0, 1),
+			Direction3D.LeftForward => new Vector3(-1, 0, 1),
+			Direction3D.RightBack => new Vector3(1, 0, -1),
+			Direction3D.LeftBack => new Vector3(-1, 0, -1),
+
+			Direction3D.RightUpForward => new Vector3(1, 1, 1),
+			Direction3D.RightDownForward => new Vector3(1, -1, 1),
+			Direction3D.LeftDownForward => new Vector3(-1, -1, 1),
+			Direction3D.LeftUpForward => new Vector3(-1, 1, 1),
+			Direction3D.RightUpBack => new Vector3(1, 1, -1),
+			Direction3D.RightDownBack => new Vector3(1, -1, -1),
+			Direction3D.LeftDownBack => new Vector3(-1, -1, -1),
+			Direction3D.LeftUpBack => new Vector3(-1, 1, -1),
+
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
+
+		public static Vector3Int ToVectorInt(this Direction3D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case Direction2D.Up:
-					return new Vector2(0, 1);
-				case Direction2D.Down:
-					return new Vector2(0, -1);
-				case Direction2D.Right:
-					return new Vector2(1, 0);
-				case Direction2D.Left:
-					return new Vector2(-1, 0);
-				case Direction2D.UpRight:
-					return new Vector2(1, 1);
-				case Direction2D.DownRight:
-					return new Vector2(1, -1);
-				case Direction2D.DownLeft:
-					return new Vector2(-1, -1);
-				case Direction2D.UpLeft:
-					return new Vector2(-1, 1);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			Direction3D.Up => new Vector3Int(0, 1, 0),
+			Direction3D.Down => new Vector3Int(0, -1, 0),
+			Direction3D.Right => new Vector3Int(1, 0, 0),
+			Direction3D.Left => new Vector3Int(-1, 0, 0),
+			Direction3D.Forward => new Vector3Int(0, 0, 1),
+			Direction3D.Back => new Vector3Int(0, 0, -1),
+
+			Direction3D.RightUp => new Vector3Int(1, 1, 0),
+			Direction3D.RightDown => new Vector3Int(1, -1, 0),
+			Direction3D.LeftDown => new Vector3Int(-1, -1, 0),
+			Direction3D.LeftUp => new Vector3Int(-1, 1, 0),
+			Direction3D.UpForward => new Vector3Int(0, 1, 1),
+			Direction3D.DownForward => new Vector3Int(0, -1, 1),
+			Direction3D.UpBack => new Vector3Int(0, 1, -1),
+			Direction3D.DownBack => new Vector3Int(0, -1, -1),
+			Direction3D.RightForward => new Vector3Int(1, 0, 1),
+			Direction3D.LeftForward => new Vector3Int(-1, 0, 1),
+			Direction3D.RightBack => new Vector3Int(1, 0, -1),
+			Direction3D.LeftBack => new Vector3Int(-1, 0, -1),
+
+			Direction3D.RightUpForward => new Vector3Int(1, 1, 1),
+			Direction3D.RightDownForward => new Vector3Int(1, -1, 1),
+			Direction3D.LeftDownForward => new Vector3Int(-1, -1, 1),
+			Direction3D.LeftUpForward => new Vector3Int(-1, 1, 1),
+			Direction3D.RightUpBack => new Vector3Int(1, 1, -1),
+			Direction3D.RightDownBack => new Vector3Int(1, -1, -1),
+			Direction3D.LeftDownBack => new Vector3Int(-1, -1, -1),
+			Direction3D.LeftUpBack => new Vector3Int(-1, 1, -1),
+
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
+
+		public static Vector2 ToVector(this Direction2D dir) => dir switch
+		{
+			Direction2D.Up => new Vector2(0, 1),
+			Direction2D.Down => new Vector2(0, -1),
+			Direction2D.Right => new Vector2(1, 0),
+			Direction2D.Left => new Vector2(-1, 0),
+			Direction2D.RightUp => new Vector2(1, 1),
+			Direction2D.RightDown => new Vector2(1, -1),
+			Direction2D.LeftDown => new Vector2(-1, -1),
+			Direction2D.LeftUp => new Vector2(-1, 1),
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
+
+		public static Vector2Int ToVectorInt(this Direction2D dir) => dir switch
+		{
+			Direction2D.Up => new Vector2Int(0, 1),
+			Direction2D.Down => new Vector2Int(0, -1),
+			Direction2D.Right => new Vector2Int(1, 0),
+			Direction2D.Left => new Vector2Int(-1, 0),
+			Direction2D.RightUp => new Vector2Int(1, 1),
+			Direction2D.RightDown => new Vector2Int(1, -1),
+			Direction2D.LeftDown => new Vector2Int(-1, -1),
+			Direction2D.LeftUp => new Vector2Int(-1, 1),
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 
 		// To Vector Int
 		public static Vector2Int ToVectorInt(this GeneralDirection2D dir) => dir switch
@@ -210,19 +250,6 @@ namespace MUtility
 			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
 		};
 
-		public static Vector2Int ToVectorInt(this Direction2D dir) => dir switch
-		{
-			Direction2D.Up => new Vector2Int(0, 1),
-			Direction2D.Down => new Vector2Int(0, -1),
-			Direction2D.Right => new Vector2Int(1, 0),
-			Direction2D.Left => new Vector2Int(-1, 0),
-			Direction2D.UpRight => new Vector2Int(1, 1),
-			Direction2D.DownRight => new Vector2Int(1, -1),
-			Direction2D.DownLeft => new Vector2Int(-1, -1),
-			Direction2D.UpLeft => new Vector2Int(-1, 1),
-			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
-		};
-
 		// To angle (Right = 0, Up = 90)
 		public static int GetAngle(this GeneralDirection2D dir) => dir switch
 		{
@@ -233,78 +260,103 @@ namespace MUtility
 			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
 		};
 
-		public static int GetAngle(this Direction2D dir)
+		public static int GetAngle(this Direction2D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case Direction2D.Up:
-					return 90;
-				case Direction2D.Down:
-					return 270;
-				case Direction2D.Right:
-					return 0;
-				case Direction2D.Left:
-					return 180;
-				case Direction2D.UpRight:
-					return 45;
-				case Direction2D.DownRight:
-					return 315;
-				case Direction2D.DownLeft:
-					return 225;
-				case Direction2D.UpLeft:
-					return 135;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			Direction2D.Up => 90,
+			Direction2D.Down => 270,
+			Direction2D.Right => 0,
+			Direction2D.Left => 180,
+			Direction2D.RightUp => 45,
+			Direction2D.RightDown => 315,
+			Direction2D.LeftDown => 225,
+			Direction2D.LeftUp => 135,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 
 		// Opposite
-		public static HorizontalDirection Opposite(this HorizontalDirection dir)
+		public static HorizontalDirection Opposite(this HorizontalDirection dir) => dir switch
 		{
-			return dir == HorizontalDirection.Left ? HorizontalDirection.Right : HorizontalDirection.Left;
-		}
-
-		public static VerticalDirection Opposite(this VerticalDirection dir)
+			HorizontalDirection.Right => HorizontalDirection.Left,
+			_ => HorizontalDirection.Right
+		};
+		public static VerticalDirection Opposite(this VerticalDirection dir) => dir switch
 		{
-			return dir == VerticalDirection.Down ? VerticalDirection.Up : VerticalDirection.Down;
-		}
+			VerticalDirection.Up => VerticalDirection.Down,
+			_ => VerticalDirection.Down
+		};
 
-		public static GeneralDirection2D Opposite(this GeneralDirection2D dir)
+		public static GeneralDirection2D Opposite(this GeneralDirection2D dir) => dir switch
 		{
-			return (GeneralDirection2D)(((int)dir + 4) % 8);
-		}
+			GeneralDirection2D.Up => GeneralDirection2D.Down,
+			GeneralDirection2D.Down => GeneralDirection2D.Up,
+			GeneralDirection2D.Right => GeneralDirection2D.Left,
+			GeneralDirection2D.Left => GeneralDirection2D.Right,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
 
-		public static GeneralDirection3D Opposite(this GeneralDirection3D dir)
+		public static GeneralDirection3D Opposite(this GeneralDirection3D dir) => dir switch
 		{
-			if ((int)dir < 8)
-			{
-				return (GeneralDirection3D)(((int)dir + 4) % 8);
-			}
-			else
-			{
-				return dir == GeneralDirection3D.Forward
-					? GeneralDirection3D.Back
-					: GeneralDirection3D.Forward;
-			}
-		}
+			GeneralDirection3D.Up => GeneralDirection3D.Down,
+			GeneralDirection3D.Down => GeneralDirection3D.Up,
+			GeneralDirection3D.Right => GeneralDirection3D.Left,
+			GeneralDirection3D.Left => GeneralDirection3D.Right,
+			GeneralDirection3D.Forward => GeneralDirection3D.Back,
+			GeneralDirection3D.Back => GeneralDirection3D.Forward,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
 
-
-
-		public static Direction2D Opposite(this Direction2D dir)
+		public static Direction3D Opposite(this Direction3D dir) => dir switch
 		{
-			return (Direction2D)(((int)dir + 4) % 8);
-		}
+			Direction3D.Up => Direction3D.Down,
+			Direction3D.Down => Direction3D.Up,
+			Direction3D.Right => Direction3D.Left,
+			Direction3D.Left => Direction3D.Right,
+			Direction3D.Forward => Direction3D.Back,
+			Direction3D.Back => Direction3D.Forward,
+
+			Direction3D.RightUp => Direction3D.LeftDown,
+			Direction3D.RightDown => Direction3D.LeftUp,
+			Direction3D.LeftDown => Direction3D.RightUp,
+			Direction3D.LeftUp => Direction3D.RightDown,
+			Direction3D.RightForward => Direction3D.LeftBack,
+			Direction3D.RightBack => Direction3D.LeftForward,
+			Direction3D.LeftBack => Direction3D.RightForward,
+			Direction3D.LeftForward => Direction3D.RightBack,
+			Direction3D.UpForward => Direction3D.DownBack,
+			Direction3D.UpBack => Direction3D.DownForward,
+			Direction3D.DownBack => Direction3D.UpForward,
+			Direction3D.DownForward => Direction3D.UpBack,
+
+			Direction3D.RightUpForward => Direction3D.LeftDownBack,
+			Direction3D.RightUpBack => Direction3D.LeftDownForward,
+			Direction3D.RightDownBack => Direction3D.LeftUpForward,
+			Direction3D.RightDownForward => Direction3D.LeftUpBack,
+			Direction3D.LeftDownBack => Direction3D.RightUpForward,
+			Direction3D.LeftDownForward => Direction3D.RightUpBack,
+			Direction3D.LeftUpForward => Direction3D.RightDownBack,
+			Direction3D.LeftUpBack => Direction3D.RightDownForward,
+
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
+
+		public static Direction2D Opposite(this Direction2D dir) => dir switch
+		{
+			Direction2D.Up => Direction2D.Down,
+			Direction2D.Down => Direction2D.Up,
+			Direction2D.Right => Direction2D.Left,
+			Direction2D.Left => Direction2D.Right,
+
+			Direction2D.RightUp => Direction2D.LeftDown,
+			Direction2D.RightDown => Direction2D.LeftUp,
+			Direction2D.LeftDown => Direction2D.RightUp,
+			Direction2D.LeftUp => Direction2D.RightDown,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+		};
 
 		// Right
-		public static GeneralDirection2D Right(this GeneralDirection2D dir, int step)
-		{
-			return (GeneralDirection2D)((int)(dir + step * 2) % 8);
-		}
+		public static GeneralDirection2D Right(this GeneralDirection2D dir, int step) => (GeneralDirection2D)((int)(dir + step * 2) % 8);
 
-		public static Direction2D Right(this Direction2D dir, int step)
-		{
-			return (Direction2D)((int)(dir + step) % 8);
-		}
+		public static Direction2D Right(this Direction2D dir, int step) => (Direction2D)((int)(dir + step) % 8);
 
 		// Left
 		public static GeneralDirection2D Left(this GeneralDirection2D dir, int step)
@@ -324,78 +376,54 @@ namespace MUtility
 		}
 
 		// Main of Diagonal 
-		public static bool IsMainDirection(this Direction2D dir)
-		{
-			return dir == Direction2D.Up || dir == Direction2D.Down || dir == Direction2D.Left ||
-				   dir == Direction2D.Right;
-		}
+		public static bool IsMainDirection(this Direction2D dir) => dir is Direction2D.Up or Direction2D.Down or Direction2D.Left or
+				   Direction2D.Right;
 
-		public static bool IsDiagonal(this Direction2D dir)
-		{
-			return !IsMainDirection(dir);
-		}
+		public static bool IsDiagonal(this Direction2D dir) => !IsMainDirection(dir);
 
 		// Vertical or Horizontal
 		public static bool IsVertical(this Direction2D dir) =>
-			dir == Direction2D.Up || dir == Direction2D.Down;
+			dir is Direction2D.Up or Direction2D.Down;
 
 
 		public static bool IsHorizontal(this Direction2D dir) =>
-			dir == Direction2D.Left || dir == Direction2D.Right;
+			dir is Direction2D.Left or Direction2D.Right;
 
 
 		public static bool IsVertical(this GeneralDirection2D dir) =>
-			dir == GeneralDirection2D.Up || dir == GeneralDirection2D.Down;
+			dir is GeneralDirection2D.Up or GeneralDirection2D.Down;
 
 
 		public static bool IsHorizontal(this GeneralDirection2D dir) =>
-			dir == GeneralDirection2D.Left || dir == GeneralDirection2D.Right;
+			dir is GeneralDirection2D.Left or GeneralDirection2D.Right;
 
 
 		//IsPositive
 		public static bool IsPositive(this GeneralDirection3D dir) =>
-			dir == GeneralDirection3D.Right || dir == GeneralDirection3D.Up || dir == GeneralDirection3D.Forward;
+			dir is GeneralDirection3D.Right or GeneralDirection3D.Up or GeneralDirection3D.Forward;
 
 		public static bool IsPositive(this GeneralDirection2D dir) =>
-			dir == GeneralDirection2D.Right || dir == GeneralDirection2D.Up;
+			dir is GeneralDirection2D.Right or GeneralDirection2D.Up;
 
 		public static bool IsPositive(this Direction2D dir) =>
-			dir == Direction2D.Right || dir == Direction2D.Up;
+			dir is Direction2D.Right or Direction2D.Up;
 
 
 		// GetAxis    
-		public static Axis2D GetAxis(this GeneralDirection2D dir)
+		public static Axis2D GetAxis(this GeneralDirection2D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case GeneralDirection2D.Right:
-				case GeneralDirection2D.Left:
-					return Axis2D.Horizontal;
-				case GeneralDirection2D.Up:
-				case GeneralDirection2D.Down:
-					return Axis2D.Vertical;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			GeneralDirection2D.Right or GeneralDirection2D.Left => Axis2D.Horizontal,
+			GeneralDirection2D.Up or GeneralDirection2D.Down => Axis2D.Vertical,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 
-		public static Axis3D GetAxis(this GeneralDirection3D dir)
+		public static Axis3D GetAxis(this GeneralDirection3D dir) => dir switch
 		{
-			switch (dir)
-			{
-				case GeneralDirection3D.Right:
-				case GeneralDirection3D.Left:
-					return Axis3D.X;
-				case GeneralDirection3D.Up:
-				case GeneralDirection3D.Down:
-					return Axis3D.Y;
-				case GeneralDirection3D.Forward:
-				case GeneralDirection3D.Back:
-					return Axis3D.Z;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			GeneralDirection3D.Right or GeneralDirection3D.Left => Axis3D.X,
+			GeneralDirection3D.Up or GeneralDirection3D.Down => Axis3D.Y,
+			GeneralDirection3D.Forward or GeneralDirection3D.Back => Axis3D.Z,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 
 
 		public static GeneralDirection3D LeftHandedRotate(this GeneralDirection3D self, Axis3D axis, int step)
@@ -465,5 +493,54 @@ namespace MUtility
 
 			throw new Exception("Unreachable Code");
 		}
+
+		public static float GetLength(this Direction3D self) => self switch
+		{
+			Direction3D.Right or
+			Direction3D.Left or
+			Direction3D.Up or
+			Direction3D.Down or
+			Direction3D.Forward or
+			Direction3D.Back => 1,
+
+			Direction3D.RightUp or
+			Direction3D.LeftUp or
+			Direction3D.RightDown or
+			Direction3D.LeftDown or
+			Direction3D.UpForward or
+			Direction3D.DownForward or
+			Direction3D.UpBack or
+			Direction3D.DownBack or
+			Direction3D.RightForward or
+			Direction3D.LeftForward or
+			Direction3D.RightBack or
+			Direction3D.LeftBack => diagonal2DLength,
+
+			Direction3D.RightUpForward or
+			Direction3D.LeftUpForward or
+			Direction3D.RightDownForward or
+			Direction3D.LeftDownForward or
+			Direction3D.RightUpBack or
+			Direction3D.LeftUpBack or
+			Direction3D.RightDownBack or
+			Direction3D.LeftDownBack => diagonal3DLength,
+
+			_ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
+		};
+
+		public static float GetLength(this Direction2D self) => self switch
+		{
+			Direction2D.Right or
+			Direction2D.Left or
+			Direction2D.Up or
+			Direction2D.Down or
+
+			Direction2D.RightUp or
+			Direction2D.LeftUp or
+			Direction2D.RightDown or
+			Direction2D.LeftDown => diagonal2DLength,
+
+			_ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
+		};
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace MUtility
 {
@@ -32,13 +33,13 @@ namespace MUtility
 
 	public enum Direction2D
 	{
-		UpRight = 0,
+		RightUp = 0,
 		Right = 1,
-		DownRight = 2,
+		RightDown = 2,
 		Down = 3,
-		DownLeft = 4,
+		LeftDown = 4,
 		Left = 5,
-		UpLeft = 6,
+		LeftUp = 6,
 		Up = 7
 	}
 
@@ -119,6 +120,53 @@ namespace MUtility
 			GeneralDirection2D.Down,
 			GeneralDirection2D.Left,
 			GeneralDirection2D.Up,
+		};
+
+		public static readonly Direction3D[] direction3DValues =
+		{
+			// General
+			Direction3D.Right,
+			Direction3D.Down,
+			Direction3D.Left,
+			Direction3D.Up,
+			Direction3D.Forward,
+			Direction3D.Back,
+
+			// Diagonal Edge
+			Direction3D.RightUp,
+			Direction3D.RightDown,
+			Direction3D.RightForward,
+			Direction3D.RightBack,
+			Direction3D.LeftUp,
+			Direction3D.LeftDown,
+			Direction3D.LeftForward,
+			Direction3D.LeftBack,
+			Direction3D.UpForward,
+			Direction3D.UpBack,
+			Direction3D.DownForward,
+			Direction3D.DownBack,
+
+			// Diagonal Corner
+			Direction3D.RightUpForward,
+			Direction3D.RightUpBack,
+			Direction3D.RightDownForward,
+			Direction3D.RightDownBack,
+			Direction3D.LeftUpForward,
+			Direction3D.LeftUpBack ,
+			Direction3D.LeftDownForward ,
+			Direction3D.LeftDownBack ,
+		};
+
+		public static readonly Direction2D[] direction2DValues =
+		{
+			Direction2D.RightUp,
+			Direction2D.Right,
+			Direction2D.RightDown,
+			Direction2D.Down,
+			Direction2D.LeftDown,
+			Direction2D.Left,
+			Direction2D.LeftUp,
+			Direction2D.Up
 		};
 	}
 }

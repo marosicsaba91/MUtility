@@ -21,36 +21,24 @@ namespace MUtility
 			set => zoom = Mathf.Clamp(value, 0.001f, 1000);
 		}
 
-
-		static Material mat;
-		static Material Mat
-		{
-			get
-			{
-				if (mat == null)
-					mat = new Material(Shader.Find("Hidden/Internal-Colored"));
-				return mat;
-			}
-		}
-
-		static readonly GUIStyle centerRightAlignedText = new GUIStyle(GUI.skin.label)
+		static readonly GUIStyle centerRightAlignedText = new(GUI.skin.label)
 		{ alignment = TextAnchor.UpperCenter };
 
 
-		static readonly GUIStyle upperRightAlignedText = new GUIStyle(GUI.skin.label)
+		static readonly GUIStyle upperRightAlignedText = new(GUI.skin.label)
 		{ alignment = TextAnchor.MiddleRight };
 
 
 		public void Draw(Rect position, AnimationCurve curve, Color color) =>
 			Draw(position, curve.Evaluate, AnimationCurveContainingRect(curve), color);
 
-		public static Rect AnimationCurveContainingRect(AnimationCurve function, bool showMargin = true)
+		public static Rect AnimationCurveContainingRect(AnimationCurve function)
 		{
 			if (function == null || function.keys.Length == 0)
 				return new Rect(x: -1, y: -1, width: 2, height: 2);
 
-			Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
-			Vector2 max = new Vector2(float.MinValue, float.MinValue);
+			Vector2 min = new(float.MaxValue, float.MaxValue);
+			Vector2 max = new(float.MinValue, float.MinValue);
 
 			foreach (Keyframe keyframe in function.keys)
 			{
@@ -146,7 +134,7 @@ namespace MUtility
 
 			if (showValuePreview)
 			{
-				Rect r = new Rect(
+				Rect r = new(
 					Event.current.mousePosition.x - valueLabelWidth, valuePreviewPixel.y - valueLabelHeight / 2,
 					valueLabelWidth, valueLabelHeight
 				);
@@ -200,7 +188,7 @@ namespace MUtility
 		static Rect GetUndistortedArea(Rect position, Rect mustContainArea)
 		{
 			float ratio = position.width / position.height;
-			Rect ranges = new Rect
+			Rect ranges = new()
 			{
 				size = ratio < mustContainArea.width / mustContainArea.height
 					? new Vector2(mustContainArea.width, mustContainArea.width / ratio)
@@ -221,7 +209,7 @@ namespace MUtility
 			const float bigGridAlpha = 0.5f;
 			const float smallGridAlpha = 0.25f;
 
-			Color axisColor = new Color(color.r, color.g, color.b, axisAlpha);
+			Color axisColor = new(color.r, color.g, color.b, axisAlpha);
 
 			float minSize = Mathf.Min(ranges.width, ranges.height);
 			float log = Mathf.Log(minSize, logBase);
@@ -230,8 +218,8 @@ namespace MUtility
 			float bigStep = Mathf.Pow(logBase, exponentOf10);
 			float smallStep = bigStep / smallInBig;
 
-			Color bigGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(bigGridAlpha, smallGridAlpha, rate));
-			Color smallGridColor = new Color(color.r, color.g, color.b, Mathf.Lerp(smallGridAlpha, 0, rate));
+			Color bigGridColor = new(color.r, color.g, color.b, Mathf.Lerp(bigGridAlpha, smallGridAlpha, rate));
+			Color smallGridColor = new(color.r, color.g, color.b, Mathf.Lerp(smallGridAlpha, 0, rate));
 
 			if (!showMargin)
 				return;
@@ -287,7 +275,7 @@ namespace MUtility
 				position.x,
 				position.x + position.width, rate);
 			int xPixel = Mathf.RoundToInt(x - valueLabelWidth / 2f);
-			Rect pos = new Rect(xPixel, position.y - valueLabelHeight, valueLabelWidth, valueLabelHeight);
+			Rect pos = new(xPixel, position.y - valueLabelHeight, valueLabelWidth, valueLabelHeight);
 			EditorGUI.LabelField(pos, NormalString(value), centerRightAlignedText);
 		}
 
@@ -308,7 +296,7 @@ namespace MUtility
 				position.y,
 				position.y + position.height, rate);
 			int yPixel = Mathf.RoundToInt(y - valueLabelHeight / 2f);
-			Rect pos = new Rect(position.x - valueLabelWidth, yPixel, valueLabelWidth, valueLabelHeight);
+			Rect pos = new(position.x - valueLabelWidth, yPixel, valueLabelWidth, valueLabelHeight);
 			EditorGUI.LabelField(pos, NormalString(value), upperRightAlignedText);
 		}
 
