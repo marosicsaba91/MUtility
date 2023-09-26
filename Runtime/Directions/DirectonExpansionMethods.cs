@@ -542,5 +542,109 @@ namespace MUtility
 
 			_ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
 		};
+
+
+		public static GeneralDirection3D Transform(this GeneralDirection3D dir, Flip3D flip, Vector3Int rotation90)
+		{
+			Vector3Int vectorDir = dir.ToVectorInt();
+			if (flip == Flip3D.X)
+				vectorDir.x *= -1;
+			else if (flip == Flip3D.Y)
+				vectorDir.y *= -1;
+			else if (flip == Flip3D.Z)
+				vectorDir.z *= -1;
+
+			int x = MathHelper.Mod(rotation90.x, 4);
+			int y = MathHelper.Mod(rotation90.y, 4);
+			int z = MathHelper.Mod(rotation90.z, 4);
+			if (x == 1)
+			{
+				int temp = vectorDir.y;
+				y = vectorDir.z;
+				z = -temp;
+			}
+			else if (x == 2)
+			{
+				vectorDir.y *= -1;
+				vectorDir.z *= -1;
+			}
+			else if (x == 3)
+			{
+				int temp = vectorDir.y;
+				vectorDir.y = -vectorDir.z;
+				vectorDir.z = temp;
+			}
+
+			if (y == 1)
+			{
+				int temp = vectorDir.x;
+				vectorDir.x = vectorDir.z;
+				vectorDir.z = -temp;
+			}
+			else if (y == 2)
+			{
+				vectorDir.x *= -1;
+				vectorDir.z *= -1;
+			}
+			else if (y == 3)
+			{
+				int temp = vectorDir.x;
+				vectorDir.x = -vectorDir.z;
+				vectorDir.z = temp;
+			}
+
+			if (z == 1)
+			{
+				int temp = vectorDir.x;
+				vectorDir.x = vectorDir.y;
+				vectorDir.y = -temp;
+			}
+			else if (z == 2)
+			{
+				vectorDir.x *= -1;
+				vectorDir.y *= -1;
+			}
+			else if (z == 3)
+			{
+				int temp = vectorDir.x;
+				vectorDir.x = -vectorDir.y;
+				vectorDir.y = temp;
+			}
+
+			if (vectorDir.x == 1)
+				return GeneralDirection3D.Right;
+			else if (vectorDir.x == -1)
+				return GeneralDirection3D.Left;
+			else if (vectorDir.y == 1)
+				return GeneralDirection3D.Up;
+			else if (vectorDir.y == -1)
+				return GeneralDirection3D.Down;
+			else if (vectorDir.z == 1)
+				return GeneralDirection3D.Forward;
+			else if (vectorDir.z == -1)
+				return GeneralDirection3D.Back;
+
+			throw new NotImplementedException();
+		}
+
+		public static GeneralDirection3D InverseTransform(this GeneralDirection3D dir, Flip3D flip, Vector3Int rotation90)
+			=> dir.Transform(flip, -rotation90);
+
+		public static Vector3 ToScale(this Flip3D flip) => flip switch
+		{
+			Flip3D.X => new Vector3(-1, 1, 1),
+			Flip3D.Y => new Vector3(1, -1, 1),
+			Flip3D.Z => new Vector3(1, 1, -1),
+			_ => Vector3.one,
+		};
+		public static Matrix4x4 ToMatrix(Flip3D flip) => flip switch
+		{
+			Flip3D.X => new Matrix4x4(new Vector4(-1, 0, 0, -1), new Vector4(0, 1, 0, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 0, 1)),
+			Flip3D.Y => new Matrix4x4(new Vector4(1, 0, 0, 0), new Vector4(0, -1, 0, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 0, 1)),
+			Flip3D.Z => new Matrix4x4(new Vector4(1, 0, 0, 0), new Vector4(0, 1, 0, 0), new Vector4(0, 0, -1, 0), new Vector4(0, 0, 0, 1)),
+			_ => Matrix4x4.identity,
+
+		};
+
 	}
 }

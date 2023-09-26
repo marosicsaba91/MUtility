@@ -12,4 +12,8 @@
 		Horizontal = 0,
 		Vertical = 1
 	}
+
+
+	public enum Flip3D { None, X, Y, Z }
+	public enum Flip2D { None, Horizontal, Vertical }
 }
