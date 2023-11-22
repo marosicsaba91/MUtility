@@ -15,9 +15,9 @@ namespace MUtility
 
 	public static partial class EasyHandles
 	{
-		static readonly Color _focusedColorMultiplier = new Color(0.9f, 0.9f, 0.9f, 0.75f);
-		static readonly Color _colorSelectedMultiplier = new Color(0.8f, 0.8f, 0.8f, 0.5f);
-		static Color MultiplyColor(Color a, Color b) => new Color(a.r * b.r, a.g * b.g, a.b * b.b, a.a * b.a);
+		static readonly Color _focusedColorMultiplier = new(0.9f, 0.9f, 0.9f, 0.75f);
+		static readonly Color _colorSelectedMultiplier = new(0.8f, 0.8f, 0.8f, 0.5f);
+		static Color MultiplyColor(Color a, Color b) => new(a.r * b.r, a.g * b.g, a.b * b.b, a.a * b.a);
 
 		public static Color color = Color.white;
 		public static float fullObjectSize = 1;
@@ -67,12 +67,6 @@ namespace MUtility
 			return PositionHandle(position, rotation, ForcedAxisMode.Non, shape);
 		}
 
-		public static bool Handle(Vector3 position, Quaternion rotation, Shape shape = Shape.Cube)
-		{
-			//return PositionHandle(position, rotation, ForcedAxisMode.Non, shape);
-			return false;
-		}
-
 		public static void DrawLine(Vector3 start, Vector3 end)
 		{
 #if UNITY_EDITOR
@@ -120,9 +114,9 @@ namespace MUtility
 				return DrawPositionHandle(position, rot, Shape.Cone, ForcedAxisMode.Line, c, sc, fc, 1.5f);
 			}
 
-			Color red = new Color(1, 0.5f, 0.5f);
-			Color green = new Color(0.5f, 1, 0.5f);
-			Color blue = new Color(0.5f, 0.5f, 1);
+			Color red = new(1, 0.5f, 0.5f);
+			Color green = new(0.5f, 1, 0.5f);
+			Color blue = new(0.5f, 0.5f, 1);
 
 			Vector3 px = Arrow(Vector3.up, red);
 			Vector3 py = Arrow(Vector3.left, green);

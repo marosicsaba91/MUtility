@@ -351,7 +351,7 @@ namespace MUtility
 
 			if (transform.parent == null)
 			{
-				Scene scene = transform.gameObject.scene;
+				UnityEngine.SceneManagement.Scene scene = transform.gameObject.scene;
 				if (scene.rootCount < siblingIndex)
 					return null;
 				return scene.GetRootGameObjects()[siblingIndex].transform;

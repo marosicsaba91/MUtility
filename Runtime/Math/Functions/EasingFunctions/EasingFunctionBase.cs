@@ -22,7 +22,6 @@ namespace MUtility
 
 		public Increasing increasing = Increasing.Up;
 		public Smooth smooth = Smooth.FullSmooth;
-		[SerializeField] DisplayMember curvePreview = new DisplayMember(nameof(Evaluate));
 
 		public Rect DefaultArea
 		{
@@ -91,6 +90,6 @@ namespace MUtility
 
 		protected abstract float EaseIn01Evaluate(float time);
 
-		public virtual Rect EaseIn01ContainingRect => new Rect(0, 0, 1, 1);
+		public virtual Rect EaseIn01ContainingRect => new (0, 0, 1, 1);
 	}
 }

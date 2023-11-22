@@ -9,7 +9,6 @@ namespace MUtility
 	{
 		public float mean = 0;
 		[SerializeField, Min(0)] float stdDev = 1;
-		[SerializeField] DisplayMember curvePreview = new DisplayMember(nameof(Evaluate));
 
 		public float StdDev
 		{

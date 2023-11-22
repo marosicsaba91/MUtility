@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-namespace MUtility
+﻿namespace MUtility
 {
 	public enum HorizontalDirection
 	{

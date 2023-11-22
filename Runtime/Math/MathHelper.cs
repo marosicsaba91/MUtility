@@ -5,6 +5,16 @@ namespace MUtility
 {
 	public static class MathHelper
 	{
+		public static float Lerp(float input, float minOutput, float maxOutput, float minInput = 0,
+			float maxInput = 1)
+		{
+			if (input <= minInput)
+				return minOutput;
+			if (input >= maxInput)
+				return maxOutput;
+			return minOutput + (input - minInput) / (maxInput - minInput) * (maxOutput - minOutput);
+		}
+
 		public static float LerpUnclamped(float input, float minOutput, float maxOutput,
 			float minInput = 0, float maxInput = 1)
 		{
@@ -23,16 +33,6 @@ namespace MUtility
 			}
 
 			return current;
-		}
-
-		public static float Lerp(float input, float minOutput, float maxOutput, float minInput = 0,
-			float maxInput = 1)
-		{
-			if (input <= minInput)
-				return minOutput;
-			if (input >= maxInput)
-				return maxOutput;
-			return minOutput + (input - minInput) / (maxInput - minInput) * (maxOutput - minOutput);
 		}
 
 		public static Vector2 LerpUnclamped(float input, Vector2 minOutput, Vector2 maxOutput,

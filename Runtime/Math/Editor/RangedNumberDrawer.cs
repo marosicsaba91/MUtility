@@ -36,8 +36,7 @@ namespace MUtility.Editor
 			Type parentType = property.GetObjectWithProperty().GetType();
 			const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 			FieldInfo propertyInfo = parentType.GetField(property.name, flags);
-			var limitsA = propertyInfo?.GetCustomAttributes().FirstOrDefault(a => a is RangeLimitsAttribute) as RangeLimitsAttribute;
-			FloatRange? limits = limitsA != null ? new FloatRange(limitsA.min, limitsA.max) : null;
+			FloatRange? limits = propertyInfo?.GetCustomAttributes().FirstOrDefault(a => a is RangeLimitsAttribute) is RangeLimitsAttribute limitsA ? new FloatRange(limitsA.min, limitsA.max) : null;
 
 			// Label
 			Rect labelRect = position;
