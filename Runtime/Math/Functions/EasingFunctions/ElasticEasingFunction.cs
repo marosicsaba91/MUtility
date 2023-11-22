@@ -23,7 +23,7 @@ namespace MUtility
 		public float MaxHeight => 1 + 0.5f * sinusoidalAmplitude;
 		public float MinHeight => -0.5f * sinusoidalAmplitude;
 
-		public override Rect EaseIn01ContainingRect => new Rect(
+		public override Rect EaseIn01ContainingRect => new(
 			0,
 			MinHeight,
 			1,

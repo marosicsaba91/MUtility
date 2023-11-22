@@ -80,7 +80,7 @@ namespace MUtility
 			float x = inputRect.x;
 			float y = inputRect.y;
 			float h = inputRect.height;
-			var result = new List<Rect>();
+			List<Rect> result = new();
 			foreach ((int pixel, int weight) w in lengths)
 			{
 				float pixels = w.pixel + w.weight * unityOtWeightInPixels;

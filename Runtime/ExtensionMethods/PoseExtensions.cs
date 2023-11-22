@@ -13,7 +13,7 @@ namespace MUtility
 			Mesh cubeMesh = PrimitiveMeshHelper.GetPrimitiveMesh(PrimitiveType.Cube);
 
 			const float cubeSize = 0.35f;
-			var cubeSizeVec = new Vector3(size * cubeSize, size * cubeSize, size * cubeSize);
+			Vector3 cubeSizeVec = new(size * cubeSize, size * cubeSize, size * cubeSize);
 			Gizmos.color = color;
 			Gizmos.DrawMesh(cubeMesh, pose.position, pose.rotation, cubeSizeVec);
 			DrawCylinder(Vector3.right, Color.red);

@@ -7,7 +7,7 @@ namespace MUtility
 	{
 		public static Quaternion ToQuaternion(this Matrix4x4 m)
 		{
-			Quaternion q = new Quaternion();
+			Quaternion q = new();
 			q.w = Mathf.Sqrt(Mathf.Max(0, 1 + m[0, 0] + m[1, 1] + m[2, 2])) / 2;
 			q.x = Mathf.Sqrt(Mathf.Max(0, 1 + m[0, 0] - m[1, 1] - m[2, 2])) / 2;
 			q.y = Mathf.Sqrt(Mathf.Max(0, 1 - m[0, 0] + m[1, 1] - m[2, 2])) / 2;
@@ -45,8 +45,7 @@ namespace MUtility
 
 		public static void SetTransform(this Matrix4x4 matrix, Transform transform)
 		{
-			transform.localPosition = matrix.GetColumn(3);
-			transform.localRotation = matrix.rotation;
+			transform.SetLocalPositionAndRotation(matrix.GetColumn(3), matrix.rotation);
 			transform.localScale = matrix.lossyScale;
 		}
 

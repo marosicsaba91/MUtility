@@ -15,7 +15,7 @@ namespace MUtility
 		{
 			Type[] typesInAssembly = assembly.GetTypes();
 
-			var result = new List<Type>();
+			List<Type> result = new();
 			foreach (Type typeToTest in typesInAssembly)
 			{
 				if (!typeToTest.IsClass)
@@ -28,11 +28,10 @@ namespace MUtility
 					result.Add(typeToTest);
 				}
 			}
-
 			return result;
 		}
 
-		public static bool IsBaseclassOf_GenericsSupported(this Type baseType, Type subType) =>
+		public static bool IsBaseClassOf_GenericsSupported(this Type baseType, Type subType) =>
 			subType.IsSubclassOf_GenericsSupported(baseType);
 
 		public static bool IsSubclassOf_GenericsSupported(this Type subType, Type baseType)

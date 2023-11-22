@@ -124,8 +124,8 @@ namespace MUtility
 		
 		public static BoundsInt GetSection(this BoundsInt one, BoundsInt other)
 		{
-			var min = Vector3Int.Max(one.min, other.min);
-			var max = Vector3Int.Min(one.max, other.max);
+			Vector3Int min = Vector3Int.Max(one.min, other.min);
+			Vector3Int max = Vector3Int.Min(one.max, other.max);
 			Vector3Int size = max - min;
 			return new BoundsInt(min, max - min);
 		}

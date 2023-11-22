@@ -109,8 +109,8 @@ namespace MUtility
 
 		public static Dictionary<TKey, TValue> GetSorted<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Comparison<KeyValuePair<TKey, TValue>> comparison)
 		{
-			var result = new Dictionary<TKey, TValue>();
-			var sorted = new List<KeyValuePair<TKey, TValue>>();
+			Dictionary<TKey, TValue> result = new();
+			List<KeyValuePair<TKey, TValue>> sorted = new();
 
 			foreach (KeyValuePair<TKey, TValue> item in dictionary)
 				sorted.Add(item);

@@ -92,16 +92,16 @@ namespace MUtility
 		public static float Mod(float n, float m) => (n % m + m) % m;
 
 		public static Vector2Int Mod(Vector2Int n, int w, int h) =>
-			new Vector2Int(Mod(n.x, w), Mod(n.y, h));
+			new(Mod(n.x, w), Mod(n.y, h));
 
 		public static Vector2 Mod(Vector2 n, float w, float h) =>
-			new Vector2(Mod(n.x, w), Mod(n.y, h));
+			new(Mod(n.x, w), Mod(n.y, h));
 
 		public static Vector3Int Mod(Vector3Int n, int w, int h, int d) =>
-			new Vector3Int(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
+			new(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
 
 		public static Vector3 Mod(Vector3 n, float w, float h, int d) =>
-			new Vector3(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
+			new(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
 
 
 		// Code duplication is for optimisation purposes.

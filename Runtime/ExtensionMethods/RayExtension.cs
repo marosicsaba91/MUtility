@@ -6,7 +6,7 @@ namespace MUtility
 	{
 
 		public static Ray Transform(this Ray ray, Matrix4x4 matrix) =>
-			new Ray(matrix.MultiplyPoint(ray.origin), matrix.MultiplyVector(ray.direction));
+			new(matrix.MultiplyPoint(ray.origin), matrix.MultiplyVector(ray.direction));
 
 		public static bool IntersectPlane(this Ray ray, Vector3 planeNormal, Vector3 planeOrigin, out Vector3 hit)
 		{

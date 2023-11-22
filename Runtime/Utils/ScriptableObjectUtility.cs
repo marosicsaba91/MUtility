@@ -7,7 +7,7 @@ namespace MUtility
 {
 	public static class ScriptableObjectUtility
 	{
-		static readonly Dictionary<Type, object> resources = new Dictionary<Type, object>();
+		static readonly Dictionary<Type, object> resources = new();
 
 		public static TScriptable GetFromResources<TScriptable>() where TScriptable : ScriptableObject
 		{

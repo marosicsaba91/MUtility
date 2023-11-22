@@ -32,7 +32,7 @@ namespace MUtility
 		{
 			if (original == null)
 				return null;
-			var result = new T[original.Length];
+			T[] result = new T[original.Length];
 			CopyTo(original, result);
 			return result;
 		}
@@ -59,7 +59,7 @@ namespace MUtility
 				index < 0)
 				return null;
 
-			var result = new T[length];
+			T[] result = new T[length];
 			Array.Copy(data, index, result, 0, length);
 			return result;
 		}

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic; 
-using UnityEngine; 
+using System.Collections.Generic;
+using UnityEngine;
 using Object = UnityEngine.Object;
-using Scene = UnityEngine.SceneManagement.Scene;
 
 namespace MUtility
 {
@@ -93,7 +92,7 @@ namespace MUtility
 
 		public static Transform CreateChild(this Transform self, string childName)
 		{
-			var go = new GameObject(childName);
+			GameObject go = new(childName);
 			Transform t = go.transform;
 			t.SetParentAndAlignToDefault(self);
 			return t;
@@ -197,7 +196,7 @@ namespace MUtility
 
 		public static Vector3 TransformPointUnscaled(this Transform transform, Vector3 position)
 		{
-			var localToWorldMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+			Matrix4x4 localToWorldMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
 			return localToWorldMatrix.MultiplyPoint3x4(position);
 		}
 
@@ -299,7 +298,7 @@ namespace MUtility
 
 		public static Object[] GetAllUnityObjects(this Transform root)
 		{
-			var allObjects = new List<Object>();
+			List<Object> allObjects = new();
 			foreach (Transform transform in root.SelfAndAllChildrenRecursively())
 			{
 				allObjects.Add(transform.gameObject);

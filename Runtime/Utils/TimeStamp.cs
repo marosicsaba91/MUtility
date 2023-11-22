@@ -27,10 +27,10 @@ namespace MUtility
 		public string FixedTimeShortString => SecondsToShortString(fixedTime);
 		public string FixedUnscaledTimeShortString => SecondsToShortString(fixedUnscaledTime);
 
-		public DateTime DateTime => new DateTime(systemTimeInTicks);
+		public DateTime DateTime => new(systemTimeInTicks);
 		string TicksToShortString(long ticks)
 		{
-			var time = new DateTime(ticks);
+			DateTime time = new(ticks);
 			int hours = time.Hour;
 			int minutes = time.Minute;
 			float seconds = time.Second + time.Millisecond / 1000f;
@@ -57,7 +57,7 @@ namespace MUtility
 			return "0";
 		}
 
-		public static TimeStamp Now() => new TimeStamp
+		public static TimeStamp Now() => new()
 		{
 			systemTimeInTicks = DateTime.Now.Ticks,
 			gameTime = Time.time,
