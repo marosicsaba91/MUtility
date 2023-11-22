@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 namespace MUtility
 {
 	[CustomPropertyDrawer(typeof(EasyCurve))]
-	public class EasyCurveDrawer : PropertyDrawer
+	class EasyCurveDrawer : PropertyDrawer
 	{
 		string _memberName; 
 		Type _ownerType;
@@ -17,7 +17,6 @@ namespace MUtility
 		object _owner;
 
 		Func<float, float> _floatFunction;
-		Func<Rect> _defaultRectGetter;
 		CurvePreview _curvePreview;
 		EasyCurve _easyFunction;
 
