@@ -35,6 +35,23 @@ namespace MUtility
 			_ => throw new ArgumentOutOfRangeException(nameof(newAxis), newAxis, null),
 		};
 
+		public static Vector2Int ToVector2Int(this Vector3Int vector, Axis3D deleteAxis) => deleteAxis switch
+		{
+			Axis3D.X => new Vector2Int(vector.y, vector.z),
+			Axis3D.Y => new Vector2Int(vector.x, vector.z),
+			Axis3D.Z => new Vector2Int(vector.x, vector.y),
+			_ => throw new ArgumentOutOfRangeException(nameof(deleteAxis), deleteAxis, null),
+		};
+
+		public static Vector3Int ToVector3Int(this Vector2Int vector, int newValue, Axis3D newAxis) => newAxis switch
+		{
+			Axis3D.X => new Vector3Int(newValue, vector.x, vector.y),
+			Axis3D.Y => new Vector3Int(vector.x, newValue, vector.y),
+			Axis3D.Z => new Vector3Int(vector.x, vector.y, newValue),
+			_ => throw new ArgumentOutOfRangeException(nameof(newAxis), newAxis, null),
+		};
+
+
 		public static float GetAngle(this Vector2 original)
 		{
 			float angle = Vector2.Angle(Vector2.right, original);

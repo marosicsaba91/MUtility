@@ -228,7 +228,6 @@ namespace MUtility
 			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
 		};
 
-		// To Vector Int
 		public static Vector2Int ToVectorInt(this GeneralDirection2D dir) => dir switch
 		{
 			GeneralDirection2D.Up => Vector2Int.up,
