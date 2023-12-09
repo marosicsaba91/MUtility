@@ -64,53 +64,145 @@ namespace MUtility
 		};
 
 
+
 		// Equals
-		public static bool Equals(this GeneralDirection2D self, GeneralDirection3D dir) =>
-			(int)self == (int)dir;
+		public static bool Equals(this GeneralDirection2D self, GeneralDirection3D dir) => self switch
+		{
+			GeneralDirection2D.Right => dir == GeneralDirection3D.Right,
+			GeneralDirection2D.Up => dir == GeneralDirection3D.Up,
+			GeneralDirection2D.Left => dir == GeneralDirection3D.Left,
+			GeneralDirection2D.Down => dir == GeneralDirection3D.Down,
+			_ => false
+		};
 
 
-		public static bool Equals(this GeneralDirection2D self, Direction2D dir) =>
-			(int)self == (int)dir;
+		public static bool Equals(this GeneralDirection2D self, Direction2D dir) => self switch
+		{
+			GeneralDirection2D.Right => dir == Direction2D.Right,
+			GeneralDirection2D.Up => dir == Direction2D.Up,
+			GeneralDirection2D.Left => dir == Direction2D.Left,
+			GeneralDirection2D.Down => dir == Direction2D.Down,
+			_ => false
+		};
 
 
-		public static bool Equals(this GeneralDirection3D self, GeneralDirection2D dir) =>
-			(int)self == (int)dir;
+
+		public static bool Equals(this GeneralDirection3D self, GeneralDirection2D dir) => dir switch
+		{
+			GeneralDirection2D.Right => self == GeneralDirection3D.Right,
+			GeneralDirection2D.Up => self == GeneralDirection3D.Up,
+			GeneralDirection2D.Left => self == GeneralDirection3D.Left,
+			GeneralDirection2D.Down => self == GeneralDirection3D.Down,
+			_ => false
+		};
 
 
-		public static bool Equals(this GeneralDirection3D self, Direction2D dir) =>
-			(int)self == (int)dir;
+		public static bool Equals(this GeneralDirection3D self, Direction2D dir) => self switch
+		{
+			GeneralDirection3D.Right => dir == Direction2D.Right,
+			GeneralDirection3D.Left => dir == Direction2D.Left,
+			GeneralDirection3D.Up => dir == Direction2D.Up,
+			GeneralDirection3D.Down => dir == Direction2D.Down,
+			_ => false
+		};
 
+		public static bool Equals(this Direction2D self, GeneralDirection2D dir) => dir switch
+		{
+			GeneralDirection2D.Right => self == Direction2D.Right,
+			GeneralDirection2D.Left => self == Direction2D.Left,
+			GeneralDirection2D.Up => self == Direction2D.Up,
+			GeneralDirection2D.Down => self == Direction2D.Down,
+			_ => false
+		};
 
-		public static bool Equals(this Direction2D self, GeneralDirection2D dir) =>
-			(int)self == (int)dir;
+		public static bool Equals(this Direction2D self, GeneralDirection3D dir) => dir switch
+		{
+			GeneralDirection3D.Right => self == Direction2D.Right,
+			GeneralDirection3D.Left => self == Direction2D.Left,
+			GeneralDirection3D.Up => self == Direction2D.Up,
+			GeneralDirection3D.Down => self == Direction2D.Down,
+			_ => false
+		};
 
+		public static bool Equals(this GeneralDirection3D self, Direction3D dir) => self switch
+		{
+			GeneralDirection3D.Right => dir == Direction3D.Right,
+			GeneralDirection3D.Left => dir == Direction3D.Left,
+			GeneralDirection3D.Up => dir == Direction3D.Up,
+			GeneralDirection3D.Down => dir == Direction3D.Down,
+			GeneralDirection3D.Forward => dir == Direction3D.Forward,
+			GeneralDirection3D.Back => dir == Direction3D.Back,
+			_ => false
+		};
 
-		public static bool Equals(this Direction2D self, GeneralDirection3D dir) =>
-			(int)self == (int)dir;
+		public static bool Equals(this GeneralDirection2D self, Direction3D dir) => self switch
+		{
+			GeneralDirection2D.Right => dir == Direction3D.Right,
+			GeneralDirection2D.Left => dir == Direction3D.Left,
+			GeneralDirection2D.Up => dir == Direction3D.Up,
+			GeneralDirection2D.Down => dir == Direction3D.Down, 
+			_ => false
+		};
 
-		public static bool Equals(this GeneralDirection3D self, Direction3D dir) =>
-			(int)self == (int)dir;
-
-		public static bool Equals(this GeneralDirection2D self, Direction3D dir) =>
-			(int)self == (int)dir;
-
-		public static bool Equals(this Direction2D self, Direction3D dir) =>
-			(int)self == (int)dir;
-
+		public static bool Equals(this Direction2D self, Direction3D dir) => self switch
+		{
+			Direction2D.RightUp => dir == Direction3D.RightUp,
+			Direction2D.Right => dir == Direction3D.Right,
+			Direction2D.RightDown => dir == Direction3D.RightDown,
+			Direction2D.Down => dir == Direction3D.Down, 
+			Direction2D.LeftDown => dir == Direction3D.LeftDown,
+			Direction2D.Left => dir == Direction3D.Left,
+			Direction2D.LeftUp => dir == Direction3D.LeftUp,
+			Direction2D.Up => dir == Direction3D.Up,
+			_ => false
+		};
 
 		// Convert
-		public static Direction2D ToDirection2D(this GeneralDirection2D self) =>
-			(Direction2D)(int)self;
+		public static Direction2D ToDirection2D(this GeneralDirection2D self) => self switch
+		{
+			GeneralDirection2D.Right => Direction2D.Right,
+			GeneralDirection2D.Left => Direction2D.Left,
+			GeneralDirection2D.Up => Direction2D.Up,
+			GeneralDirection2D.Down => Direction2D.Down,
+			_ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
+		};
 
-		public static GeneralDirection3D ToGeneralDirection3D(this GeneralDirection2D self) =>
-			(GeneralDirection3D)(int)self;
+		public static GeneralDirection3D ToGeneralDirection3D(this GeneralDirection2D self) => self switch
+		{ 
+			GeneralDirection2D.Right => GeneralDirection3D.Right,
+			GeneralDirection2D.Left => GeneralDirection3D.Left,
+			GeneralDirection2D.Up => GeneralDirection3D.Up,
+			GeneralDirection2D.Down => GeneralDirection3D.Down,
+			_ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
+		};
 
-		public static Direction3D ToDirection3D(this GeneralDirection2D self) =>
-			(Direction3D)(int)self;
+		public static Direction3D ToDirection3D(this GeneralDirection2D self) => self switch
+		{
+			GeneralDirection2D.Right => Direction3D.Right,
+			GeneralDirection2D.Left => Direction3D.Left,
+			GeneralDirection2D.Up => Direction3D.Up,
+			GeneralDirection2D.Down => Direction3D.Down,
+			_ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
+		};
 
 
-		public static Direction3D ToDirection3D(this GeneralDirection3D self) =>
-			(Direction3D)(int)self;
+		public static Direction3D ToDirection3D(this GeneralDirection3D self) => self switch
+		{ 
+			GeneralDirection3D.Right => Direction3D.Right,
+			GeneralDirection3D.Left => Direction3D.Left,
+			GeneralDirection3D.Up => Direction3D.Up,
+			GeneralDirection3D.Down => Direction3D.Down,
+			GeneralDirection3D.Forward => Direction3D.Forward,
+			GeneralDirection3D.Back => Direction3D.Back,
+			_ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
+		};
+
+		public static GeneralDirection3D ToGeneralDirection3D(this HorizontalDirection self) => self switch
+		{
+			HorizontalDirection.Right => GeneralDirection3D.Right,
+			HorizontalDirection.Left => GeneralDirection3D.Left,
+			_ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
+		};
 
 
 		// To Vector Float
@@ -353,48 +445,33 @@ namespace MUtility
 		};
 
 		// Right
-		public static GeneralDirection2D Right(this GeneralDirection2D dir, int step) => (GeneralDirection2D)((int)(dir + step * 2) % 8);
+		public static GeneralDirection2D Right(this GeneralDirection2D dir, int step) => (GeneralDirection2D)(MathHelper.Mod((int)dir + step, 4));
 
-		public static Direction2D Right(this Direction2D dir, int step) => (Direction2D)((int)(dir + step) % 8);
+		public static Direction2D Right(this Direction2D dir, int step) => (Direction2D)(MathHelper.Mod((int)dir + step, 8));
 
 		// Left
-		public static GeneralDirection2D Left(this GeneralDirection2D dir, int step)
-		{
-			int n = (int)(dir - step * 2) % 8;
-			if (n < 0)
-				n = 8 + n;
-			return (GeneralDirection2D)n;
-		}
+		public static GeneralDirection2D Left(this GeneralDirection2D dir, int step) => (GeneralDirection2D)(MathHelper.Mod((int)dir - step, 4));
 
-		public static Direction2D Left(this Direction2D dir, int step)
-		{
-			int n = (int)(dir - step) % 8;
-			if (n < 0)
-				n = 8 + n;
-			return (Direction2D)n;
-		}
+		public static Direction2D Left(this Direction2D dir, int step) => (Direction2D)(MathHelper.Mod((int)dir - step, 8));
+
 
 		// Main of Diagonal 
-		public static bool IsMainDirection(this Direction2D dir) => dir is Direction2D.Up or Direction2D.Down or Direction2D.Left or
-				   Direction2D.Right;
+		public static bool IsMainDirection(this Direction2D dir) =>
+			dir is Direction2D.Up or Direction2D.Down or Direction2D.Left or Direction2D.Right;
 
 		public static bool IsDiagonal(this Direction2D dir) => !IsMainDirection(dir);
 
 		// Vertical or Horizontal
-		public static bool IsVertical(this Direction2D dir) =>
-			dir is Direction2D.Up or Direction2D.Down;
+		public static bool IsVertical(this Direction2D dir) => dir is Direction2D.Up or Direction2D.Down;
 
 
-		public static bool IsHorizontal(this Direction2D dir) =>
-			dir is Direction2D.Left or Direction2D.Right;
+		public static bool IsHorizontal(this Direction2D dir) => dir is Direction2D.Left or Direction2D.Right;
 
 
-		public static bool IsVertical(this GeneralDirection2D dir) =>
-			dir is GeneralDirection2D.Up or GeneralDirection2D.Down;
+		public static bool IsVertical(this GeneralDirection2D dir) => dir is GeneralDirection2D.Up or GeneralDirection2D.Down;
 
 
-		public static bool IsHorizontal(this GeneralDirection2D dir) =>
-			dir is GeneralDirection2D.Left or GeneralDirection2D.Right;
+		public static bool IsHorizontal(this GeneralDirection2D dir) => dir is GeneralDirection2D.Left or GeneralDirection2D.Right;
 
 
 		//IsPositive
@@ -429,11 +506,9 @@ namespace MUtility
 		{
 			if (self.GetAxis() == axis)
 				return self;
-			step = step % 4;
+			step %= 4;
 			if (step < 0)
-			{
 				step += 4;
-			}
 
 			if (step == 0)
 				return self;

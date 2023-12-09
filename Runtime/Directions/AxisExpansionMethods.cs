@@ -32,95 +32,53 @@ namespace MUtility
 		}
 
 
-		public static Vector3 ToVector(this Axis3D axis)
+		public static Vector3 ToVector(this Axis3D axis) => axis switch
 		{
-			switch (axis)
-			{
-				case Axis3D.X:
-					return Vector3.right;
-				case Axis3D.Y:
-					return Vector3.up;
-				case Axis3D.Z:
-					return Vector3.forward;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
-			}
-		}
+			Axis3D.X => Vector3.right,
+			Axis3D.Y => Vector3.up,
+			Axis3D.Z => Vector3.forward,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null),
+		};
 
-		public static Vector3Int ToIntVector(this Axis3D axis)
+		public static Vector3Int ToIntVector(this Axis3D axis) => axis switch
 		{
-			switch (axis)
-			{
-				case Axis3D.X:
-					return Vector3Int.right;
-				case Axis3D.Y:
-					return Vector3Int.up;
-				case Axis3D.Z:
-					return Vector3Int.forward;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
-			}
-		}
+			Axis3D.X => Vector3Int.right,
+			Axis3D.Y => Vector3Int.up,
+			Axis3D.Z => Vector3Int.forward,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null),
+		};
 
-		public static GeneralDirection3D ToPositiveDirection(this Axis3D axis)
+		public static GeneralDirection3D ToPositiveDirection(this Axis3D axis) => axis switch
 		{
-			switch (axis)
-			{
-				case Axis3D.X:
-					return GeneralDirection3D.Right;
-				case Axis3D.Y:
-					return GeneralDirection3D.Up;
-				case Axis3D.Z:
-					return GeneralDirection3D.Forward;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
-			}
-		}
+			Axis3D.X => GeneralDirection3D.Right,
+			Axis3D.Y => GeneralDirection3D.Up,
+			Axis3D.Z => GeneralDirection3D.Forward,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null),
+		};
 
-		public static Vector3 ToNegativeVector(this Axis3D axis)
+		public static Vector3 ToNegativeVector(this Axis3D axis) => axis switch
 		{
-			switch (axis)
-			{
-				case Axis3D.X:
-					return Vector3.left;
-				case Axis3D.Y:
-					return Vector3.down;
-				case Axis3D.Z:
-					return Vector3.back;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
-			}
-		}
+			Axis3D.X => Vector3.left,
+			Axis3D.Y => Vector3.down,
+			Axis3D.Z => Vector3.back,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null),
+		};
 
-		public static GeneralDirection3D ToNegativeDirection(this Axis3D axis)
+		public static GeneralDirection3D ToNegativeDirection(this Axis3D axis) => axis switch
 		{
-			switch (axis)
-			{
-				case Axis3D.X:
-					return GeneralDirection3D.Left;
-				case Axis3D.Y:
-					return GeneralDirection3D.Down;
-				case Axis3D.Z:
-					return GeneralDirection3D.Back;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
-			}
-		}
+			Axis3D.X => GeneralDirection3D.Left,
+			Axis3D.Y => GeneralDirection3D.Down,
+			Axis3D.Z => GeneralDirection3D.Back,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null),
+		};
 
-		public static Color GetAxisColor(this Axis3D axis)
+		public static Color GetAxisColor(this Axis3D axis) => axis switch
 		{
-			switch (axis)
-			{
-				case Axis3D.X:
-					return Color.red;
-				case Axis3D.Y:
-					return Color.green;
-				case Axis3D.Z:
-					return Color.blue;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
-			}
-		}
+			Axis3D.X => Color.red,
+			Axis3D.Y => Color.green,
+			Axis3D.Z => Color.blue,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null),
+		};
 
 		public static Axis3D Next(this Axis3D axis) => axis switch
 		{ 
@@ -129,7 +87,6 @@ namespace MUtility
 			Axis3D.Z => Axis3D.X,
 			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null) 			
 		};
-
 
 		public static Axis3D Previous(this Axis3D axis) => axis switch
 		{

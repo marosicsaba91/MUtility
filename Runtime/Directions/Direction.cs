@@ -1,31 +1,33 @@
-﻿namespace MUtility
+﻿using UnityEngine;
+
+namespace MUtility
 {
 	public enum HorizontalDirection
 	{
 		Right = 1,
-		Left = 5
+		Left = -1
 	}
 
 	public enum VerticalDirection
 	{
-		Down = 3,
-		Up = 7
+		Down = -1,
+		Up = 1
 	}
 
 	public enum GeneralDirection2D
 	{
-		Right = 1,
-		Down = 3,
-		Left = 5,
-		Up = 7
+		Right = 0,
+		Down = 1,
+		Left = 2,
+		Up = 3
 	}
 
 	public enum DiagonalDirection2D
 	{
 		UpRight = 0,
-		DownRight = 2,
-		DownLeft = 4,
-		UpLeft = 6,
+		DownRight = 1,
+		DownLeft = 2,
+		UpLeft = 3,
 	}
 
 	public enum Direction2D
@@ -42,47 +44,47 @@
 
 	public enum GeneralDirection3D
 	{
-		Right = 1,
-		Down = 3,
-		Left = 5,
-		Up = 7,
-		Forward = 8,
-		Back = 9
+		Right = 0,
+		Down = 1,
+		Left = 2,
+		Up = 3,
+		Forward = 4,
+		Back = 5
 	}
 
 	public enum Direction3D
 	{
 		// General
-		Right = 1,
-		Down = 3,
-		Left = 5,
-		Up = 7,
-		Forward = 8,
-		Back = 9,
+		Right = 0,
+		Down = 1,
+		Left = 2,
+		Up = 3,
+		Forward = 4,
+		Back = 5,
 
 		// Diagonal Edge
-		RightUp = 10,
-		RightDown = 11,
-		RightForward = 12,
-		RightBack = 13,
-		LeftUp = 14,
-		LeftDown = 15,
-		LeftForward = 16,
-		LeftBack = 17,
-		UpForward = 18,
-		UpBack = 19,
-		DownForward = 20,
-		DownBack = 21,
+		RightUp = 6,
+		RightDown = 7,
+		RightForward = 8,
+		RightBack = 9,
+		LeftUp = 10,
+		LeftDown = 11,
+		LeftForward = 12,
+		LeftBack = 13,
+		UpForward = 14,
+		UpBack = 15,
+		DownForward = 16,
+		DownBack = 17,
 
 		// Diagonal Corner
-		RightUpForward = 22,
-		RightUpBack = 23,
-		RightDownForward = 24,
-		RightDownBack = 25,
-		LeftUpForward = 26,
-		LeftUpBack = 27,
-		LeftDownForward = 28,
-		LeftDownBack = 29,
+		RightUpForward = 18,
+		RightUpBack = 19,
+		RightDownForward = 20,
+		RightDownBack = 21,
+		LeftUpForward = 22,
+		LeftUpBack = 23,
+		LeftDownForward = 24,
+		LeftDownBack = 25,
 	}
 
 	public enum StepDirection
@@ -165,5 +167,17 @@
 			Direction2D.LeftUp,
 			Direction2D.Up
 		};
+
+		public static GeneralDirection3D GeneralDirection3DFromVector(Vector3Int vector) 
+		{
+			int ax = Mathf.Abs(vector.x);
+			int ay = Mathf.Abs(vector.y);
+			int az = Mathf.Abs(vector.z);
+			if (ax > ay && ax > az)
+				return vector.x > 0 ? GeneralDirection3D.Right : GeneralDirection3D.Left;
+			if (ay > ax && ay > az)
+				return vector.y > 0 ? GeneralDirection3D.Up : GeneralDirection3D.Down;
+			return vector.z > 0 ? GeneralDirection3D.Forward : GeneralDirection3D.Back;
+		}
 	}
 }
