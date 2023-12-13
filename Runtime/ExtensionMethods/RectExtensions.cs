@@ -1,10 +1,12 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MUtility
 {
 	public static class RectExtensions
 	{
+		const float standardVerticalSpacing = 2;
+		const float singleLineHeight = 16;
+
 		public static Rect Combine(this Rect self, Rect other)
 		{
 			float left = Mathf.Min(self.position.x, other.position.x);
@@ -71,8 +73,10 @@ namespace MUtility
 		public static Vector2 BottomPoint(this Rect self) => new(self.center.x, self.yMin);
 
 
-		public static void RemoveOneSpace(this ref Rect self, GeneralDirection2D side = GeneralDirection2D.Up) =>
-			self.RemoveSpace(EditorGUIUtility.standardVerticalSpacing, side);
+		public static void RemoveOneSpace(this ref Rect self, GeneralDirection2D side = GeneralDirection2D.Up)
+		{
+			self.RemoveSpace(standardVerticalSpacing, side);
+		}
 
 		public static void RemoveSpace(this ref Rect self, float space, GeneralDirection2D side = GeneralDirection2D.Up)
 		{
@@ -96,8 +100,10 @@ namespace MUtility
 			}
 		}
 
-		public static Rect SliceOutLine(this ref Rect self, GeneralDirection2D side = GeneralDirection2D.Up, bool addSpace = true) =>
-			self.SliceOut(EditorGUIUtility.singleLineHeight, side, addSpace);
+		public static Rect SliceOutLine(this ref Rect self, GeneralDirection2D side = GeneralDirection2D.Up, bool addSpace = true)
+		{
+			return self.SliceOut(singleLineHeight, side, addSpace);
+		}
 
 		public static Rect SliceOut(this ref Rect self, float pixels, GeneralDirection2D side = GeneralDirection2D.Up, bool addSpace = true)
 		{
@@ -108,7 +114,7 @@ namespace MUtility
 
 				float newHeight = self.height - pixels;
 				if (addSpace)
-					newHeight -= EditorGUIUtility.standardVerticalSpacing;
+					newHeight -= standardVerticalSpacing;
 				self.height = Mathf.Max(0, newHeight);
 
 				if (side == GeneralDirection2D.Up)
@@ -116,7 +122,7 @@ namespace MUtility
 					self.y += pixels;
 
 					if (addSpace)
-						self.y += EditorGUIUtility.standardVerticalSpacing;
+						self.y += standardVerticalSpacing;
 				}
 				else
 				{
@@ -126,7 +132,7 @@ namespace MUtility
 
 					slice.y = self.yMax;
 					if (addSpace)
-						slice.y += EditorGUIUtility.standardVerticalSpacing;
+						slice.y += standardVerticalSpacing;
 				}
 			}
 			else
@@ -134,14 +140,14 @@ namespace MUtility
 				slice.x = pixels;
 				float newWidth = self.width - pixels;
 				if (addSpace)
-					newWidth -= EditorGUIUtility.standardVerticalSpacing;
+					newWidth -= standardVerticalSpacing;
 				self.width = Mathf.Max(0, newWidth);
 
 				if (side == GeneralDirection2D.Right)
 				{
 					self.x += pixels;
 					if (addSpace)
-						self.x += EditorGUIUtility.standardVerticalSpacing;
+						self.x += standardVerticalSpacing;
 				}
 				else
 				{
@@ -150,7 +156,7 @@ namespace MUtility
 
 					slice.x = self.xMax;
 					if (addSpace)
-						slice.x += EditorGUIUtility.standardVerticalSpacing;
+						slice.x += standardVerticalSpacing;
 
 				}
 			}
