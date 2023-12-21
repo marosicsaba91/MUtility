@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace MUtility
 {
-	public readonly struct WireShape
+	public class WireShape
 	{
-		public enum DrawingType { Gizmo, Debug, Handle}
-		public readonly List<Vector3[]> polygons;
-
+		public enum DrawingType { Gizmo, Debug, Handle }
+		public readonly List<Vector3[]> polygons = new();
+		public WireShape() { }
 		public WireShape(List<Vector3[]> polygons)
 		{
 			this.polygons = polygons;
@@ -202,15 +202,15 @@ namespace MUtility
 		WireShape CreateCopy(Func<Vector3, Vector3> action)
 		{
 			List<Vector3[]> newPolygons = new(polygons.Count);
-			for (int i = 0; i < polygons.Count; i++) 
+			for (int i = 0; i < polygons.Count; i++)
 			{
 				Vector3[] originalPolygon = polygons[i];
 				Vector3[] newPolygon = new Vector3[originalPolygon.Length];
 				for (int j = 0; j < originalPolygon.Length; j++)
-				{ 
+				{
 					newPolygon[j] = action(originalPolygon[j]);
 				}
-				newPolygons.Add(newPolygon); 
+				newPolygons.Add(newPolygon);
 			}
 			return new WireShape(newPolygons);
 		}
