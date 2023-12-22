@@ -15,28 +15,64 @@ namespace MUtility
 
 		}
 
-		public static GeneralDirection3D GetPerpendicularRightHand(this GeneralDirection3D dir) => dir switch
+		//Perpendicular
+		public static GeneralDirection3D GetPerpendicularRight(this GeneralDirection3D dir, GeneralDirection3D dir2) => (dir, dir2) switch
 		{
-			GeneralDirection3D.Right => GeneralDirection3D.Down,
-			GeneralDirection3D.Up => GeneralDirection3D.Back,
-			GeneralDirection3D.Forward => GeneralDirection3D.Left,
-			GeneralDirection3D.Left => GeneralDirection3D.Forward,
-			GeneralDirection3D.Down => GeneralDirection3D.Right,
-			GeneralDirection3D.Back => GeneralDirection3D.Up,
-			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+			(GeneralDirection3D.Up, GeneralDirection3D.Forward) => GeneralDirection3D.Left,
+			(GeneralDirection3D.Up, GeneralDirection3D.Back) => GeneralDirection3D.Right,
+			(GeneralDirection3D.Up, GeneralDirection3D.Right) => GeneralDirection3D.Forward,
+			(GeneralDirection3D.Up, GeneralDirection3D.Left) => GeneralDirection3D.Back,
+			(GeneralDirection3D.Down, GeneralDirection3D.Forward) => GeneralDirection3D.Right,
+			(GeneralDirection3D.Down, GeneralDirection3D.Back) => GeneralDirection3D.Left,
+			(GeneralDirection3D.Down, GeneralDirection3D.Right) => GeneralDirection3D.Back,
+			(GeneralDirection3D.Down, GeneralDirection3D.Left) => GeneralDirection3D.Forward,
+			(GeneralDirection3D.Right, GeneralDirection3D.Forward) => GeneralDirection3D.Up,
+			(GeneralDirection3D.Right, GeneralDirection3D.Back) => GeneralDirection3D.Down,
+			(GeneralDirection3D.Right, GeneralDirection3D.Up) => GeneralDirection3D.Back,
+			(GeneralDirection3D.Right, GeneralDirection3D.Down) => GeneralDirection3D.Forward,
+			(GeneralDirection3D.Left, GeneralDirection3D.Forward) => GeneralDirection3D.Down,
+			(GeneralDirection3D.Left, GeneralDirection3D.Back) => GeneralDirection3D.Up,
+			(GeneralDirection3D.Left, GeneralDirection3D.Up) => GeneralDirection3D.Forward,
+			(GeneralDirection3D.Left, GeneralDirection3D.Down) => GeneralDirection3D.Back,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Right) => GeneralDirection3D.Down,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Left) => GeneralDirection3D.Up,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Up) => GeneralDirection3D.Right,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Down) => GeneralDirection3D.Left,
+			(GeneralDirection3D.Back, GeneralDirection3D.Right) => GeneralDirection3D.Up,
+			(GeneralDirection3D.Back, GeneralDirection3D.Left) => GeneralDirection3D.Down,
+			(GeneralDirection3D.Back, GeneralDirection3D.Up) => GeneralDirection3D.Left,
+			(GeneralDirection3D.Back, GeneralDirection3D.Down) => GeneralDirection3D.Right,
+			_ => throw new ArgumentException("Invalid direction combination: Not perpendicular")
 		};
 
 
-		//Perpendicular
-		public static GeneralDirection3D GetPerpendicularLeftHand(this GeneralDirection3D dir) => dir switch
+		public static GeneralDirection3D GetPerpendicularLeftHand(this GeneralDirection3D dir, GeneralDirection3D dir2) => (dir, dir2) switch
 		{
-			GeneralDirection3D.Right => GeneralDirection3D.Back,
-			GeneralDirection3D.Up => GeneralDirection3D.Left,
-			GeneralDirection3D.Forward => GeneralDirection3D.Down,
-			GeneralDirection3D.Left => GeneralDirection3D.Up,
-			GeneralDirection3D.Down => GeneralDirection3D.Forward,
-			GeneralDirection3D.Back => GeneralDirection3D.Right,
-			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+			(GeneralDirection3D.Up, GeneralDirection3D.Forward) => GeneralDirection3D.Right,
+			(GeneralDirection3D.Up, GeneralDirection3D.Back) => GeneralDirection3D.Left,
+			(GeneralDirection3D.Up, GeneralDirection3D.Right) => GeneralDirection3D.Back,
+			(GeneralDirection3D.Up, GeneralDirection3D.Left) => GeneralDirection3D.Forward,
+			(GeneralDirection3D.Down, GeneralDirection3D.Forward) => GeneralDirection3D.Left,
+			(GeneralDirection3D.Down, GeneralDirection3D.Back) => GeneralDirection3D.Right,
+			(GeneralDirection3D.Down, GeneralDirection3D.Right) => GeneralDirection3D.Forward,
+			(GeneralDirection3D.Down, GeneralDirection3D.Left) => GeneralDirection3D.Back,
+			(GeneralDirection3D.Right, GeneralDirection3D.Forward) => GeneralDirection3D.Down,
+			(GeneralDirection3D.Right, GeneralDirection3D.Back) => GeneralDirection3D.Up,
+			(GeneralDirection3D.Right, GeneralDirection3D.Up) => GeneralDirection3D.Forward,
+			(GeneralDirection3D.Right, GeneralDirection3D.Down) => GeneralDirection3D.Back,
+			(GeneralDirection3D.Left, GeneralDirection3D.Forward) => GeneralDirection3D.Up,
+			(GeneralDirection3D.Left, GeneralDirection3D.Back) => GeneralDirection3D.Down,
+			(GeneralDirection3D.Left, GeneralDirection3D.Up) => GeneralDirection3D.Back,
+			(GeneralDirection3D.Left, GeneralDirection3D.Down) => GeneralDirection3D.Forward,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Right) => GeneralDirection3D.Up,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Left) => GeneralDirection3D.Down,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Up) => GeneralDirection3D.Left,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Down) => GeneralDirection3D.Right,
+			(GeneralDirection3D.Back, GeneralDirection3D.Right) => GeneralDirection3D.Down,
+			(GeneralDirection3D.Back, GeneralDirection3D.Left) => GeneralDirection3D.Up,
+			(GeneralDirection3D.Back, GeneralDirection3D.Up) => GeneralDirection3D.Right,
+			(GeneralDirection3D.Back, GeneralDirection3D.Down) => GeneralDirection3D.Left,
+			_ => throw new ArgumentException("Invalid direction combination: Not perpendicular")
 		};
 
 		public static GeneralDirection3D Next(this GeneralDirection3D dir) => dir switch
