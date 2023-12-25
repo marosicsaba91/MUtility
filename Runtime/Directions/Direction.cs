@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MUtility
 {
@@ -168,7 +169,7 @@ namespace MUtility
 			Direction2D.Up
 		};
 
-		public static GeneralDirection3D GeneralDirection3DFromVector(Vector3Int vector) 
+		public static GeneralDirection3D GeneralDirection3DFromVector(Vector3Int vector)
 		{
 			int ax = Mathf.Abs(vector.x);
 			int ay = Mathf.Abs(vector.y);
@@ -178,6 +179,56 @@ namespace MUtility
 			if (ay > ax && ay > az)
 				return vector.y > 0 ? GeneralDirection3D.Up : GeneralDirection3D.Down;
 			return vector.z > 0 ? GeneralDirection3D.Forward : GeneralDirection3D.Back;
+		}
+
+		public static bool IsLeftHanded(
+			GeneralDirection3D right, GeneralDirection3D up, GeneralDirection3D forward)
+		{
+			SortDirectionsByAxis(right, up, forward, out GeneralDirection3D xDir, out GeneralDirection3D yDir, out GeneralDirection3D zXir);
+
+			if (yDir == GeneralDirection3D.Down)
+				xDir = xDir.Opposite();
+
+			return xDir == GeneralDirection3D.Right ^ zXir == GeneralDirection3D.Forward;
+
+		}
+
+		public static Axis3D OtherAxis(Axis3D a, Axis3D b) 
+		{
+			if(a!= Axis3D.X && b!= Axis3D.X)
+				return Axis3D.X;
+			if(a!= Axis3D.Y && b!= Axis3D.Y)
+				return Axis3D.Y;
+
+			return Axis3D.Z;
+		}
+
+		public static void SortDirectionsByAxis(
+			GeneralDirection3D d0, GeneralDirection3D d1, GeneralDirection3D d2,
+			out GeneralDirection3D xDir, out GeneralDirection3D yDir, out GeneralDirection3D zXir)
+		{
+			Axis3D a0 = d0.GetAxis();
+			Axis3D a1 = d1.GetAxis();
+			Axis3D a2 = d2.GetAxis();
+
+			xDir = d0;
+			yDir = d1;
+			zXir = d2;
+
+			if (a1 == Axis3D.X)
+				xDir = d1;
+			else if (a2 == Axis3D.X)
+				xDir = d2;
+
+			if (a0 == Axis3D.Y)
+				yDir = d0;
+			else if (a2 == Axis3D.Y)
+				yDir = d1;
+
+			if (a0 == Axis3D.Z)
+				zXir = d0;
+			else if (a1 == Axis3D.Z)
+				zXir = d1;
 		}
 	}
 }

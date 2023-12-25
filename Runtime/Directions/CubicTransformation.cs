@@ -43,7 +43,7 @@ namespace MUtility
 			Axis3D verticalAxis = up.GetAxis();
 			Axis3D forwardAxis = forward.GetAxis();
 			if (verticalAxis == forwardAxis)
-				throw new ArgumentException("Up and Forward direction must be perpendicular");
+				throw new ArgumentException($"Up and Forward direction must be perpendicular: {up} {forward}");
 
 			GeneralDirection3D rightWithoutRotation = GetRightDirectionWithoutRotation(up);
 			GeneralDirection3D forwardWithoutRotation = GetForwardDirectionWithoutRotation(up);
@@ -92,16 +92,37 @@ namespace MUtility
 			return new CubicTransformation(up, rotation, mirror);
 		}
 
-		public static CubicTransformation FromRightForward(GeneralDirection3D right, GeneralDirection3D forward, bool mirror = false)
+		public static CubicTransformation FromDirections(
+			GeneralDirection3D right,
+			GeneralDirection3D up,
+			GeneralDirection3D forward)
 		{
-			Axis3D forwardAxis = forward.GetAxis();
-			Axis3D rightAxis = right.GetAxis();
-			if (forwardAxis == rightAxis)
-				throw new ArgumentException("Right and Forward direction must be perpendicular");
+			CubicTransformation result = FromUpForward(up, forward);
+			GeneralDirection3D resultRight = result.TransformDirection(GeneralDirection3D.Right);
 
-			GeneralDirection3D up = right.GetPerpendicularRight(forward);
-			return FromRightUp(right, up, mirror);
+			if (resultRight == right)
+			{
+				Debug.Log($"Left Handed:  {right} {up} {forward}");
+				return result;
+			}
+			if (resultRight == right.Opposite())
+			{
+				Debug.Log($"Right Handed:  {right} {up} {forward}");
+				result.verticalFlip = true;
+				result.upDirection = up.Opposite();
+				result.verticalRotation = (4 - result.verticalRotation) % 4;
+				return result;
+			}
+
+			// Error:
+			GeneralDirection3D resultUp = result.upDirection;
+			GeneralDirection3D resultForward = result.TransformDirection(GeneralDirection3D.Forward);
+			throw new ArgumentException(
+				$"Directions are not valid: " +
+				$"{right} {up} {forward} - " +
+				$"{resultRight} {resultUp} {resultForward}");
 		}
+
 
 		static GeneralDirection3D GetForwardDirectionWithoutRotation(GeneralDirection3D upDirection) => upDirection switch
 		{
