@@ -102,12 +102,12 @@ namespace MUtility
 
 			if (resultRight == right)
 			{
-				Debug.Log($"Left Handed:  {right} {up} {forward}");
+				//Debug.Log($"Left Handed:  {right} {up} {forward}");
 				return result;
 			}
 			if (resultRight == right.Opposite())
 			{
-				Debug.Log($"Right Handed:  {right} {up} {forward}");
+				//Debug.Log($"Right Handed:  {right} {up} {forward}");
 				result.verticalFlip = true;
 				result.upDirection = up.Opposite();
 				result.verticalRotation = (4 - result.verticalRotation) % 4;
