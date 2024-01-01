@@ -49,5 +49,17 @@ namespace MUtility
 			transform.localScale = matrix.lossyScale;
 		}
 
+		public  static bool CloseEnough(this Matrix4x4 matrix, Matrix4x4 other) 
+		{
+			const float epsilon = 0.0001f;
+			for (int i = 0; i < 16; i++)
+				if (Mathf.Abs(matrix[i] - other[i]) > epsilon)
+				{
+					Debug.Log($"Matrix not close enough: {i}:    {matrix[i]} != {other[i]}");
+					return false;
+				}
+			return true;
+		}
+
 	}
 }

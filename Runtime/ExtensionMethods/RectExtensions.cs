@@ -117,14 +117,7 @@ namespace MUtility
 					newHeight -= standardVerticalSpacing;
 				self.height = Mathf.Max(0, newHeight);
 
-				if (side == GeneralDirection2D.Up)
-				{
-					self.y += pixels;
-
-					if (addSpace)
-						self.y += standardVerticalSpacing;
-				}
-				else
+				if (side == GeneralDirection2D.Down)
 				{
 
 					if (newHeight < 0)
@@ -134,30 +127,37 @@ namespace MUtility
 					if (addSpace)
 						slice.y += standardVerticalSpacing;
 				}
+				else
+				{
+					self.y += pixels;
+
+					if (addSpace)
+						self.y += standardVerticalSpacing;
+				}
 			}
 			else
 			{
-				slice.x = pixels;
+				slice.width = pixels;
 				float newWidth = self.width - pixels;
-				if (addSpace)
+				if (addSpace) 
 					newWidth -= standardVerticalSpacing;
 				self.width = Mathf.Max(0, newWidth);
 
 				if (side == GeneralDirection2D.Right)
-				{
-					self.x += pixels;
-					if (addSpace)
-						self.x += standardVerticalSpacing;
-				}
-				else
 				{
 					if (newWidth < 0)
 						self.x -= newWidth;
 
 					slice.x = self.xMax;
 					if (addSpace)
-						slice.x += standardVerticalSpacing;
+						self.width -= standardVerticalSpacing;
 
+				}
+				else
+				{
+					self.x += pixels;
+					if (addSpace)
+						self.x += standardVerticalSpacing;
 				}
 			}
 

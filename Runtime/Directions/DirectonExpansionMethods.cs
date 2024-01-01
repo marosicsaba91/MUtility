@@ -75,31 +75,29 @@ namespace MUtility
 			_ => throw new ArgumentException("Invalid direction combination: Not perpendicular")
 		};
 
-		public static GeneralDirection3D Next(this GeneralDirection3D dir) => dir switch
+		//Perpendicular
+		public static GeneralDirection3D GetPerpendicularNext(this GeneralDirection3D dir) => dir switch
 		{
 			GeneralDirection3D.Right => GeneralDirection3D.Up,
 			GeneralDirection3D.Up => GeneralDirection3D.Forward,
-			GeneralDirection3D.Forward => GeneralDirection3D.Left,
+			GeneralDirection3D.Forward => GeneralDirection3D.Right,
 			GeneralDirection3D.Left => GeneralDirection3D.Down,
 			GeneralDirection3D.Down => GeneralDirection3D.Back,
-			GeneralDirection3D.Back => GeneralDirection3D.Right,
+			GeneralDirection3D.Back => GeneralDirection3D.Left,
 			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
 		};
 
 
-		//Perpendicular
-		public static GeneralDirection3D Previous(this GeneralDirection3D dir) => dir switch
+		public static GeneralDirection3D GetPerpendicularPrevious(this GeneralDirection3D dir) => dir switch
 		{
-			GeneralDirection3D.Right => GeneralDirection3D.Back,
+			GeneralDirection3D.Right => GeneralDirection3D.Forward,
 			GeneralDirection3D.Up => GeneralDirection3D.Right,
 			GeneralDirection3D.Forward => GeneralDirection3D.Up,
-			GeneralDirection3D.Left => GeneralDirection3D.Forward,
+			GeneralDirection3D.Left => GeneralDirection3D.Back,
 			GeneralDirection3D.Down => GeneralDirection3D.Left,
 			GeneralDirection3D.Back => GeneralDirection3D.Down,
 			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
 		};
-
-
 
 		// Equals
 		public static bool Equals(this GeneralDirection2D self, GeneralDirection3D dir) => self switch

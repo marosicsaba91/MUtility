@@ -45,10 +45,10 @@ namespace MUtility
 
 	public enum GeneralDirection3D
 	{
-		Right = 0,
+		Up = 0,
 		Down = 1,
-		Left = 2,
-		Up = 3,
+		Right = 2,
+		Left = 3,
 		Forward = 4,
 		Back = 5
 	}
@@ -56,10 +56,10 @@ namespace MUtility
 	public enum Direction3D
 	{
 		// General
-		Right = 0,
+		Up = 0,
 		Down = 1,
-		Left = 2,
-		Up = 3,
+		Right = 2,
+		Left = 3,
 		Forward = 4,
 		Back = 5,
 
@@ -106,10 +106,10 @@ namespace MUtility
 
 		public static readonly GeneralDirection3D[] generalDirection3DValues =
 		{
-			GeneralDirection3D.Right,
-			GeneralDirection3D.Down,
-			GeneralDirection3D.Left,
 			GeneralDirection3D.Up,
+			GeneralDirection3D.Down,
+			GeneralDirection3D.Right,
+			GeneralDirection3D.Left,
 			GeneralDirection3D.Forward,
 			GeneralDirection3D.Back
 		};
@@ -125,10 +125,10 @@ namespace MUtility
 		public static readonly Direction3D[] direction3DValues =
 		{
 			// General
-			Direction3D.Right,
-			Direction3D.Down,
-			Direction3D.Left,
 			Direction3D.Up,
+			Direction3D.Down,
+			Direction3D.Right,
+			Direction3D.Left,
 			Direction3D.Forward,
 			Direction3D.Back,
 
@@ -181,17 +181,39 @@ namespace MUtility
 			return vector.z > 0 ? GeneralDirection3D.Forward : GeneralDirection3D.Back;
 		}
 
-		public static bool IsLeftHanded(
-			GeneralDirection3D right, GeneralDirection3D up, GeneralDirection3D forward)
+		public static bool IsLeftHanded(GeneralDirection3D right, GeneralDirection3D up, GeneralDirection3D forward) => (right, up) switch
 		{
-			SortDirectionsByAxis(right, up, forward, out GeneralDirection3D xDir, out GeneralDirection3D yDir, out GeneralDirection3D zXir);
+			(GeneralDirection3D.Right, GeneralDirection3D.Up) => forward == GeneralDirection3D.Forward,
+			(GeneralDirection3D.Right, GeneralDirection3D.Down) => forward == GeneralDirection3D.Back,
+			(GeneralDirection3D.Right, GeneralDirection3D.Forward) => forward == GeneralDirection3D.Down,
+			(GeneralDirection3D.Right, GeneralDirection3D.Back) => forward == GeneralDirection3D.Up,
 
-			if (yDir == GeneralDirection3D.Down)
-				xDir = xDir.Opposite();
+			(GeneralDirection3D.Left, GeneralDirection3D.Up) => forward == GeneralDirection3D.Back,
+			(GeneralDirection3D.Left, GeneralDirection3D.Down) => forward == GeneralDirection3D.Forward,
+			(GeneralDirection3D.Left, GeneralDirection3D.Forward) => forward == GeneralDirection3D.Up,
+			(GeneralDirection3D.Left, GeneralDirection3D.Back) => forward == GeneralDirection3D.Down,
 
-			return xDir == GeneralDirection3D.Right ^ zXir == GeneralDirection3D.Forward;
+			(GeneralDirection3D.Forward, GeneralDirection3D.Up) => forward == GeneralDirection3D.Left,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Down) => forward == GeneralDirection3D.Right,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Right) => forward == GeneralDirection3D.Up,
+			(GeneralDirection3D.Forward, GeneralDirection3D.Left) => forward == GeneralDirection3D.Down,
 
-		}
+			(GeneralDirection3D.Back, GeneralDirection3D.Up) => forward == GeneralDirection3D.Right,
+			(GeneralDirection3D.Back, GeneralDirection3D.Down) => forward == GeneralDirection3D.Left,
+			(GeneralDirection3D.Back, GeneralDirection3D.Right) => forward == GeneralDirection3D.Down,
+			(GeneralDirection3D.Back, GeneralDirection3D.Left) => forward == GeneralDirection3D.Up,
+
+			(GeneralDirection3D.Up, GeneralDirection3D.Right) => forward == GeneralDirection3D.Back,
+			(GeneralDirection3D.Up, GeneralDirection3D.Left) => forward == GeneralDirection3D.Forward,
+			(GeneralDirection3D.Up, GeneralDirection3D.Forward) => forward == GeneralDirection3D.Right,
+			(GeneralDirection3D.Up, GeneralDirection3D.Back) => forward == GeneralDirection3D.Left,
+
+			(GeneralDirection3D.Down, GeneralDirection3D.Right) => forward == GeneralDirection3D.Forward,
+			(GeneralDirection3D.Down, GeneralDirection3D.Left) => forward == GeneralDirection3D.Back,
+			(GeneralDirection3D.Down, GeneralDirection3D.Forward) => forward == GeneralDirection3D.Left,
+			(GeneralDirection3D.Down, GeneralDirection3D.Back) => forward == GeneralDirection3D.Right,
+			_ => throw new ArgumentOutOfRangeException($"Invalid combination of right, up and forward directions: {right}, {up}, {forward}")
+		};
 
 		public static Axis3D OtherAxis(Axis3D a, Axis3D b) 
 		{

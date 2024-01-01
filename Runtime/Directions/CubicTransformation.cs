@@ -3,11 +3,10 @@ using UnityEngine;
 
 namespace MUtility
 {
-
 	[Serializable]
 	public struct CubicTransformation
 	{
-		// There is 48 possible transformations: 6 directions * 4 rotations * 2 flips
+		// There is 48 possible transformations: 6 directions * 4 rotations * 2 (mirrored or not)
 
 		// In Left handed coordinate system
 		// If No Rotation:
@@ -18,37 +17,34 @@ namespace MUtility
 
 		public GeneralDirection3D upDirection;
 		[Range(0, 3)] public int verticalRotation;
-		public bool verticalFlip;
+		public bool isVerticalFlipped;
 
 		public const int allTransformationCount = 48;
 
-		public CubicTransformation(GeneralDirection3D upDirection, int verticalRotation, bool verticalFlip)
+		public CubicTransformation(GeneralDirection3D upDirection, int verticalRotation, bool isVerticalFlipped)
 		{
 			this.upDirection = upDirection;
 			this.verticalRotation = verticalRotation % 4;
-			this.verticalFlip = verticalFlip;
+			this.isVerticalFlipped = isVerticalFlipped;
 		}
 
 		public CubicTransformation(byte cubicTransformationIndex)
 		{
-			verticalFlip = cubicTransformationIndex % 2 == 1;
+			isVerticalFlipped = cubicTransformationIndex % 2 == 1;
 			cubicTransformationIndex /= 2;
 			verticalRotation = cubicTransformationIndex % 4;
 			cubicTransformationIndex /= 4;
-			upDirection = (GeneralDirection3D)cubicTransformationIndex;
+			upDirection = (GeneralDirection3D)(cubicTransformationIndex % 6);
 		}
 
 		public static CubicTransformation FromUpForward(GeneralDirection3D up, GeneralDirection3D forward, bool mirror = false)
 		{
-			Axis3D verticalAxis = up.GetAxis();
-			Axis3D forwardAxis = forward.GetAxis();
-			if (verticalAxis == forwardAxis)
-				throw new ArgumentException($"Up and Forward direction must be perpendicular: {up} {forward}");
+			if (mirror)
+				up = up.Opposite();
 
 			GeneralDirection3D rightWithoutRotation = GetRightDirectionWithoutRotation(up);
 			GeneralDirection3D forwardWithoutRotation = GetForwardDirectionWithoutRotation(up);
 
-			// Calculate rotation
 			int rotation;
 			if (forward == forwardWithoutRotation)
 				rotation = 0;
@@ -59,19 +55,13 @@ namespace MUtility
 			else
 				rotation = 3;
 
-			if (mirror)
-				up = up.Opposite();
-
 			return new CubicTransformation(up, rotation, mirror);
-
 		}
 
 		public static CubicTransformation FromRightUp(GeneralDirection3D right, GeneralDirection3D up, bool mirror = false)
 		{
-			Axis3D verticalAxis = up.GetAxis();
-			Axis3D rightAxis = right.GetAxis();
-			if (verticalAxis == rightAxis)
-				throw new ArgumentException("Right and Up direction must be perpendicular");
+			if (mirror)
+				up = up.Opposite();
 
 			GeneralDirection3D rightWithoutRotation = GetRightDirectionWithoutRotation(up);
 			GeneralDirection3D forwardWithoutRotation = GetForwardDirectionWithoutRotation(up);
@@ -86,43 +76,11 @@ namespace MUtility
 			else
 				rotation = 1;
 
-			if (mirror)
-				up = up.Opposite();
-
 			return new CubicTransformation(up, rotation, mirror);
 		}
 
-		public static CubicTransformation FromDirections(
-			GeneralDirection3D right,
-			GeneralDirection3D up,
-			GeneralDirection3D forward)
-		{
-			CubicTransformation result = FromUpForward(up, forward);
-			GeneralDirection3D resultRight = result.TransformDirection(GeneralDirection3D.Right);
-
-			if (resultRight == right)
-			{
-				//Debug.Log($"Left Handed:  {right} {up} {forward}");
-				return result;
-			}
-			if (resultRight == right.Opposite())
-			{
-				//Debug.Log($"Right Handed:  {right} {up} {forward}");
-				result.verticalFlip = true;
-				result.upDirection = up.Opposite();
-				result.verticalRotation = (4 - result.verticalRotation) % 4;
-				return result;
-			}
-
-			// Error:
-			GeneralDirection3D resultUp = result.upDirection;
-			GeneralDirection3D resultForward = result.TransformDirection(GeneralDirection3D.Forward);
-			throw new ArgumentException(
-				$"Directions are not valid: " +
-				$"{right} {up} {forward} - " +
-				$"{resultRight} {resultUp} {resultForward}");
-		}
-
+		public static CubicTransformation FromDirections(GeneralDirection3D right, GeneralDirection3D up, GeneralDirection3D forward)
+			=> FromUpForward(up, forward, !DirectionUtility.IsLeftHanded(right, up, forward));
 
 		static GeneralDirection3D GetForwardDirectionWithoutRotation(GeneralDirection3D upDirection) => upDirection switch
 		{
@@ -146,12 +104,11 @@ namespace MUtility
 			_ => GeneralDirection3D.Forward
 		};
 
-		public byte GetIndex() => (byte)((int)upDirection * 8 + (verticalRotation % 4) * 2 + (verticalFlip ? 1 : 0));
-
-		static readonly Matrix4x4 rightToLeftHanded =
-			Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(-90, 0, 0), new(-1, -1, 1));
+		public byte ToByte() => (byte)((int)upDirection * 8 + (verticalRotation % 4) * 2 + (isVerticalFlipped ? 1 : 0));
 
 		public static readonly CubicTransformation identity = new(GeneralDirection3D.Up, 0, false);
+
+		static readonly Matrix4x4 rightToLeftHanded = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(-90, 0, 0), new(-1, -1, 1));
 
 		public Matrix4x4 GetTransformationMatrix(bool fromRightHanded = false)
 		{
@@ -162,11 +119,12 @@ namespace MUtility
 			Quaternion rotation = Quaternion.LookRotation(forwardVector, upVector);
 			rotation *= Quaternion.Euler(0, verticalRotation * 90, 0);
 
-			Vector3Int scale = verticalFlip ? new Vector3Int(1, -1, 1) : Vector3Int.one;
+			Vector3Int scale = isVerticalFlipped ? new Vector3Int(1, -1, 1) : Vector3Int.one;
 
 			Matrix4x4 result = Matrix4x4.TRS(Vector3.zero, rotation, scale);
 			if (fromRightHanded)
 				result *= rightToLeftHanded;
+
 			return result;
 		}
 
@@ -178,9 +136,9 @@ namespace MUtility
 		public GeneralDirection3D TransformDirection(GeneralDirection3D localDir)
 		{
 			if (localDir == GeneralDirection3D.Up)
-				return verticalFlip ? upDirection.Opposite() : upDirection;
+				return isVerticalFlipped ? upDirection.Opposite() : upDirection;
 			if (localDir == GeneralDirection3D.Down)
-				return verticalFlip ? upDirection : upDirection.Opposite();
+				return isVerticalFlipped ? upDirection : upDirection.Opposite();
 
 			GeneralDirection3D localForward = GetForwardDirectionWithoutRotation(upDirection);
 			GeneralDirection3D localRight = GetRightDirectionWithoutRotation(upDirection);
@@ -217,6 +175,12 @@ namespace MUtility
 			return localDir;
 		}
 
+		public GeneralDirection3D Up => isVerticalFlipped ? upDirection.Opposite() : upDirection;
+		public GeneralDirection3D Down => isVerticalFlipped ? upDirection : upDirection.Opposite();
+		public GeneralDirection3D Right => TransformDirection(GeneralDirection3D.Right);
+		public GeneralDirection3D Left => TransformDirection(GeneralDirection3D.Left);
+		public GeneralDirection3D Forward => TransformDirection(GeneralDirection3D.Forward);
+		public GeneralDirection3D Back => TransformDirection(GeneralDirection3D.Back);
 
 		/// <summary>
 		/// Generate local direction from world direction
@@ -228,9 +192,9 @@ namespace MUtility
 			//Generate Inverse Transformation Function based on TransformDirection
 
 			if (worldDir == upDirection)
-				return verticalFlip ? GeneralDirection3D.Down : GeneralDirection3D.Up;
+				return isVerticalFlipped ? GeneralDirection3D.Down : GeneralDirection3D.Up;
 			if (worldDir == upDirection.Opposite())
-				return verticalFlip ? GeneralDirection3D.Up : GeneralDirection3D.Down;
+				return isVerticalFlipped ? GeneralDirection3D.Up : GeneralDirection3D.Down;
 
 			GeneralDirection3D localForward = GetForwardDirectionWithoutRotation(upDirection);
 			GeneralDirection3D localRight = GetRightDirectionWithoutRotation(upDirection);
@@ -264,5 +228,113 @@ namespace MUtility
 
 			return worldDir;
 		}
+		public static bool operator ==(CubicTransformation a, CubicTransformation b) => a.upDirection == b.upDirection && a.verticalRotation == b.verticalRotation && a.isVerticalFlipped == b.isVerticalFlipped;
+		public static bool operator !=(CubicTransformation a, CubicTransformation b) => !(a == b);
+		public override bool Equals(object obj) => obj is CubicTransformation other && this == other;
+		public override int GetHashCode() => upDirection.GetHashCode() ^ verticalRotation.GetHashCode() ^ isVerticalFlipped.GetHashCode();
+
+		public override string ToString() => $"Up: {upDirection},   Vertical Flip: {isVerticalFlipped},   Rotation: {verticalRotation}";
+
+		public void Mirror(Axis3D axis)
+		{
+			isVerticalFlipped = !isVerticalFlipped;
+			Axis3D upAxis = upDirection.GetAxis();
+			if (axis == upAxis) return;
+
+			bool upPositive = upDirection.IsPositive() ^ !isVerticalFlipped;
+			int rotation = (axis.Next() == upAxis) ^ upPositive ^ isVerticalFlipped ? 3 : 1;
+
+			verticalRotation = (verticalRotation + rotation) % 4;
+			upDirection = upDirection.Opposite();
+		}
+
+		public void Turn(Axis3D axis, int leftHandedTurnCount)
+		{
+			leftHandedTurnCount %= 4;
+			if (leftHandedTurnCount == 0) return;
+
+			if (leftHandedTurnCount < 0)
+				leftHandedTurnCount += 4;
+
+			if (leftHandedTurnCount == 1)
+				TurnPositiveLeftHanded(axis);
+			else if (leftHandedTurnCount == 2)
+				TurnHalf(axis);
+			else if (leftHandedTurnCount == 3)
+				TurnNegativeLeftHanded(axis);
+		}
+
+		public void TurnHalf(Axis3D axis)
+		{
+			Axis3D upAxis = upDirection.GetAxis();
+			if (axis == upAxis)
+			{
+				verticalRotation = (verticalRotation + 2) % 4;
+			}
+			else if (axis.Next() == upAxis)
+			{
+				upDirection = upDirection.Opposite();
+				int turn = upDirection.IsPositive() ? 3 : 1;
+				verticalRotation = (verticalRotation + turn) % 4;
+			}
+			else
+			{
+				upDirection = upDirection.Opposite();
+				int turn = upDirection.IsPositive() ? 1 : 3;
+				verticalRotation = (verticalRotation + turn) % 4;
+			}
+		}
+
+		public void Turn(Axis3D axis, bool leftHandedPositive)
+		{
+			if (leftHandedPositive)
+				TurnPositiveLeftHanded(axis);
+			else
+				TurnNegativeLeftHanded(axis);
+		}
+
+		public void TurnPositiveLeftHanded(Axis3D axis)
+		{
+			Axis3D upAxis = upDirection.GetAxis();
+			if (axis == upAxis)
+			{
+				int rotations = axis.Next() == upAxis ^ upDirection.IsPositive() ? 1 : 3;
+				verticalRotation = (verticalRotation + rotations) % 4;
+			}
+			else if (axis.Next() == upAxis)
+			{
+				upDirection = upDirection.GetPerpendicularNext();
+				int turn = upDirection.IsPositive() ? 3 : 1;
+				verticalRotation = (verticalRotation + turn) % 4;
+			}
+			else
+			{
+				upDirection = upDirection.GetPerpendicularPrevious().Opposite();
+				verticalRotation = (verticalRotation + 2) % 4;
+			}
+		}
+		public void TurnNegativeLeftHanded(Axis3D axis)
+		{
+			Axis3D upAxis = upDirection.GetAxis();
+			if (axis == upAxis)
+			{
+				int rotations = axis.Next() == upAxis ^ upDirection.IsPositive() ? 3 : 1;
+				verticalRotation = (verticalRotation + rotations) % 4;
+			}
+			else if (axis.Next() == upAxis)
+			{
+				upDirection = upDirection.GetPerpendicularNext().Opposite();
+				int turn = 2;
+				verticalRotation = (verticalRotation + turn) % 4;
+			}
+			else
+			{
+				upDirection = upDirection.GetPerpendicularPrevious();
+				int turn = upDirection.IsPositive() ? 1 : 3;
+				verticalRotation = (verticalRotation + turn) % 4;
+			}
+		}
+
+
 	}
 }

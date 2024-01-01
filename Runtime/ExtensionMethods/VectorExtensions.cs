@@ -329,5 +329,14 @@ namespace MUtility
 			else
 				throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
 		}
+
+		public static bool CloseEnough(this Vector3 vector, Vector3 other, float epsilon = 0.0001f) =>
+			Mathf.Abs(vector.x - other.x) < epsilon &&
+			Mathf.Abs(vector.y - other.y) < epsilon &&
+			Mathf.Abs(vector.z - other.z) < epsilon;
+
+		public static bool CloseEnough(this Vector2 vector, Vector2 other, float epsilon = 0.0001f) =>
+			Mathf.Abs(vector.x - other.x) < epsilon &&
+			Mathf.Abs(vector.y - other.y) < epsilon;
 	}
 }
