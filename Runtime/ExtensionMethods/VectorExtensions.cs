@@ -338,5 +338,16 @@ namespace MUtility
 		public static bool CloseEnough(this Vector2 vector, Vector2 other, float epsilon = 0.0001f) =>
 			Mathf.Abs(vector.x - other.x) < epsilon &&
 			Mathf.Abs(vector.y - other.y) < epsilon;
+
+		public static void RoundToDecimal(this ref Vector3 vector, int digits = 0) 
+		{
+			vector.x = RoundToDecimalF(vector.x);
+			vector.y = RoundToDecimalF(vector.y);
+			vector.z = RoundToDecimalF(vector.z);
+
+			float RoundToDecimalF(float value) =>
+				(float) Math.Round(value, digits);
+		}
+
 	}
 }
