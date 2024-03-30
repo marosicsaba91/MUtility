@@ -56,9 +56,9 @@ namespace MUtility
 				polygon[i] = origin + (Mathf.Sin(phase) * up + Mathf.Cos(phase) * right);
 			}
 			polygon[points - 1] = polygon[0];
-			WireShape arrowDrawable = new Arrow(origin, normal, radius).ToWireShape();
+			// WireShape arrowDrawable = new Arrow(origin, normal, radius).ToWireShape();
+			// plainDrawable.Merge(arrowDrawable);
 			WireShape plainDrawable = new(polygon);
-			plainDrawable.Merge(arrowDrawable);
 			return plainDrawable;
 		}
 
