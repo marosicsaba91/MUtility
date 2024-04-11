@@ -254,6 +254,22 @@ namespace MUtility
 			return vector;
 		}
 
+		public static Vector3 Abs(this Vector3 vector)
+		{
+			vector.x = Mathf.Abs(vector.x);
+			vector.y = Mathf.Abs(vector.y);
+			vector.z = Mathf.Abs(vector.z);
+			return vector;
+		}
+
+		public static Vector3 Sign(this Vector3 vector)
+		{
+			vector.x = Mathf.Sign(vector.x);
+			vector.y = Mathf.Sign(vector.y);
+			vector.z = Mathf.Sign(vector.z);
+			return vector;
+		}
+
 		public static float Mean(this Vector2 vector) => (vector.x + vector.y) / 2f;
 		public static float AbsMean(this Vector2 vector) =>
 			(Mathf.Abs(vector.x) + Mathf.Abs(vector.y)) / 2f;

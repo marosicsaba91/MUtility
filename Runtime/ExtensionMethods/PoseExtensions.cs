@@ -32,5 +32,19 @@ namespace MUtility
 				Gizmos.DrawLine(start, end);
 			}
 		}
+
+
+		public static Pose Lerp(this Pose a, Pose b, float t)
+		{
+			Vector3 position = Vector3.Lerp(a.position, b.position, t);
+			Quaternion rotation = Quaternion.Lerp(a.rotation, b.rotation, t);
+			return new Pose(position, rotation);
+		}
+
+		public static Vector3 TransformVector(this Pose pose, Vector3 localVector)
+			=> pose.rotation * localVector;
+
+		public static Vector3 TransformPosition(this Pose pose, Vector3 localVector)
+			=> pose.rotation * localVector + pose.position; 
 	}
 }
