@@ -309,7 +309,8 @@ namespace MUtility
 		}
 
 
-		public static Pose GetPose(this Transform transform) => new (transform.position, transform.rotation);
+		public static Pose GetPose(this Transform transform) => new(transform.position, transform.rotation);
+		public static Pose GetLocalPose(this Transform transform) => new(transform.localPosition, transform.localRotation);
 
 		public static Pose TransformPose(this Transform transform, Pose localPose) => new ()
 		{

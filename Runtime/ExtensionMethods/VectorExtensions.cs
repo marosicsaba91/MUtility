@@ -21,33 +21,33 @@ namespace MUtility
 
 		public static Vector2 ToVector2(this Vector3 vector, Axis3D deleteAxis) => deleteAxis switch
 		{
-			Axis3D.X => new Vector2(vector.y, vector.z),
-			Axis3D.Y => new Vector2(vector.x, vector.z),
-			Axis3D.Z => new Vector2(vector.x, vector.y),
+			Axis3D.X => new(vector.y, vector.z),
+			Axis3D.Y => new(vector.x, vector.z),
+			Axis3D.Z => new(vector.x, vector.y),
 			_ => throw new ArgumentOutOfRangeException(nameof(deleteAxis), deleteAxis, null),
 		};
 
 		public static Vector3 ToVector3(this Vector2 vector, float newValue, Axis3D newAxis) => newAxis switch
 		{
-			Axis3D.X => new Vector3(newValue, vector.x, vector.y),
-			Axis3D.Y => new Vector3(vector.x, newValue, vector.y),
-			Axis3D.Z => new Vector3(vector.x, vector.y, newValue),
+			Axis3D.X => new(newValue, vector.x, vector.y),
+			Axis3D.Y => new(vector.x, newValue, vector.y),
+			Axis3D.Z => new(vector.x, vector.y, newValue),
 			_ => throw new ArgumentOutOfRangeException(nameof(newAxis), newAxis, null),
 		};
 
 		public static Vector2Int ToVector2Int(this Vector3Int vector, Axis3D deleteAxis) => deleteAxis switch
 		{
-			Axis3D.X => new Vector2Int(vector.y, vector.z),
-			Axis3D.Y => new Vector2Int(vector.x, vector.z),
-			Axis3D.Z => new Vector2Int(vector.x, vector.y),
+			Axis3D.X => new(vector.y, vector.z),
+			Axis3D.Y => new(vector.x, vector.z),
+			Axis3D.Z => new(vector.x, vector.y),
 			_ => throw new ArgumentOutOfRangeException(nameof(deleteAxis), deleteAxis, null),
 		};
 
 		public static Vector3Int ToVector3Int(this Vector2Int vector, int newValue, Axis3D newAxis) => newAxis switch
 		{
-			Axis3D.X => new Vector3Int(newValue, vector.x, vector.y),
-			Axis3D.Y => new Vector3Int(vector.x, newValue, vector.y),
-			Axis3D.Z => new Vector3Int(vector.x, vector.y, newValue),
+			Axis3D.X => new(newValue, vector.x, vector.y),
+			Axis3D.Y => new(vector.x, newValue, vector.y),
+			Axis3D.Z => new(vector.x, vector.y, newValue),
 			_ => throw new ArgumentOutOfRangeException(nameof(newAxis), newAxis, null),
 		};
 
@@ -73,6 +73,9 @@ namespace MUtility
 			v.y = sin * tx + cos * ty;
 			return v;
 		}
+
+		public static Vector3 ProjectTo(this Vector3 vector, Plane plane) =>
+			vector - plane.normal * Vector3.Dot(plane.normal, vector);
 
 
 		// Clamp vector
@@ -157,13 +160,13 @@ namespace MUtility
 
 
 
-		public static Vector2 MultiplyAllAxis(this Vector2 s, Vector2 v) => new(s.x * v.x, s.y * v.y);
-		public static Vector2 MultiplyAllAxis(this Vector2 s, Vector2Int v) => new(s.x * v.x, s.y * v.y);
+		public static Vector2 MultiplyAllAxis(this Vector2 s, Vector2 v) => s * v;
+		public static Vector2 MultiplyAllAxis(this Vector2 s, Vector2Int v) => s * v;
 		public static Vector2 MultiplyAllAxis(this Vector2 s, float x, float y) => new(s.x * x, s.y * y);
 
 
-		public static Vector2 MultiplyAllAxis(this Vector2Int s, Vector2 v) => new(s.x * v.x, s.y * v.y);
-		public static Vector2Int MultiplyAllAxis(this Vector2Int s, Vector2Int v) => new(s.x * v.x, s.y * v.y);
+		public static Vector2 MultiplyAllAxis(this Vector2Int s, Vector2 v) => s * v;
+		public static Vector2Int MultiplyAllAxis(this Vector2Int s, Vector2Int v) => s * v;
 		public static Vector2Int MultiplyAllAxis(this Vector2Int s, int x, int y) => new(s.x * x, s.y * y);
 		public static Vector2 MultiplyAllAxis(this Vector2Int s, float x, float y) => new(s.x * x, s.y * y);
 
@@ -177,7 +180,7 @@ namespace MUtility
 		public static Vector3Int MultiplyAllAxis(this Vector3Int s, Vector3Int v) => new(s.x * v.x, s.y * v.y, s.z * v.z);
 		public static Vector3Int MultiplyAllAxis(this Vector3Int s, int x, int y, int z) => new(s.x * x, s.y * y, s.z * z);
 		public static Vector3 MultiplyAllAxis(this Vector3Int s, float x, float y, float z) => new(s.x * x, s.y * y, s.z * z);
-		 
+
 		public static Vector3Int Rotate(this Vector3Int vector, Axis3D axis, int rotations90)
 		{
 			rotations90 = (rotations90 % 4 + 4) % 4;
@@ -297,7 +300,7 @@ namespace MUtility
 		public static Vector3 GetPerpendicular(this Vector3 dir)
 		{
 			dir.Normalize();
-			if(dir == Vector3.up || dir == Vector3Int.down)
+			if (dir == Vector3.up || dir == Vector3Int.down)
 				return Vector3.Cross(Vector3.right, dir);
 			return Vector3.Cross(Vector3.up, dir);
 		}
@@ -341,7 +344,7 @@ namespace MUtility
 			if (axis == Axis2D.Horizontal)
 				v.x = value;
 			else if (axis == Axis2D.Vertical)
-				v.y = value; 
+				v.y = value;
 			else
 				throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
 		}
@@ -355,14 +358,14 @@ namespace MUtility
 			Mathf.Abs(vector.x - other.x) < epsilon &&
 			Mathf.Abs(vector.y - other.y) < epsilon;
 
-		public static void RoundToDecimal(this ref Vector3 vector, int digits = 0) 
+		public static void RoundToDecimal(this ref Vector3 vector, int digits = 0)
 		{
 			vector.x = RoundToDecimalF(vector.x);
 			vector.y = RoundToDecimalF(vector.y);
 			vector.z = RoundToDecimalF(vector.z);
 
 			float RoundToDecimalF(float value) =>
-				(float) Math.Round(value, digits);
+				(float)Math.Round(value, digits);
 		}
 
 	}
