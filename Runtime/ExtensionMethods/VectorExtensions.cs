@@ -265,6 +265,9 @@ namespace MUtility
 			return vector;
 		}
 
+		public static float Longest(this Vector3 vector) =>
+			Mathf.Max(Mathf.Abs(vector.x), Mathf.Abs(vector.y), Mathf.Abs(vector.z));
+
 		public static Vector3 Sign(this Vector3 vector)
 		{
 			vector.x = Mathf.Sign(vector.x);
