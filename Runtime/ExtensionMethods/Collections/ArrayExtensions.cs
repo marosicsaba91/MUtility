@@ -37,6 +37,8 @@ namespace MUtility
 			return result;
 		}
 
+		public static void Clear<T>(this T[] array) => Array.Clear(array, 0, array.Length);
+
 		public static void CopyTo<T>(this T[] source, T[] destination) =>
 			Array.Copy(source, destination, Math.Min(source.Length, destination.Length));
 
