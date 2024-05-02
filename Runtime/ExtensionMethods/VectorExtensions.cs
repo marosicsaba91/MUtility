@@ -51,7 +51,6 @@ namespace MUtility
 			_ => throw new ArgumentOutOfRangeException(nameof(newAxis), newAxis, null),
 		};
 
-
 		public static float GetAngle(this Vector2 original)
 		{
 			float angle = Vector2.Angle(Vector2.right, original);
