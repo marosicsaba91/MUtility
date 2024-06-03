@@ -37,8 +37,8 @@ public class ContinuousTouch
 	public int Raycast2D(Camera camera, Collider2D[] colliders)
 	{
 		Vector2 origin = camera.ScreenToWorldPoint(singleTouchEvent.position);
-		Debug.Log(origin);
-		return Physics2D.OverlapPointNonAlloc(origin, colliders);
+		ContactFilter2D filter = new ContactFilter2D().NoFilter();
+		return Physics2D.OverlapPoint(origin, filter, colliders);
 	}
 }
 
