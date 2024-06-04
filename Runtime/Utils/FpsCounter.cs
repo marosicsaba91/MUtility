@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-namespace MarosiUtility
+namespace MUtility
 {
 	[RequireComponent(typeof(TMP_Text))]
 	public class FpsCounter : MonoBehaviour
