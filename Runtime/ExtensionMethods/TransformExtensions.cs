@@ -55,13 +55,9 @@ namespace MUtility
 			if (child != null)
 			{
 				if (Application.isPlaying)
-				{
 					Object.Destroy(child.gameObject);
-				}
 				else
-				{
 					Object.DestroyImmediate(child.gameObject);
-				}
 				return true;
 			}
 			return false;

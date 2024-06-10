@@ -250,29 +250,40 @@ namespace MUtility
 
 		public static Vector3Int Abs(this Vector3Int vector)
 		{
-			vector.x = Mathf.Abs(vector.x);
-			vector.y = Mathf.Abs(vector.y);
-			vector.z = Mathf.Abs(vector.z);
+			vector.x = vector.x >= 0 ? vector.x : -vector.x;
+			vector.y = vector.y >= 0 ? vector.y : -vector.y;
+			vector.z = vector.z >= 0 ? vector.z : -vector.z;
 			return vector;
 		}
 
 		public static Vector3 Abs(this Vector3 vector)
 		{
-			vector.x = Mathf.Abs(vector.x);
-			vector.y = Mathf.Abs(vector.y);
-			vector.z = Mathf.Abs(vector.z);
+			vector.x = vector.x >= 0 ? vector.x : -vector.x;
+			vector.y = vector.y >= 0 ? vector.y : -vector.y;
+			vector.z = vector.z >= 0 ? vector.z : -vector.z;
 			return vector;
 		}
 
 		public static float Longest(this Vector3 vector)
 		{
-			float x = Mathf.Abs(vector.x);
-			float y = Mathf.Abs(vector.y);
-			float z = Mathf.Abs(vector.z);
+			float x = vector.x >= 0 ? vector.x : -vector.x;
+			float y = vector.y >= 0 ? vector.y : -vector.y;
+			float z = vector.z >= 0 ? vector.z : -vector.z;
 
-			return 
+			return
 				x > y && x > z ? x :
 				y > z ? y :
+				z;
+		}
+		public static float Shortest(this Vector3 vector)
+		{
+			float x = vector.x >= 0 ? vector.x : -vector.x;
+			float y = vector.y >= 0 ? vector.y : -vector.y;
+			float z = vector.z >= 0 ? vector.z : -vector.z;
+
+			return
+				x < y && x < z ? x :
+				y < z ? y :
 				z;
 		}
 

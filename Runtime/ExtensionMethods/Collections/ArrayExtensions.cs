@@ -50,7 +50,13 @@ namespace MUtility
 
 		public static int IndexOf<T>(this T[] array, T value) => Array.IndexOf(array, value);
 
-		public static bool Contains<T>(this T[] array, T value) => Array.IndexOf(array, value) > -1;
+		public static bool Contains<T>(this T[] array, T value)
+		{
+			for (int i = 0; i < array.Length; i++)
+				if (array[i].Equals(value))
+					return true;
+			return false;
+		}
 
 		public static T[] SubArray<T>(this T[] data, int index, int length)
 		{
