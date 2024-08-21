@@ -63,5 +63,13 @@ namespace MUtility
 			if (index < 0) return source[0];
 			return source[index];
 		}
+
+		public static void AddOrRemove<T>(this List<T> dictionary, T value)
+		{
+			if (dictionary.Contains(value))
+				dictionary.Remove(value);
+			else
+				dictionary.Add(value);
+		}
 	}
 }

@@ -208,5 +208,13 @@ namespace MUtility
 			else
 				dictionary.Add(key, value);
 		}
+
+		public static void AddOrRemove<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+		{
+			if (dictionary.ContainsKey(key))
+				dictionary.Remove(key);
+			else
+				dictionary.Add(key, value);
+		}
 	}
 }
