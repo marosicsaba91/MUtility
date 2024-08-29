@@ -182,6 +182,40 @@ namespace MUtility
 		public GeneralDirection3D Forward => TransformDirection(GeneralDirection3D.Forward);
 		public GeneralDirection3D Back => TransformDirection(GeneralDirection3D.Back);
 
+
+		public Vector3 Vector_R => Right.ToVector();
+		public Vector3 Vector_L => Left.ToVector();
+		public Vector3 Vector_U => Up.ToVector();
+		public Vector3 Vector_D => Down.ToVector();
+		public Vector3 Vector_F => Forward.ToVector();
+		public Vector3 Vector_B => Back.ToVector();
+
+
+		public Vector3 Vector_RU => Up.ToVector() + Right.ToVector();
+		public Vector3 Vector_RD => Down.ToVector() + Right.ToVector();
+		public Vector3 Vector_RF => Right.ToVector() + Forward.ToVector();
+		public Vector3 Vector_RB => Right.ToVector() + Back.ToVector();
+		public Vector3 Vector_LU => Up.ToVector() + Left.ToVector();
+		public Vector3 Vector_LD => Down.ToVector() + Left.ToVector();
+		public Vector3 Vector_LF => Left.ToVector() + Forward.ToVector();
+		public Vector3 Vector_LB => Left.ToVector() + Back.ToVector();
+		public Vector3 Vector_UF => Up.ToVector() + Forward.ToVector();
+		public Vector3 Vector_UB => Up.ToVector() + Back.ToVector();
+		public Vector3 Vector_DF => Down.ToVector() + Forward.ToVector();
+		public Vector3 Vector_DB => Down.ToVector() + Back.ToVector();
+
+
+		public Vector3 Vector_RUF => Right.ToVector() + Up.ToVector() + Forward.ToVector();
+		public Vector3 Vector_RUB => Right.ToVector() + Up.ToVector() + Back.ToVector();
+		public Vector3 Vector_RDF => Right.ToVector() + Down.ToVector() + Forward.ToVector();
+		public Vector3 Vector_RDB => Right.ToVector() + Down.ToVector() + Back.ToVector();
+		public Vector3 Vector_LUF => Left.ToVector() + Up.ToVector() + Forward.ToVector();
+		public Vector3 Vector_LUB => Left.ToVector() + Up.ToVector() + Back.ToVector();
+		public Vector3 Vector_LDF => Left.ToVector() + Down.ToVector() + Forward.ToVector();
+		public Vector3 Vector_LDB => Left.ToVector() + Down.ToVector() + Back.ToVector();
+
+
+
 		/// <summary>
 		/// Generate local direction from world direction
 		/// </summary>
