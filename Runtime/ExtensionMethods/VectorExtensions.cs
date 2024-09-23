@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MUtility
@@ -389,6 +390,5 @@ namespace MUtility
 			float RoundToDecimalF(float value) =>
 				(float)Math.Round(value, digits);
 		}
-
 	}
 }
