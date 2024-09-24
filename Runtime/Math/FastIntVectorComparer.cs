@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Use it like this:
+// HashSet<Vector2Int> hashSet = new(FastVector2IntComparer.instance);
+// Dictionary<Vector3Int, Object> dictionary = new(FastVector3IntComparer.instance);
+
 public class FastVector2IntComparer : IEqualityComparer<Vector2Int>
 {
 	public static readonly FastVector2IntComparer instance = new();
