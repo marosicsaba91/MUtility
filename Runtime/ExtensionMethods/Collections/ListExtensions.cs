@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace MUtility
 {
@@ -37,7 +38,7 @@ namespace MUtility
 			int di = destinationIndex;
 			for (int si = sourceIndex; si < length; si++)
 			{
-				if (destinationCount >= di)
+				if (destinationCount <= di)
 					destination.Add(source[si]);
 				else
 					destination[di] = source[si];
