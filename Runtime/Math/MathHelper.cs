@@ -87,21 +87,23 @@ namespace MUtility
 			return new Vector3(outX, outY, outZ);
 		}
 
-		public static int Mod(int n, int m) => (n % m + m) % m;
+		// This modulo function is different from the % operator in C#.
+		// It always returns a positive number.
+		public static int ModuloPositive(int n, int m) => (n % m + m) % m;
 
-		public static float Mod(float n, float m) => (n % m + m) % m;
+		public static float ModuloPositive(float n, float m) => (n % m + m) % m;
 
-		public static Vector2Int Mod(Vector2Int n, int w, int h) =>
-			new(Mod(n.x, w), Mod(n.y, h));
+		public static Vector2Int ModuloPositive(Vector2Int n, int w, int h) =>
+			new(ModuloPositive(n.x, w), ModuloPositive(n.y, h));
 
-		public static Vector2 Mod(Vector2 n, float w, float h) =>
-			new(Mod(n.x, w), Mod(n.y, h));
+		public static Vector2 ModuloPositive(Vector2 n, float w, float h) =>
+			new(ModuloPositive(n.x, w), ModuloPositive(n.y, h));
 
-		public static Vector3Int Mod(Vector3Int n, int w, int h, int d) =>
-			new(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
+		public static Vector3Int ModuloPositive(Vector3Int n, int w, int h, int d) =>
+			new(ModuloPositive(n.x, w), ModuloPositive(n.y, h), ModuloPositive(n.z, d));
 
-		public static Vector3 Mod(Vector3 n, float w, float h, int d) =>
-			new(Mod(n.x, w), Mod(n.y, h), Mod(n.z, d));
+		public static Vector3 ModuloPositive(Vector3 n, float w, float h, int d) =>
+			new(ModuloPositive(n.x, w), ModuloPositive(n.y, h), ModuloPositive(n.z, d));
 
 
 		// Code duplication is for optimisation purposes.

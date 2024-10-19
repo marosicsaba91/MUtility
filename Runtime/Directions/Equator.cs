@@ -15,27 +15,19 @@ namespace MUtility
 	{
 		public static Equator FromAngle(float angle)
 		{
-			angle = MathHelper.Mod(angle, 360);
+			angle = MathHelper.ModuloPositive(angle, 360);
 
-			if (angle >= 315 || angle < 45)
-			{
+			if (angle is >= 315 or < 45)
 				return Equator.North;
-			}
 
-			if (angle >= 45 && angle < 135)
-			{
+			if (angle is >= 45 and < 135)
 				return Equator.West;
-			}
 
-			if (angle >= 135 && angle < 225)
-			{
+			if (angle is >= 135 and < 225)
 				return Equator.South;
-			}
 
-			if (angle >= 225 && angle < 315)
-			{
+			if (angle is >= 225 and < 315)
 				return Equator.East;
-			}
 
 			return Equator.North;
 		}

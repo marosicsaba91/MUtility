@@ -479,14 +479,14 @@ namespace MUtility
 		};
 
 		// Right
-		public static GeneralDirection2D Right(this GeneralDirection2D dir, int step) => (GeneralDirection2D)(MathHelper.Mod((int)dir + step, 4));
+		public static GeneralDirection2D Right(this GeneralDirection2D dir, int step) => (GeneralDirection2D)(MathHelper.ModuloPositive((int)dir + step, 4));
 
-		public static Direction2D Right(this Direction2D dir, int step) => (Direction2D)(MathHelper.Mod((int)dir + step, 8));
+		public static Direction2D Right(this Direction2D dir, int step) => (Direction2D)(MathHelper.ModuloPositive((int)dir + step, 8));
 
 		// Left
-		public static GeneralDirection2D Left(this GeneralDirection2D dir, int step) => (GeneralDirection2D)(MathHelper.Mod((int)dir - step, 4));
+		public static GeneralDirection2D Left(this GeneralDirection2D dir, int step) => (GeneralDirection2D)(MathHelper.ModuloPositive((int)dir - step, 4));
 
-		public static Direction2D Left(this Direction2D dir, int step) => (Direction2D)(MathHelper.Mod((int)dir - step, 8));
+		public static Direction2D Left(this Direction2D dir, int step) => (Direction2D)(MathHelper.ModuloPositive((int)dir - step, 8));
 
 
 		// Main of Diagonal 
@@ -662,9 +662,9 @@ namespace MUtility
 			else if (flip == Flip3D.Z)
 				vectorDir.z *= -1;
 
-			int x = MathHelper.Mod(rotation90.x, 4);
-			int y = MathHelper.Mod(rotation90.y, 4);
-			int z = MathHelper.Mod(rotation90.z, 4);
+			int x = MathHelper.ModuloPositive(rotation90.x, 4);
+			int y = MathHelper.ModuloPositive(rotation90.y, 4);
+			int z = MathHelper.ModuloPositive(rotation90.z, 4);
 			if (x == 1)
 			{
 				int temp = vectorDir.y;
