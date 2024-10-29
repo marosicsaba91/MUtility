@@ -32,55 +32,31 @@ namespace MUtility
 			return Equator.North;
 		}
 
-		public static int ToAngle(this Equator dir)
+		public static int ToAngle(this Equator dir) => dir switch
 		{
-			switch (dir)
-			{
-				case Equator.North:
-					return 0;
-				case Equator.West:
-					return 90;
-				case Equator.South:
-					return 180;
-				case Equator.East:
-					return 270;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			Equator.North => 0,
+			Equator.West => 90,
+			Equator.South => 180,
+			Equator.East => 270,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 
-		public static Vector2 ToVector2(this Equator dir)
+		public static Vector2 ToVector2(this Equator dir) => dir switch
 		{
-			switch (dir)
-			{
-				case Equator.North:
-					return Vector2.up;
-				case Equator.West:
-					return Vector2.left;
-				case Equator.South:
-					return Vector2.right;
-				case Equator.East:
-					return Vector2.down;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			Equator.North => Vector2.up,
+			Equator.West => Vector2.left,
+			Equator.South => Vector2.right,
+			Equator.East => Vector2.down,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 
-		public static Vector3 Rotate(this Equator dir, Vector3 inputVector)
+		public static Vector3 Rotate(this Equator dir, Vector3 inputVector) => dir switch
 		{
-			switch (dir)
-			{
-				case Equator.North:
-					return inputVector;
-				case Equator.West:
-					return new Vector3(inputVector.z, 0, -inputVector.x);
-				case Equator.South:
-					return -inputVector;
-				case Equator.East:
-					return new Vector3(-inputVector.z, 0, inputVector.x);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-			}
-		}
+			Equator.North => inputVector,
+			Equator.West => new Vector3(inputVector.z, 0, -inputVector.x),
+			Equator.South => -inputVector,
+			Equator.East => new Vector3(-inputVector.z, 0, inputVector.x),
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 	}
 }
