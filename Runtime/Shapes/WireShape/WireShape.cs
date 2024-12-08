@@ -47,7 +47,7 @@ namespace MUtility
 		public void Scale(Vector3 scale) =>
 			Each((polygon) => polygon.Scale(scale));
 
-		public void Transform(Vector3 offset, Quaternion rotate, float scale) =>
+		public void Transform(Vector3 offset, Quaternion rotate, float scale = 1) =>
 			Each((polygon) => polygon.Transform(offset, rotate, scale));
 
 		public void Transform(Vector3 offset, Quaternion rotate, Vector3 scale) =>
