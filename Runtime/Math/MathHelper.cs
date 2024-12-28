@@ -166,5 +166,21 @@ namespace MUtility
 		public static bool ChanceInPercent(int percent) => Random.Range(0, 100) < percent;
 
 		public static bool Chance(float rate) => Random.Range(0f, 1f) < rate;
+
+		// Rounding to any steps 
+
+		public static float Round(float value, float step, float maxDistance = 0)
+		{
+			if (maxDistance >= step / 2 || maxDistance <= 0)
+				return Mathf.Round(value / step) * step;
+
+			float mod = ModuloPositive(value, step);
+			if (mod < maxDistance)
+				value -= mod;
+			else if (mod > step - maxDistance)
+				value += step - mod;
+
+			return value;
+		}
 	}
 }
