@@ -182,5 +182,79 @@ namespace MUtility
 
 			return value;
 		}
+
+		public static float Smooth(float t, float sharpness, bool hardStart = false, bool hardEnd = false)
+		{
+			if (t <= 0)
+				return 0;
+			if (t >= 1)
+				return 1;
+
+			if (hardStart && hardEnd)
+				return t;
+
+			// Transform t between -1 and 1
+			float cut;
+			if (hardEnd)
+				cut = t - 1;
+			else if (hardStart)
+				cut = t;
+			else
+				cut = (t * 2) - 1;
+
+			float sin = Mathf.Sin(cut * Mathf.PI / 2);
+
+			// Apply sharpness
+			float curved;
+			if (sharpness >= 1)
+				curved = Mathf.Sign(sin) * Mathf.Pow(Mathf.Abs(sin), 1 / sharpness);
+			else
+				curved = Mathf.Lerp(cut, sin, sharpness);
+
+			// Smooth Between 0-1
+			if (hardEnd)
+				return curved + 1;
+			else if (hardStart)
+				return curved;
+			else
+				return 0.5f + curved / 2;
+		}
+
+		public static float InverseSmooth(float smoothened, float sharpness, bool hardStart = false, bool hardEnd = false)
+		{
+			if (smoothened <= 0)
+				return 0;
+			if (smoothened >= 1)
+				return 1;
+			if (hardStart && hardEnd)
+				return smoothened;
+
+			// Smooth Between 0-1
+			float curved;
+			if (hardEnd)
+				curved = smoothened - 1;
+			else if (hardStart)
+				curved = smoothened;
+			else
+				curved = (smoothened * 2) - 1;
+
+			// Apply sharpness
+			float sin;
+ 			if (sharpness >= 1)
+				sin = Mathf.Sign(curved) * Mathf.Pow(Mathf.Abs(curved), sharpness);
+			else
+				sin = Mathf.Lerp(curved, Mathf.Sin(curved * Mathf.PI / 2), sharpness);
+
+			float cut = Mathf.Asin(sin) * 2 / Mathf.PI;
+
+			// Transform smoothened between -1 and 1 
+			if (hardEnd)
+				return cut + 1;
+			else if (hardStart)
+				return cut;
+			else
+				return (cut + 1) / 2;
+
+		}
 	}
 }

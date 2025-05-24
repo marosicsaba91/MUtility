@@ -25,15 +25,12 @@ public class ContinuousTouch
 	internal void InvokeEndTouch() =>
 		Ended?.Invoke(this);
 
-	public bool Raycast(out RaycastHit hit) => Raycast(Camera.main, out hit);
-
 	public bool Raycast(Camera camera, out RaycastHit hit)
 	{
 		Ray ray = camera.ScreenPointToRay(singleTouchEvent.position);
 		return Physics.Raycast(ray, out hit);
 	}
 
-	public int Raycast2D(Collider2D[] colliders) => Raycast2D(Camera.main, colliders);
 	public int Raycast2D(Camera camera, Collider2D[] colliders)
 	{
 		Vector2 origin = camera.ScreenToWorldPoint(singleTouchEvent.position);
