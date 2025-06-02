@@ -11,5 +11,15 @@ namespace MUtility
 			if (index < 0) return source[0];
 			return source[index];
 		}
+
+		public static bool Contains<T>(this IReadOnlyList<T> stack, T item)
+		{
+			if (stack == null || stack.Count == 0)
+				return false;
+			for (int i = 0; i < stack.Count; i++)
+				if (stack[i].Equals(item))
+					return true;
+			return false;
+		}
 	}
 }
