@@ -183,7 +183,7 @@ namespace MUtility
 			return value;
 		}
 
-		public static float Smooth(float t, float sharpness, bool hardStart = false, bool hardEnd = false)
+		public static float SmoothBetween01(float t, float sharpness, bool hardStart = false, bool hardEnd = false)
 		{
 			if (t <= 0)
 				return 0;
