@@ -14,15 +14,15 @@ namespace MUtility
 		IPointerExitHandler
 	{
 
-		Button _button;
+		Graphic _graphicRaycastTarget;
 
-		public Button Button
+		public Graphic GraphicRaycastTarget
 		{
 			get
 			{
-				if (_button == null)
-					_button = GetComponent<Button>();
-				return _button;
+				if (_graphicRaycastTarget == null)
+					_graphicRaycastTarget = GetComponent<Graphic>();
+				return _graphicRaycastTarget;
 			}
 		}
 
