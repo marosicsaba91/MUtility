@@ -181,6 +181,15 @@ namespace MUtility
 		public static Vector3Int MultiplyAllAxis(this Vector3Int s, int x, int y, int z) => new(s.x * x, s.y * y, s.z * z);
 		public static Vector3 MultiplyAllAxis(this Vector3Int s, float x, float y, float z) => new(s.x * x, s.y * y, s.z * z);
 
+		public static Vector2 DivideByAllAxis(this Vector2 s, Vector2 v) => new(s.x / v.x, s.y / v.y);
+		public static Vector2 DivideByAllAxis(this Vector2 s, Vector2Int v) => new(s.x / v.x, s.y / v.y);
+		public static Vector2 DivideByAllAxis(this Vector2 s, float x, float y) => new(s.x / x, s.y / y);
+		public static Vector3 DivideByAllAxis(this Vector3 s, Vector3 v) => new(s.x / v.x, s.y / v.y, s.z / v.z);
+		public static Vector3 DivideByAllAxis(this Vector3 s, Vector3Int v) => new(s.x / v.x, s.y / v.y, s.z / v.z);
+		public static Vector3 DivideByAllAxis(this Vector3 s, float x, float y, float z) => new(s.x / x, s.y / y, s.z / z);
+
+
+
 		public static Vector3Int Rotate(this Vector3Int vector, Axis3D axis, int rotations90)
 		{
 			rotations90 = (rotations90 % 4 + 4) % 4;
