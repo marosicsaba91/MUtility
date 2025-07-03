@@ -399,5 +399,17 @@ namespace MUtility
 			float RoundToDecimalF(float value) =>
 				(float)Math.Round(value, digits);
 		}
+
+		public static float DistanceTo(this Vector2 point, Vector2 otherPoint) =>
+			(point - otherPoint).magnitude;
+
+		public static float SqrDistanceTo(this Vector2 point, Vector2 otherPoint) =>
+			(point - otherPoint).sqrMagnitude;
+
+		public static float DistanceTo(this Vector3 point, Vector3 otherPoint) =>
+			(point - otherPoint).magnitude;
+
+		public static float SqrDistanceTo(this Vector3 point, Vector3 otherPoint) =>
+			(point - otherPoint).sqrMagnitude;
 	}
 }
