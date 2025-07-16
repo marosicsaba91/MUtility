@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MUtility
 {
 	[Serializable]
-	public struct LineSegment : IWireShape/*, IEasyHandleable*/
+	public struct LineSegment
 	{
 		public Vector3 a;
 		public Vector3 b;
@@ -19,11 +19,9 @@ namespace MUtility
 
 		public float SqrMagnitude => (b - a).sqrMagnitude;
 
-		Vector3 LerpOnLineUnclamped(float value) => Vector3.LerpUnclamped(a, b, value);
+		public Vector3 LerpOnLineUnclamped(float value) => Vector3.LerpUnclamped(a, b, value);
 
-		Vector3 LerpOnLine(float value) => Vector3.Lerp(a, b, value);
-
-		public WireShape ToWireShape() => new(new[] { a, b });
+		public Vector3 LerpOnLine(float value) => Vector3.Lerp(a, b, value);
 
 		public Vector3 ClosestPointOnSegmentToPoint(Vector3 point) =>
 			Vector3.Lerp(a, b, Line.ClosestPointOnLineToPointRate(a, b, point));

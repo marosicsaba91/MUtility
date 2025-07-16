@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MUtility
 {
 	[Serializable]
-	public struct Line : IWireShape/*, IEasyHandleable*/
+	public struct Line 
 	{
 		public Vector3 a;
 		public Vector3 b;
@@ -26,39 +26,6 @@ namespace MUtility
 			a = ray.origin;
 			b = ray.origin + ray.direction;
 		}
-
-		Vector3 DirectionNormal
-		{
-			get => (b - a).normalized;
-			set => b = a + value;
-		}
-
-		const float defaultLength = 100f;
-
-		public WireShape ToWireShape() => ToDrawable(defaultLength);
-
-		public WireShape ToDrawable(float length)
-		{
-			Vector3 center = (a + b) / 2f;
-			Vector3 dir = DirectionNormal * (length / 2f);
-			return new WireShape(new[] { center - dir, center + dir });
-		}
-
-		/*
-		public IEnumerable<EasyHandle> GetHandles()
-		{
-			yield return new EasyHandle() { position = a };
-			yield return new EasyHandle() { position = b }; 
-		}
-
-		public void SetHandle(int index, HandleResult result)
-		{
-			if (index == 0)
-				a = result.startPosition;
-			else
-				b = result.startPosition;
-		}
-		*/
 
 		public float ClosestPointOnLineToPointRate(Vector3 point) =>
 			ClosestPointOnLineToPointRate(a, b, point);

@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Reflection;
 
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEngine;
+#endif
+
 namespace MUtility
 {
 	public static class ObjectExtension
@@ -33,6 +38,13 @@ namespace MUtility
 			}
 
 			return copyObj;
+		}
+
+		public static void SetDirtySafe(this ScriptableObject so)
+		{
+#if UNITY_EDITOR
+			EditorUtility.SetDirty(so);
+#endif
 		}
 	}
 }

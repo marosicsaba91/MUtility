@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MUtility
 {
 	[Serializable]
-	public struct Plain : IWireShape
+	public struct Plain
 	{
 		public Vector3 origin;
 		public Vector3 normal;
@@ -33,38 +33,8 @@ namespace MUtility
 			return a + t * u;
 		}
 
-		const float defaultRadius = 100;
-		public WireShape ToWireShape() => ToDrawable(defaultRadius, defaultRadius);
-
-		public WireShape ToDrawable(float radius) => ToDrawable(radius, radius);
-
-		public WireShape ToDrawable(float radius, float normalLength)
-		{
-			Vector3 v1 = normal.x == 0 && normal.y == 0 ? Vector3.up : Vector3.forward;
-
-			Vector3 up = Vector3.Cross(v1, normal).normalized;
-			Vector3 right = Vector3.Cross(up, normal).normalized;
-			up *= radius * 0.5f;
-			right *= radius * 0.5f;
-
-			const int points = 25;
-			Vector3[] polygon = new Vector3[points];
-			float angle = Mathf.PI * 2 / (points - 1);
-			for (int i = 0; i < points - 1; i++)
-			{
-				float phase = i * angle;
-				polygon[i] = origin + (Mathf.Sin(phase) * up + Mathf.Cos(phase) * right);
-			}
-			polygon[points - 1] = polygon[0];
-			// WireShape arrowDrawable = new Arrow(origin, normal, radius).ToWireShape();
-			// plainDrawable.Merge(arrowDrawable);
-			WireShape plainDrawable = new(polygon);
-			return plainDrawable;
-		}
-
 		public float DistanceToPoint(Vector3 point) =>
 			Vector3.Dot(point - origin, normal.normalized);
-
 
 		internal void Normalise() => normal = normal.normalized;
 
