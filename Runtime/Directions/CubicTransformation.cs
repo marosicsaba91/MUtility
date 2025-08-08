@@ -10,9 +10,9 @@ namespace MUtility
 
 		// In Left handed coordinate system
 		// If No Rotation:
-		//	Thumb = Right
-		//	Index = Up
-		//	Middle = Forward
+		//	 Thumb = Right
+		//	 Index = Up
+		//	 Middle = Forward
 		// Clockwise rotation around Y axis
 
 		public GeneralDirection3D upDirection;
@@ -36,6 +36,9 @@ namespace MUtility
 			cubicTransformationIndex /= 4;
 			upDirection = (GeneralDirection3D)(cubicTransformationIndex % 6);
 		}
+
+		public static CubicTransformation FromUpForward(Vector3 up, Vector3 forward, bool mirror = false) =>
+			FromUpForward(up.ToDirection3D(), forward.ToDirection3D(), mirror);
 
 		public static CubicTransformation FromUpForward(GeneralDirection3D up, GeneralDirection3D forward, bool mirror = false)
 		{

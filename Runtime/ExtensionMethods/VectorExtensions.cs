@@ -285,6 +285,32 @@ namespace MUtility
 				y > z ? y :
 				z;
 		}
+
+		public static Axis3D LongestAxis(this Vector3 vector)
+		{
+			float x = vector.x >= 0 ? vector.x : -vector.x;
+			float y = vector.y >= 0 ? vector.y : -vector.y;
+			float z = vector.z >= 0 ? vector.z : -vector.z;
+
+			return
+				x > y && x > z ? Axis3D.X :
+				y > z ? Axis3D.Y :
+				Axis3D.Z;
+		}
+
+		public static GeneralDirection3D ToDirection3D(this Vector3 vector)
+		{
+			float x = vector.x >= 0 ? vector.x : -vector.x;
+			float y = vector.y >= 0 ? vector.y : -vector.y;
+			float z = vector.z >= 0 ? vector.z : -vector.z;
+			if (x > y && x > z)
+				return vector.x > 0 ? GeneralDirection3D.Right : GeneralDirection3D.Left;
+			if (y > z)
+				return vector.y > 0 ? GeneralDirection3D.Up : GeneralDirection3D.Down;
+			return vector.z > 0 ? GeneralDirection3D.Forward : GeneralDirection3D.Back;
+		}
+
+
 		public static float Shortest(this Vector3 vector)
 		{
 			float x = vector.x >= 0 ? vector.x : -vector.x;
