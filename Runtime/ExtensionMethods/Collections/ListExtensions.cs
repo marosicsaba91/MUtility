@@ -46,6 +46,17 @@ namespace MUtility
 			}
 		}
 
+		public static void SetCount<T>(this List<T> list, int count)
+		{
+			if (list.Count > count)
+				list.RemoveRange(count, list.Count - count);
+			else
+			{
+				while (list.Count < count)
+					list.Add(default);
+			}
+		}
+
 		public static void SetCount<T>(this List<T> list, int count, Func<T> create)
 		{
 			if (list.Count > count)
