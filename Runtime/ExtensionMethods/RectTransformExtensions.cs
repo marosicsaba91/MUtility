@@ -33,18 +33,12 @@ namespace MUtility
 		public static void Split(this Rect inputRect, float rate, out Rect first, out Rect second) =>
 			Split(inputRect, rate, Space, out first, out second);
 
-		public static float Space
-		{
-			get
-			{
-#if UNITY_EDITOR
-				return EditorGUIUtility.standardVerticalSpacing;
-#else
-            return 2;
-#endif
-			}
-		}
 
+#if UNITY_EDITOR
+		public static float Space => EditorGUIUtility.standardVerticalSpacing;
+#else
+		public static float Space => 2
+#endif
 
 		public static void Split(this Rect inputRect, float rate, float space, out Rect first, out Rect second)
 		{
@@ -90,5 +84,21 @@ namespace MUtility
 
 			return result;
 		}
+		public static Rect GetRectToParent(this RectTransform rectTransform)
+		{
+			RectTransform parent = rectTransform.parent as RectTransform;
+			Vector2 parentSize = parent.rect.size;
+			Vector2 min = parentSize.MultiplyAllAxis(rectTransform.anchorMin) + rectTransform.offsetMin;
+			Vector2 max = parentSize.MultiplyAllAxis(rectTransform.anchorMax) + rectTransform.offsetMax;
+			return new() { xMin = min.x, yMin = min.y, xMax = max.x, yMax = max.y };
+		}
+
+		public static Rect LerpWith(this Rect a, Rect b, float t) => new()
+		{
+			xMin = Mathf.Lerp(a.xMin, b.xMin, t),
+			yMin = Mathf.Lerp(a.yMin, b.yMin, t),
+			xMax = Mathf.Lerp(a.xMax, b.xMax, t),
+			yMax = Mathf.Lerp(a.yMax, b.yMax, t)
+		};
 	}
 }

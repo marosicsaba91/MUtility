@@ -95,5 +95,12 @@ namespace MUtility
 			Axis3D.Z => Axis3D.Y,
 			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null)
 		};
+
+		public static Axis2D Opposite(this Axis2D dir) => dir switch
+		{
+			Axis2D.Horizontal => Axis2D.Vertical,
+			Axis2D.Vertical => Axis2D.Horizontal,
+			_ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null),
+		};
 	}
 }
