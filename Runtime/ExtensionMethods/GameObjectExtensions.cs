@@ -27,8 +27,7 @@ namespace MUtility
 			string name = string.IsNullOrEmpty(newObjectName) ? typeof(T).Name : newObjectName;
 			GameObject child = new(name);
 			child.transform.SetParent(gameObject.transform);
-			child.transform.localPosition = Vector3.zero;
-			child.transform.localRotation = Quaternion.identity;
+			child.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 			child.transform.localScale = Vector3.one;
 			component = child.AddComponent<T>();
 		}

@@ -181,6 +181,18 @@ namespace MUtility
 			return vector.z > 0 ? GeneralDirection3D.Forward : GeneralDirection3D.Back;
 		}
 
+		public static Direction2D Direction2DFromVector(Vector2 vector) => vector.GetAngle() switch
+		{
+			>= 22.5f and < 67.5f => Direction2D.RightUp,
+			>= 67.5f and < 112.5f => Direction2D.Up,
+			>= 112.5f and < 157.5f => Direction2D.LeftUp,
+			>= 157.5f and < 202.5f => Direction2D.Left,
+			>= 202.5f and < 247.5f => Direction2D.LeftDown,
+			>= 247.5f and < 292.5f => Direction2D.Down,
+			>= 292.5f and < 337.5f => Direction2D.RightDown,
+			_ => Direction2D.Right
+		};
+
 		public static bool IsLeftHanded(GeneralDirection3D right, GeneralDirection3D up, GeneralDirection3D forward) => (right, up) switch
 		{
 			(GeneralDirection3D.Right, GeneralDirection3D.Up) => forward == GeneralDirection3D.Forward,
