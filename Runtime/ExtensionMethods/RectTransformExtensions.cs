@@ -93,6 +93,19 @@ namespace MUtility
 			return new() { xMin = min.x, yMin = min.y, xMax = max.x, yMax = max.y };
 		}
 
+		public static Rect GetRectToParentCenter(this RectTransform rectTransform)
+		{
+			RectTransform parent = rectTransform.parent as RectTransform;
+			Vector2 parentSize = parent.rect.size;
+			Vector2 min = parentSize.MultiplyAllAxis(rectTransform.anchorMin) + rectTransform.offsetMin;
+			Vector2 max = parentSize.MultiplyAllAxis(rectTransform.anchorMax) + rectTransform.offsetMax;
+
+			Vector2 center = (min + max) / 2 - parentSize / 2;
+			Vector2 size = max - min;
+			return new() { center = center, size = size };
+		}
+
+
 		public static Rect LerpWith(this Rect a, Rect b, float t) => new()
 		{
 			xMin = Mathf.Lerp(a.xMin, b.xMin, t),

@@ -240,7 +240,7 @@ namespace MUtility
 
 			// Apply sharpness
 			float sin;
- 			if (sharpness >= 1)
+			if (sharpness >= 1)
 				sin = Mathf.Sign(curved) * Mathf.Pow(Mathf.Abs(curved), sharpness);
 			else
 				sin = Mathf.Lerp(curved, Mathf.Sin(curved * Mathf.PI / 2), sharpness);
@@ -256,5 +256,8 @@ namespace MUtility
 				return (cut + 1) / 2;
 
 		}
+
+		public static bool Approximately(float a, float b, float epsilon)
+			=> Mathf.Abs(a - b) <= epsilon;
 	}
 }
