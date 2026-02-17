@@ -16,6 +16,14 @@ namespace MUtility
 
 		public static float Average(this IList<float> source) => source.Sum() / source.Count;
 
+		public static float Sum(this IList<float> source)
+		{
+			float sum = 0;
+			for (int i = 0; i < source.Count; i++)
+				sum += source[i];
+			return sum;
+		}
+		
 		public static bool ContainsSubset<T>(this IList<T> whole, IList<T> subset)
 		{
 			for (int i = 0; i < subset.Count; i++)

@@ -34,8 +34,7 @@ public class ContinuousTouch
 	public int Raycast2D(Camera camera, Collider2D[] colliders)
 	{
 		Vector2 origin = camera.ScreenToWorldPoint(singleTouchEvent.position);
-		ContactFilter2D filter = new ContactFilter2D().NoFilter();
-		return Physics2D.OverlapPoint(origin, filter, colliders);
+		return Physics2D.OverlapPoint(origin, ContactFilter2D.noFilter, colliders);
 	}
 }
 
@@ -44,8 +43,8 @@ class TouchUtility : MonoBehaviour
 
 	public delegate void TouchEvent(ContinuousTouch touch);
 
-	readonly Dictionary<int, ContinuousTouch> touchesByFingerId = new();
-	public IReadOnlyDictionary<int, ContinuousTouch> TouchesByFingerId => touchesByFingerId;
+	readonly Dictionary<int, ContinuousTouch> _touchesByFingerId = new();
+	public IReadOnlyDictionary<int, ContinuousTouch> TouchesByFingerId => _touchesByFingerId;
 
 	public event TouchEvent TouchStarted;
 	public event TouchEvent TouchEnded;
@@ -57,24 +56,24 @@ class TouchUtility : MonoBehaviour
 			Touch touch = Input.GetTouch(i);
 			TouchPhase phase = touch.phase;
 			int id = touch.fingerId;
-			if (!touchesByFingerId.ContainsKey(id) && phase != TouchPhase.Ended && phase != TouchPhase.Canceled)
+			if (!_touchesByFingerId.ContainsKey(id) && phase != TouchPhase.Ended && phase != TouchPhase.Canceled)
 			{
 				ContinuousTouch tc = new()
 				{
 					singleTouchEvent = touch,
 					startScreenPosition = touch.position,
 				};
-				touchesByFingerId.Add(id, tc);
+				_touchesByFingerId.Add(id, tc);
 				TouchStarted?.Invoke(tc);
 			}
 			else
 			{
-				ContinuousTouch tc = touchesByFingerId[id];
+				ContinuousTouch tc = _touchesByFingerId[id];
 				tc.singleTouchEvent = touch;
 
 				if (phase is TouchPhase.Ended or TouchPhase.Canceled)
 				{
-					touchesByFingerId.Remove(id);
+					_touchesByFingerId.Remove(id);
 					tc.InvokeEndTouch();
 					TouchEnded?.Invoke(tc);
 				}

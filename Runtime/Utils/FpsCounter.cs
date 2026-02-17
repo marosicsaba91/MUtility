@@ -27,7 +27,7 @@ namespace MUtility
 			float deltaTime = smooth ? Time.smoothDeltaTime : Time.deltaTime;
 			string text = (1f / deltaTime).ToString("F0");
 
-			if(suffixText != null && suffixText != string.Empty)
+			if(!string.IsNullOrEmpty(suffixText))
 				text += suffixText;
 
 			uiText.text = text;
