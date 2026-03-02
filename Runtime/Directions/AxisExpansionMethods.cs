@@ -30,7 +30,12 @@ namespace MUtility
 				return Axis3D.Y;
 			return Axis3D.Z;
 		}
-
+		public static Vector3 ToVector(this Axis2D axis) => axis switch
+		{
+			Axis2D.Horizontal => Vector3.right,
+			Axis2D.Vertical => Vector3.up,
+			_ => throw new ArgumentOutOfRangeException(nameof(axis), axis, null),
+		};
 
 		public static Vector3 ToVector(this Axis3D axis) => axis switch
 		{
