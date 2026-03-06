@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 
+using System;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -23,6 +24,9 @@ namespace MUtility.Editor
 
 	public static class RangedNumberDrawer
 	{
+		static GUIContent _minContent;
+		static GUIContent _maxContent;
+
 		public static void DrawRanged(Rect position, SerializedProperty property, GUIContent label)
 		{
 			// Get Range Attribute
@@ -43,92 +47,115 @@ namespace MUtility.Editor
 
 			FieldInfo propertyInfo = property.serializedObject.targetObject.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 			RangedFloat? limits =
-				propertyInfo?.GetCustomAttributes().FirstOrDefault(a => a is RangeLimitsAttribute) is
-					RangeLimitsAttribute limitsA
+				propertyInfo?.GetCustomAttributes().FirstOrDefault(a => a is RangeAttribute) is
+					RangeAttribute limitsA
 					? new RangedFloat(limitsA.min, limitsA.max)
 					: null;
 
-			// Label
-			Rect labelRect = position;
-			labelRect.width = EditorGUIUtility.labelWidth;
-			EditorGUI.LabelField(labelRect, label);
-
-			Rect propertyRect = position;
-			propertyRect.x = labelRect.xMax;
-			propertyRect.width = (position.width - EditorGUIUtility.labelWidth - EditorGUIUtility.standardVerticalSpacing * 2) / 2;
-
-			float cachedLabelW = EditorGUIUtility.labelWidth;
-			EditorGUIUtility.labelWidth = 27;
-			int cachedIndent = EditorGUI.indentLevel;
-			EditorGUI.indentLevel = 0;
-
-			SerializedProperty minProperty = property.FindPropertyRelative("min");
-			SerializedProperty maxProperty = property.FindPropertyRelative("max");
-
-			switch (minProperty.propertyType)
+			// Draw label the proper way and forward remaining rect
+			using (new EditorGUI.PropertyScope(position, label, property))
 			{
-				case SerializedPropertyType.Float:
-				{
-					float oldMin = minProperty.floatValue;
-					float oldMax = maxProperty.floatValue;
+				position = EditorGUI.PrefixLabel(position, label);
 
-					float newMin = EditorGUI.FloatField(propertyRect, "Min", oldMin);
-					propertyRect.x = propertyRect.xMax + EditorGUIUtility.standardVerticalSpacing * 2;
-					float newMax = EditorGUI.FloatField(propertyRect, "Max", oldMax);
+				SerializedProperty minProperty = property.FindPropertyRelative("min");
+				SerializedProperty maxProperty = property.FindPropertyRelative("max");
 
-					if (limits.HasValue)
-					{
-						newMin = Mathf.Clamp(newMin, limits.Value.min, limits.Value.max);
-						newMax = Mathf.Clamp(newMax, limits.Value.min, limits.Value.max);
-					}
+				if (minProperty.propertyType == SerializedPropertyType.Float)
+					DrawRangedFloat(position, minProperty, maxProperty, limits);
+				else if (minProperty.propertyType == SerializedPropertyType.Integer)
+					DrawRangedInt(position, minProperty, maxProperty, limits);
+			}
+		}
 
-					if (newMin != oldMin)
-					{
-						newMin = Mathf.Min(newMin, newMax);
-						minProperty.floatValue = newMin;
-					}
+		static void DrawRangedFloat(
+			Rect position,
+			SerializedProperty minProperty,
+			SerializedProperty maxProperty,
+			RangedFloat? limits) =>
+			DrawAnyRanged(position, minProperty, maxProperty, limits,
+				p => p.floatValue,
+				(p, f) => p.floatValue = f,
+				f => f,
+				f => f,
+				(rect, gc, f) => EditorGUI.FloatField(rect, gc, f));
 
-					if (newMax != oldMax)
-					{
-						newMax = Mathf.Max(newMin, newMax);
-						maxProperty.floatValue = newMax;
-					}
+		static void DrawRangedInt(
+			Rect position,
+			SerializedProperty minProperty,
+			SerializedProperty maxProperty,
+			RangedFloat? limits)
+			=> DrawAnyRanged(position, minProperty, maxProperty, limits,
+				p => p.intValue,
+				(p, i) => p.intValue = i,
+				i => Mathf.RoundToInt(i),
+				f => f,
+				(rect, gc, i) => EditorGUI.IntField(rect, gc, i));
 
-					break;
-				}
-				case SerializedPropertyType.Integer:
-				{
-					int oldMin = minProperty.intValue;
-					int oldMax = maxProperty.intValue;
+		static void DrawAnyRanged<T>(
+			Rect position,
+			SerializedProperty minProperty,
+			SerializedProperty maxProperty,
+			RangedFloat? limits,
 
-					int newMin = EditorGUI.IntField(propertyRect, "Min", oldMin);
-					propertyRect.x = propertyRect.xMax + EditorGUIUtility.standardVerticalSpacing * 2;
-					int newMax = EditorGUI.IntField(propertyRect, "Max", oldMax);
+			Func<SerializedProperty, T> getValue,
+			Action<SerializedProperty, T> setValue,
+			Func<float, T> fromFloat,
+			Func<T, float> toFloat,
+			Func<Rect, GUIContent, T, T> propertyDrawer
+			) where T : struct, IComparable<T>
+		{
+			T oldMin = getValue(minProperty);
+			T oldMax = getValue(maxProperty);
+			T newMin = oldMin;
+			T newMax = oldMax;
 
-					if (limits.HasValue)
-					{
-						newMin = Mathf.Clamp(newMin, (int)limits.Value.min, (int)limits.Value.max);
-						newMax = Mathf.Clamp(newMax, (int)limits.Value.min, (int)limits.Value.max);
-					}
+			float space = EditorGUIUtility.standardVerticalSpacing;
 
-					if (newMin != oldMin)
-					{
-						newMin = Mathf.Min(newMin, newMax);
-						minProperty.intValue = newMin;
-					}
+			if (limits.HasValue)  // Slider view
+			{
+				float inputFieldWidth = Mathf.Min(50f, (position.width - space * 2) / 6);
+				Rect minFieldRect = new(position.x, position.y, inputFieldWidth, position.height);
+				Rect sliderRect = new(minFieldRect.xMax + space, position.y, position.width - inputFieldWidth * 2 - space * 2, position.height);
+				Rect maxFieldRect = new(sliderRect.xMax + space, position.y, inputFieldWidth, position.height);
 
-					if (newMax != oldMax)
-					{
-						newMax = Mathf.Max(newMin, newMax);
-						maxProperty.intValue = newMax;
-					}
+				float fMin = toFloat(newMin);
+				float fMax = toFloat(newMax);
+				EditorGUI.MinMaxSlider(sliderRect, ref fMin, ref fMax, limits.Value.min, limits.Value.max);
+				newMin = propertyDrawer(minFieldRect, GUIContent.none, fromFloat(fMin));
+				newMax = propertyDrawer(maxFieldRect, GUIContent.none, fromFloat(fMax));
+				newMin = Clamp(newMin, fromFloat(limits.Value.min), fromFloat(limits.Value.max));
+				newMax = Clamp(newMax, fromFloat(limits.Value.min), fromFloat(limits.Value.max));
+			}
+			else  // Input Fields only view
+			{
+				_minContent ??= new GUIContent("Min");
+				_maxContent ??= new GUIContent("Max");
 
-					break;
-				}
+				float originalLabelWidth = EditorGUIUtility.labelWidth;
+				EditorGUIUtility.labelWidth = 26;
+				Rect propertyRect = position;
+				propertyRect.x = position.x;
+				propertyRect.width = (position.width - space * 2) / 2;
+
+				newMin = propertyDrawer(propertyRect, _minContent, oldMin);
+				propertyRect.x = propertyRect.xMax + space * 2;
+				newMax = propertyDrawer(propertyRect, _maxContent, oldMax);
+				EditorGUIUtility.labelWidth = originalLabelWidth;
 			}
 
-			EditorGUIUtility.labelWidth = cachedLabelW;
-			EditorGUI.indentLevel = cachedIndent;
+			if (newMin.CompareTo(oldMin) != 0)
+				setValue(minProperty, Min(newMin, newMax));
+
+			if (newMax.CompareTo(oldMax) != 0)
+				setValue(maxProperty, Max(newMin, newMax));
+
+			static T Clamp(T value, T min, T max) =>
+				value.CompareTo(min) < 0 ? min :
+				value.CompareTo(max) > 0 ? max :
+				value;
+
+			static T Min(T a, T b) => a.CompareTo(b) < 0 ? a : b;
+			static T Max(T a, T b) => a.CompareTo(b) > 0 ? a : b;
 		}
 	}
 }
