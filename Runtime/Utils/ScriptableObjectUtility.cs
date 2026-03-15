@@ -53,5 +53,24 @@ namespace MUtility
 			return Array.Empty<T>();
 #endif
 		}
+
+		public static IEnumerable<T> FindAllInAssetsWithInterface_EditorOnly<T>()
+		{
+#if UNITY_EDITOR
+			string[] guids = AssetDatabase.FindAssets($"t:{typeof(ScriptableObject)}", null);
+
+			for (int i = 0; i < guids.Length; i++)
+			{
+				string guid1 = guids[i];
+				string path = AssetDatabase.GUIDToAssetPath(guid1);
+				ScriptableObject so = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
+				if(so is T result)
+					yield return result;
+			}
+#else
+			Debug.LogError("ScriptableObjectUtility.FindAllInAssets_EditorOnly is only available in the editor.");
+			yield break;
+#endif
+		}
 	}
 }
