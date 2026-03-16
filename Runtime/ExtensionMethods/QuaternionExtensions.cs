@@ -51,5 +51,8 @@ namespace MUtility
 
 			return new Quaternion(result.x, result.y, result.z, result.w);
 		}
+
+		public static bool IsNaN(this Quaternion q) =>
+			float.IsNaN(q.x) && float.IsNaN(q.y) && float.IsNaN(q.z) && float.IsNaN(q.w);
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MUtility
@@ -156,9 +155,14 @@ namespace MUtility
 			LeftHand(thumb, out index, middle);
 		}
 
-
-
-
+		public static bool IsNormal(this Vector2 v) =>
+			float.IsNormal(v.x) && float.IsNormal(v.y);
+		public static bool IsNormal(this Vector3 v) =>
+			float.IsNormal(v.x) && float.IsNormal(v.y) && float.IsNormal(v.z);
+		public static bool IsNaN(this Vector2 v) =>
+			float.IsNaN(v.x) && float.IsNaN(v.y);
+		public static bool IsNaN(this Vector3 v) =>
+			float.IsNaN(v.x) && float.IsNaN(v.y) && float.IsNaN(v.z);
 
 		public static Vector2 MultiplyAllAxis(this Vector2 s, Vector2 v) => s * v;
 		public static Vector2 MultiplyAllAxis(this Vector2 s, Vector2Int v) => s * v;
