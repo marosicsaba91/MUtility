@@ -7,7 +7,7 @@ using UnityEditor;
 namespace MUtility
 {
 	[Serializable]
-	public class Optional<T>
+	public struct Optional<T>
 	{
 		[SerializeField] bool enabled;
 		[SerializeField] T value;
@@ -17,8 +17,7 @@ namespace MUtility
 
 		public bool Enabled => enabled;
 		public T Value => value;
-
-		public Optional() { }
+		public T ValueOrDefault => enabled ? value : default;
 
 		public Optional(T value, bool enabled = true)
 		{
@@ -50,12 +49,12 @@ namespace MUtility
 
 			Rect toggleRect = position;
 			toggleRect.width = 16;
-			enabledProp.boolValue = EditorGUI.Toggle(toggleRect, enabledProp.boolValue);
+			EditorGUI.PropertyField(toggleRect, enabledProp, GUIContent.none);
 
 			Rect valueRect = position;
 			valueRect.x += 20;
 			valueRect.width -= 20;
-
+			EditorGUIUtility.labelWidth = 0;
 			Color color = GUI.color;
 			if (!enabledProp.boolValue)
 				GUI.color = new Color(color.r, color.g, color.b, color.a / 2);
