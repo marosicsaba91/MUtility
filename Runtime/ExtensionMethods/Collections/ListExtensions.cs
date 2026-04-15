@@ -83,5 +83,24 @@ namespace MUtility
 			else
 				dictionary.Add(value);
 		}
+
+		public static void ExpandByGetComponentInChildren<T>(this List<T> list, Transform transform)
+		{
+			Type searchedType = typeof(T);
+			ExpandByGetComponentInChildren(transform, searchedType, list);
+		}
+
+		static void ExpandByGetComponentInChildren<T>(Transform parent, Type searchedType, List<T> list)
+		{
+			int childCount = parent.childCount;
+			for (int i = 0; i < childCount; i++)
+			{
+				Transform child = parent.GetChild(i);
+				if (child.gameObject.TryGetComponent(searchedType, out Component found) && found is T typed && !list.Contains(typed))
+					list.Add(typed);
+
+				ExpandByGetComponentInChildren(child, searchedType, list);
+			}
+		}
 	}
 }
