@@ -18,6 +18,8 @@ namespace MUtility
 		public static Vector3Int RoundToInt(this Vector3 vector) =>
 			new(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y), Mathf.RoundToInt(vector.z));
 
+		public static Vector2Int FloorToInt(this Vector2 vector) =>
+			new((int)(vector.x), (int)(vector.y));
 
 		public static Vector2 ToVector2(this Vector3 vector, Axis3D deleteAxis) => deleteAxis switch
 		{
