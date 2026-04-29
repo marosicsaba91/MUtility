@@ -105,6 +105,20 @@ namespace MUtility
 			return new() { center = center, size = size };
 		}
 
+		static public Rect GetRect(this RectTransform panel, bool useScale)
+		{
+			Vector2 size = panel.sizeDelta;
+
+			if (useScale)
+				size = size.MultiplyAllAxis(panel.localScale);
+
+			Vector2 extent = size * 0.5f;
+			Vector2 pivot = panel.pivot * 2 - Vector2.one;
+			Vector2 center = panel.anchoredPosition - pivot.MultiplyAllAxis(extent);
+
+			Vector2 min = center - extent;
+			return new Rect(min, size);
+		}
 
 		public static Rect LerpWith(this Rect a, Rect b, float t) => new()
 		{
