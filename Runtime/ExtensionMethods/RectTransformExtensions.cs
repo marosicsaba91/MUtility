@@ -107,17 +107,32 @@ namespace MUtility
 
 		static public Rect GetRect(this RectTransform panel, bool useScale)
 		{
-			Vector2 size = panel.sizeDelta;
+			bool hasRelativeAnchors = panel.anchorMin != panel.anchorMax;
+			if (!hasRelativeAnchors || panel.parent is not RectTransform parent)
+			{
+				Vector2 size = panel.sizeDelta;
+				if (useScale)
+					size = size.MultiplyAllAxis(panel.localScale);
 
-			if (useScale)
-				size = size.MultiplyAllAxis(panel.localScale);
+				Vector2 extent = size * 0.5f;
+				Vector2 pivot = panel.pivot * 2 - Vector2.one;
+				Vector2 center = panel.anchoredPosition - pivot.MultiplyAllAxis(extent);
+				Vector2 min = center - extent;
+				return new Rect(min, size);
+			}
 
-			Vector2 extent = size * 0.5f;
-			Vector2 pivot = panel.pivot * 2 - Vector2.one;
-			Vector2 center = panel.anchoredPosition - pivot.MultiplyAllAxis(extent);
+			Vector2 parentSize = parent.rect.size;
+			Vector2 minToParent = parentSize.MultiplyAllAxis(panel.anchorMin) + panel.offsetMin;
+			Vector2 maxToParent = parentSize.MultiplyAllAxis(panel.anchorMax) + panel.offsetMax;
+			Vector2 sizeToUse = maxToParent - minToParent;
 
-			Vector2 min = center - extent;
-			return new Rect(min, size);
+			if (!useScale)
+				return new Rect(minToParent, sizeToUse);
+
+			Vector2 scaledSize = sizeToUse.MultiplyAllAxis(panel.localScale);
+			Vector2 pivotPoint = minToParent + sizeToUse.MultiplyAllAxis(panel.pivot);
+			Vector2 scaledMin = pivotPoint - scaledSize.MultiplyAllAxis(panel.pivot);
+			return new Rect(scaledMin, scaledSize);
 		}
 
 		public static Rect LerpWith(this Rect a, Rect b, float t) => new()
