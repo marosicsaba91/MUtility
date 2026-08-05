@@ -12,7 +12,7 @@ namespace MUtility
 			Type type = monoBehaviour.GetType();
 			GameObject gameObject = monoBehaviour.gameObject;
 			string name = gameObject.name;
-			int guid = gameObject.GetInstanceID();
+			EntityId guid = gameObject.GetEntityId();
 
 			// Combine the type, name, and GUID into a single string and return it
 			string id = $"{type.FullName}_{name}_{guid}";

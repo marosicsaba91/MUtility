@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine.Assemblies;
 
 namespace MUtility
 {
@@ -19,7 +20,7 @@ namespace MUtility
 			Assembly currentAssembly = Assembly.GetExecutingAssembly();
 			string currentAssemblyFullName = currentAssembly.FullName;
 			const string globalAssembly = "Assembly-CSharp";
-			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+			foreach (Assembly assembly in CurrentAssemblies.GetLoadedAssemblies())
 			{
 				string assemblyName = assembly.GetName().Name;
 				bool isCurrent = includeExecutingAssembly && assembly == currentAssembly;
